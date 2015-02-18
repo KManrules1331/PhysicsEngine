@@ -5,14 +5,13 @@
 #include "OpenGL.h"
 #include "Mesh.h"
 #include "SphereCollider.h"
+#include "Transform.h"
 
 class GameObject
 {
 public:
 	//Attributes
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 scale;
+	Transform* transform;	//OWNS TRANSFORM
 	Mesh* mesh;				//DOES NOT OWN MESH
 	Collider* collider;		//OWNS COLLIDER
 

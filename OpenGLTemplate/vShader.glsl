@@ -1,9 +1,8 @@
 #version 130
 
 //Transformation Vars
-uniform vec3 position;
-uniform vec3 rotation;
-uniform vec3 scale;
+uniform mat4 transformMatrix;
+uniform mat4 rotationMatrix;
 uniform vec3 cameraPosition;
 uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
@@ -27,42 +26,9 @@ out vec2 textureCoordinates;
 void main()
 {
 	vec4 homogPos = vec4(vPosition, 1.0);
-	vec3 angles = radians(rotation);
-	vec3 c = cos(angles);
-	vec3 s = sin(angles);
-	
-	//Set Matrices
-
-	//Rotation Matrices
-	mat4 rx = mat4(	1.0,	0.0,	0.0,	0.0,
-					0.0,	c.x,	s.x,	0.0,
-					0.0,	-s.x,	c.x,	0.0,
-					0.0,	0.0,	0.0,	1.0);
-
-	mat4 ry = mat4(	c.y,	0.0,	-s.y,	0.0,
-					0.0,	1.0,	0.0,	0.0,
-					s.y,	0.0,	c.y,	0.0,
-					0.0,	0.0,	0.0,	1.0);
-
-	mat4 rz = mat4(	c.z,	-s.z,	0.0,	0.0,
-					s.z,	c.z,	0.0,	0.0,
-					0.0,	0.0,	1.0,	0.0,
-					0.0,	0.0,	0.0,	1.0);
-
-	mat4 rotationMat = rz * ry * rx;
-
-	mat4 translationMat = mat4(	1.0,	0.0,	0.0,	0.0,
-								0.0,	1.0,	0.0,	0.0,
-								0.0,	0.0,	1.0,	0.0,
-								position.x, position.y,	position.z,	1.0);
-	
-	mat4 scaleMat = mat4(	scale.x,	0.0,	0.0,	0.0,
-							0.0,	scale.y,	0.0,	0.0,
-							0.0,	0.0,	scale.z,	0.0,
-							0.0,	0.0,	0.0,	1.0);
 
 	//Get coordinates relative to the world
-	vec4 worldCoord4v = translationMat * rotationMat * scaleMat * homogPos;
+	vec4 worldCoord4v = transformMatrix * homogPos;
 	vec4 worldNormal4v = rotationMat * vec4(vNormal, 1.0);
 
 	//Set position relative to camera

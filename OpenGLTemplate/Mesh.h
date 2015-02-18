@@ -6,6 +6,7 @@
 #include "OpenGL.h"
 #include "ShaderProgram.h"
 #include "Textures.h"
+#include "Transform.h"
 
 class Mesh
 {
@@ -22,7 +23,7 @@ public:
 
 	//Methods
 	static void init(ShaderProgram* shader);
-	void draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	void draw(const Transform* transform);
 
 private:
 	//Attributes

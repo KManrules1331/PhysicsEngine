@@ -4,9 +4,7 @@
 GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
 	this->type = p;
-	this->position = position;
-	this->rotation = rotation;
-	this->scale = scale;
+	this->transform = new Transform(position, rotation, scale);
 
 	switch(type)
 	{
@@ -40,12 +38,13 @@ GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm:
 
 GameObject::~GameObject(void)
 {
+	delete transform;
 	delete collider;
 }
 
 void GameObject::draw()
 {
-	mesh->draw(position, rotation, scale);
+	mesh->draw(transform);
 }
 
 void GameObject::update()

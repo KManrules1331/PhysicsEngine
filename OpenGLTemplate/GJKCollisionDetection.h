@@ -1,12 +1,11 @@
 #pragma once
+#include "OpenGL.h"
+#include "Constants.h"
 #include "CubeCollider.h"
 
 class GJKCollisionDetection
 {
 public:
-	GJKCollisionDetection();
-	~GJKCollisionDetection();
-
 	static bool Colliding(CubeCollider* a, CubeCollider* b);
 
 private:

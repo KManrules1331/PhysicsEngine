@@ -30,9 +30,9 @@ Mesh::~Mesh(void)
 
 #pragma region Public
 
-void Mesh::draw(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+void Mesh::draw(const Transform* transform)
 {
-	shader->drawMesh(&position[0], &rotation[0], &scale[0], VAO, textureID);
+	shader->drawMesh(&(transform->transformMatrix[0][0]), &(transform->rotationMatrix[0][0]), VAO, textureID);
 }
 
 void Mesh::init(ShaderProgram* shader)

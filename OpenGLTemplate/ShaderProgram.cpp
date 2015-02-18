@@ -16,9 +16,8 @@ ShaderProgram::ShaderProgram(char* vertexShader, char* fragmentShader)
 	glUseProgram(program);
 
 	//Install Uniforms
-	position = glGetUniformLocation(program, "position");
-	rotation = glGetUniformLocation(program, "rotation");
-	scale = glGetUniformLocation(program, "scale");
+	transformMatrix = glGetUniformLocation(program, "transformMatrix");
+	rotationMatrix = glGetUniformLocation(program, "rotationMatrix");
 	cameraPosition = glGetUniformLocation(program, "cameraPosition");
 	projMatrix = glGetUniformLocation(program, "projMatrix");
 	viewMatrix = glGetUniformLocation(program, "viewMatrix");
@@ -42,13 +41,12 @@ ShaderProgram::~ShaderProgram(void)
 
 #pragma region Public
 
-void ShaderProgram::drawMesh(float* position, float* rotation, float* scale, VertexArrayObject* VAO, Texture_IDs texture)
+void ShaderProgram::drawMesh(const float* transformMatrix, const float* rotationMatrix, VertexArrayObject* VAO, Texture_IDs texture)
 {
 	VAO->activate();
 	glBindTexture(GL_TEXTURE_2D, textures[texture]);
-	glUniform3fv(this->position, 1, position);
-	glUniform3fv(this->rotation, 1, rotation);
-	glUniform3fv(this->scale, 1, scale);
+	glUniformMatrix4fv(this->transformMatrix, 1, GL_FALSE, transformMatrix);
+	glUniformMatrix4fv(this->rotationMatrix, 1, GL_FALSE, rotationMatrix);
 	glDrawElements(GL_TRIANGLES, VAO->numVertices, GL_UNSIGNED_SHORT, (void*)0);
 }
 

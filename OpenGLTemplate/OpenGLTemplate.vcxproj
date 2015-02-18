@@ -87,6 +87,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CubeCollider.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GJKCollisionDetection.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OpenGL.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexArrayObject.h" />
     <ClInclude Include="Window.h" />
@@ -104,6 +106,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CubeCollider.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GJKCollisionDetection.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -111,6 +114,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexArrayObject.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
