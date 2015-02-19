@@ -1,11 +1,9 @@
 #include "Collider.h"
 
 
-Collider::Collider(glm::vec3* center, glm::vec3* rotation, glm::vec3* scale)
+Collider::Collider(Transform* GOTransform)
 {
-	this->center = center;
-	this->rotation = rotation;
-	this->scale = scale;
+	this->GOTransform = GOTransform;
 
 	CollisionTree->insert(this);
 }
@@ -14,19 +12,6 @@ Collider::Collider(glm::vec3* center, glm::vec3* rotation, glm::vec3* scale)
 Collider::~Collider(void)
 {
 	CollisionTree->remove(this);
-}
-
-Collider::ContainingBox Collider::getAABB()
-{
-	ContainingBox returnBox;
-	returnBox.left = center->x - scale->x / 2;
-	returnBox.right = center->x + scale->x / 2;
-	returnBox.down = center->y - scale->y / 2;
-	returnBox.up = center->y + scale->y / 2;
-	returnBox.front = center->z - scale->z / 2;
-	returnBox.back = center->z + scale->z / 2;
-
-	return returnBox;
 }
 
 Collider::Octree* Collider::CollisionTree;

@@ -1,7 +1,7 @@
 #include "CubeCollider.h"
 
 
-CubeCollider::CubeCollider(glm::vec3* center, float sideLength) : Collider(center, sideLength, sideLength, sideLength)
+CubeCollider::CubeCollider(Transform* GOTransform, float sideLength) : Collider(GOTransform)
 {
 	this->sideLength = sideLength;
 }
@@ -49,4 +49,18 @@ bool CubeCollider::detectSphereCollision(SphereCollider* c)
 bool CubeCollider::detectCubeCollision(CubeCollider* c)
 {
 	return false;
+}
+
+Collider::ContainingBox CubeCollider::getAABB()
+{
+	ContainingBox returnBox;
+	float factor = sqrt(3) / 2;
+	glm::vec3 center = GOTransform->getPosition();
+	glm::vec3 scale = GOTransform->getScale();
+	returnBox.right = center.x + scale.x * factor;
+	returnBox.left = center.x - scale.x * factor;
+	returnBox.up = center.y + scale.y * factor;
+	returnBox.down = center.y - scale.y * factor;
+	returnBox.front = center.z - scale.z * factor;
+	returnBox.back = center.z + scale.z * factor;
 }

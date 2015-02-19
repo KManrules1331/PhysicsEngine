@@ -45,6 +45,36 @@ void Transform::setScale(glm::vec3 newScale)
 	scale = newScale;
 	updateTransformMatrix();
 }
+glm::vec3 Transform::getPosition()
+{
+	return this->position;
+}
+glm::vec3 Transform::getRotation()
+{
+	return this->rotation;
+}
+glm::vec3 Transform::getScale()
+{
+	return this->scale;
+}
+glm::vec3 Transform::getForward()
+{
+	glm::vec4 forwardVector = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	forwardVector *= rotationMatrix;
+	return glm::vec3(forwardVector);
+}
+glm::vec3 Transform::getUp()
+{
+	glm::vec4 upVector = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	upVector *= rotationMatrix;
+	return glm::vec3(upVector);
+}
+glm::vec3 Transform::getRight()
+{
+	glm::vec4 rightVector = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	rightVector *= rotationMatrix;
+	return glm::vec3(rightVector);
+}
 
 #pragma region MatrixUpdaters
 

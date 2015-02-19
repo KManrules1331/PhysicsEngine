@@ -8,17 +8,19 @@ public:
 	float sideLength;
 
 	//Constructors
-	CubeCollider(glm::vec3* center, float sideLength);
+	CubeCollider(Transform* GOTransform, float sideLength);
 	~CubeCollider(void);
 
 	//Methods
 	void HandleCollision(Collider* c) override;
 	void handleSphereCollision(SphereCollider* c) override;
-	void handleCubeCollision(CubeCollider* c);
+	void handleCubeCollision(CubeCollider* c) override;
 
 	//Methods
 	bool detectCollision(Collider* c) override;
 	bool detectSphereCollision(SphereCollider* c) override;
-	bool detectCubeCollision(CubeCollider* c);
+	bool detectCubeCollision(CubeCollider* c) override;
+
+	Collider::ContainingBox getAABB() override;
 };
 

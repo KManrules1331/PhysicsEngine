@@ -5,6 +5,7 @@
 
 //Custom Include
 #include "OpenGL.h"
+#include "Transform.h"
 
 //Forward Declarations
 class SphereCollider;
@@ -14,12 +15,10 @@ class Collider
 {
 public:
 	//Attributes
-	glm::vec3* center;
-	glm::vec3* scale;
-	glm::vec3* rotation;
+	Transform* GOTransform;
 
 	//Constructors
-	Collider(glm::vec3* center, glm::vec3* rotation, glm::vec3* scale);
+	Collider(Transform* GOTransform);
 	~Collider(void);
 
 	struct ContainingBox
@@ -34,7 +33,7 @@ public:
 
 
 	//Methods
-	ContainingBox getAABB();
+	virtual ContainingBox getAABB() = 0;
 	void CheckCollisions();
 	virtual void HandleCollision(Collider* c) = 0;
 	virtual void handleSphereCollision(SphereCollider* c) = 0;

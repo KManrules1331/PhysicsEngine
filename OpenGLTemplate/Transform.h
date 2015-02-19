@@ -19,6 +19,12 @@ public:
 	void setPosition(glm::vec3 newPosition);
 	void setRotation(glm::vec3 newRotation);
 	void setScale(glm::vec3 newScale);
+	glm::vec3 getPosition();
+	glm::vec3 getRotation();
+	glm::vec3 getScale();
+	glm::vec3 getForward();
+	glm::vec3 getUp();
+	glm::vec3 getRight();
 
 private:
 	glm::vec3 position;
