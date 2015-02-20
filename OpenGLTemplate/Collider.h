@@ -33,7 +33,7 @@ public:
 
 
 	//Methods
-	virtual ContainingBox getAABB() = 0;
+	virtual ContainingBox getAABB();
 	void CheckCollisions();
 	virtual void HandleCollision(Collider* c) = 0;
 	virtual void handleSphereCollision(SphereCollider* c) = 0;

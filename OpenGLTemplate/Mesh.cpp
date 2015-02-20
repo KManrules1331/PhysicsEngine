@@ -63,68 +63,68 @@ Mesh* Mesh::createCube(ShaderProgram* shader, int subdivisions)
 		{
 			float textureSquare1[8] = {
 				u[i],	v[j],
-				u[i+1],	v[j],
-				u[i+1],	v[j+1],
-				u[i],	v[j+1]
-			};
-			float textureSquare2[8] = {
-				u[i],	v[j],
 				u[i],	v[j+1],
 				u[i+1],	v[j+1],
 				u[i+1],	v[j]
+			};
+			float textureSquare2[8] = {
+				u[i],	v[j],
+				u[i+1],	v[j],
+				u[i+1],	v[j+1],
+				u[i],	v[j+1]
 			};
 
 			//Front
 			float fSquare[12] = {
 				x[i],	y[j],	.5f,
-				x[i+1],	y[j],	.5f,
+				x[i],	y[j+1],	.5f,
 				x[i+1],	y[j+1],	.5f,
-				x[i],	y[j+1],	.5f
+				x[i+1],	y[j],	.5f
 			};
 			cube->addSquare(fSquare, textureSquare1);
 
 			//Back
 			float bSquare[12] = {
 				x[i],	y[j],	-.5f,
-				x[i],	y[j+1],	-.5f,
+				x[i+1],	y[j],	-.5f,
 				x[i+1],	y[j+1],	-.5f,
-				x[i+1],	y[j],	-.5f
+				x[i],	y[j+1],	-.5f
 			};
 			cube->addSquare(bSquare, textureSquare2);
 
 			//Top
 			float tSquare[12] = {
 				x[i],	.5f,	z[j],
-				x[i],	.5f,	z[j+1],
+				x[i+1],	.5f,	z[j],
 				x[i+1],	.5f,	z[j+1],
-				x[i+1],	.5f,	z[j]
+				x[i],	.5f,	z[j+1]
 			};
 			cube->addSquare(tSquare, textureSquare2);
 
 			//Bottom
 			float boSquare[12] = {
 				x[i],	-.5f,	z[j],
-				x[i+1],	-.5f,	z[j],
+				x[i],	-.5f,	z[j+1],
 				x[i+1],	-.5f,	z[j+1],
-				x[i],	-.5f,	z[j+1]
+				x[i+1],	-.5f,	z[j]
 			};
 			cube->addSquare(boSquare, textureSquare1);
 
 			//Left
 			float lSquare[12] = {
 				-.5f,	y[i],	z[j],
-				-.5f,	y[i],	z[j+1],
+				-.5f,	y[i+1],	z[j],
 				-.5f,	y[i+1],	z[j+1],
-				-.5f,	y[i+1],	z[j]
+				-.5f,	y[i],	z[j+1]
 			};
 			cube->addSquare(lSquare, textureSquare2);
 
 			//Right
 			float rSquare[12] = {
 				.5f,	y[i],	z[j],
-				.5f,	y[i+1],	z[j],
+				.5f,	y[i],	z[j+1],
 				.5f,	y[i+1],	z[j+1],
-				.5f,	y[i],	z[j+1]
+				.5f,	y[i+1],	z[j]
 			};
 			cube->addSquare(rSquare, textureSquare1);
 		}
@@ -153,15 +153,15 @@ Mesh* Mesh::createSphere(ShaderProgram* shader, int stacks, int slices)
 		{
 			float square[12] = {
 				xL[i], y[j], zL[i],
-				xL[i+1], y[j], zL[i+1],
+				xU[i], y[j+1], zU[i],
 				xU[i+1], y[j+1], zU[i+1],
-				xU[i], y[j+1], zU[i]
+				xL[i+1], y[j], zL[i+1]
 			};
 			float textureSquare[8] = {
 				u[i],	v[j],
-				u[i+1],	v[j],
+				u[i],	v[j+1],
 				u[i+1],	v[j+1],
-				u[i],	v[j+1]
+				u[i+1],	v[j]
 			};
 			sphere->addSquare(square, textureSquare);
 		}

@@ -63,4 +63,6 @@ Collider::ContainingBox CubeCollider::getAABB()
 	returnBox.down = center.y - scale.y * factor;
 	returnBox.front = center.z - scale.z * factor;
 	returnBox.back = center.z + scale.z * factor;
+
+	return returnBox;
 }

@@ -11,6 +11,7 @@
 Window* window;
 Scene* scene1;
 Camera* cam;
+GameObject* obj1;
 float framesPerSecond;
 
 using namespace std;
@@ -30,12 +31,12 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch(key)
 	{
-		case 'w': cam->move(0.0f, 0.0f, 0.1f);	break;
-		case 'a': cam->move(-0.1f, 0.0f,  0.0f);	break;
-		case 's': cam->move(0.0f, 0.0f, -0.1f);	break;
-		case 'd': cam->move(0.1f, 0.0f, 0.0f);	break;
-		case 'q': cam->move(0.0f, -0.1f, 0.0f);	break;
-		case 'e': cam->move(0.0f, 0.1f, 0.0f);	break;
+		case 'w': cam->transform->move(glm::vec3(0.0f, 0.0f, 0.1f));	break;
+		case 'a': cam->transform->move(glm::vec3(-0.1f, 0.0f,  0.0f));	break;
+		case 's': cam->transform->move(glm::vec3(0.0f, 0.0f, -0.1f));	break;
+		case 'd': cam->transform->move(glm::vec3(0.1f, 0.0f, 0.0f));	break;
+		case 'q': cam->transform->move(glm::vec3(0.0f, -0.1f, 0.0f));	break;
+		case 'e': cam->transform->move(glm::vec3(0.0f, 0.1f, 0.0f));	break;
 		case 033:	exit(0);	break;
 	}
 	glutPostRedisplay();
@@ -71,23 +72,19 @@ void mouselook(int x, int y)
 void init(void)
 {
 	scene1->addObject(new GameObject(GameObject::Primitive::Sphere, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-	scene1->addObject(new GameObject(GameObject::Primitive::Cube, glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
+	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	scene1->addObject(obj1);
 	scene1->addObject(new GameObject(GameObject::Primitive::Circle, glm::vec3(-1.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
 	scene1->addObject(new GameObject(GameObject::Primitive::Square, glm::vec3(-1.0f, -1.0f, -2.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
 
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
-	glm::vec3 camForward = glm::vec3(0.0f, 0.0f, 1.0f);
-	glm::vec3 camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	cam->setViewData(&camPosition[0], &camForward[0], &camUp[0]);
+	cam->transform->setPosition(camPosition);
 }
 
 void update(void)
 {
 	scene1->updateScene();
-	//Testing
-	//cam->look(0, 0.05f);
-
-
+	obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
 	calculateFPS();
 	glutPostRedisplay();
 }

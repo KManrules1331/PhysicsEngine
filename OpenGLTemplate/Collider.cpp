@@ -38,6 +38,22 @@ void Collider::reEvaluate()
 	CollisionTree->insert(this);
 }
 
+Collider::ContainingBox Collider::getAABB()
+{
+	ContainingBox returnBox;
+	float factor = sqrt(3) / 2;
+	glm::vec3 center = GOTransform->getPosition();
+	glm::vec3 scale = GOTransform->getScale();
+	returnBox.right = center.x + scale.x * factor;
+	returnBox.left = center.x - scale.x * factor;
+	returnBox.up = center.y + scale.y * factor;
+	returnBox.down = center.y - scale.y * factor;
+	returnBox.front = center.z - scale.z * factor;
+	returnBox.back = center.z + scale.z * factor;
+
+	return returnBox;
+}
+
 bool Collider::AABBCollision(Collider* c)
 {
 	ContainingBox a = this->getAABB();

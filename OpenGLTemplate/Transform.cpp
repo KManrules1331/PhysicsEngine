@@ -60,19 +60,19 @@ glm::vec3 Transform::getScale()
 glm::vec3 Transform::getForward()
 {
 	glm::vec4 forwardVector = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-	forwardVector *= rotationMatrix;
+	forwardVector = rotationMatrix * forwardVector;
 	return glm::vec3(forwardVector);
 }
 glm::vec3 Transform::getUp()
 {
 	glm::vec4 upVector = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-	upVector *= rotationMatrix;
+	upVector = rotationMatrix * upVector;
 	return glm::vec3(upVector);
 }
 glm::vec3 Transform::getRight()
 {
 	glm::vec4 rightVector = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	rightVector *= rotationMatrix;
+	rightVector = rotationMatrix * rightVector;
 	return glm::vec3(rightVector);
 }
 

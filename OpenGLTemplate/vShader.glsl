@@ -29,7 +29,7 @@ void main()
 
 	//Get coordinates relative to the world
 	vec4 worldCoord4v = transformMatrix * homogPos;
-	vec4 worldNormal4v = rotationMat * vec4(vNormal, 1.0);
+	vec4 worldNormal4v = rotationMatrix * vec4(vNormal, 1.0);
 
 	//Set position relative to camera
 	gl_Position = projMatrix * viewMatrix * worldCoord4v;

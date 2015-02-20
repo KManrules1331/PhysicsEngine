@@ -1,7 +1,7 @@
 #include "SphereCollider.h"
 
 
-SphereCollider::SphereCollider(Transform* GOTransform, float radius) : Collider(GOTransform, radius * 2, radius * 2, radius * 2)
+SphereCollider::SphereCollider(Transform* GOTransform, float radius) : Collider(GOTransform)
 {
 	this->radius = radius;
 }
