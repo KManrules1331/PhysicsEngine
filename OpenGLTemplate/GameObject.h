@@ -5,6 +5,7 @@
 #include "OpenGL.h"
 #include "Mesh.h"
 #include "SphereCollider.h"
+#include "CubeCollider.h"
 #include "Transform.h"
 
 class GameObject

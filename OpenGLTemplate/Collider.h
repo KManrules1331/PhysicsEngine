@@ -5,11 +5,12 @@
 
 //Custom Include
 #include "OpenGL.h"
+#include "GJKCollisionDetection.h"
 #include "Transform.h"
 
 //Forward Declarations
-class SphereCollider;
 class CubeCollider;
+class SphereCollider;
 
 class Collider
 {
