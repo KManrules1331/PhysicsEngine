@@ -7,10 +7,10 @@ class GJKCollisionDetection
 {
 public:
 	//Methods
-	static bool areColliding(std::vector<glm::vec3> aVertices, std::vector < glm::vec3> bVertices);
+	static bool areColliding(const std::vector<glm::vec3>& aVertices, const std::vector<glm::vec3>& bVertices);
 private:
-	static glm::vec3 Support(std::vector<glm::vec3> vertices, glm::vec3 direction);
-	static bool doSimplex(std::vector<glm::vec3>& vertices, glm::vec3& direction);
+	static glm::vec3 Support(const std::vector<glm::vec3>& vertices, const glm::vec3& direction);
+	static glm::vec3 getVertex(const std::vector<glm::vec3>& aVertices, const std::vector<glm::vec3>& bVertices, const glm::vec3& direction);
 	class Simplex
 	{
 	public:
@@ -31,6 +31,9 @@ private:
 
 		bool lineCase(glm::vec3 a, glm::vec3 b, glm::vec3& direction);
 		bool triangleCase(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3& direction);
+		bool prismCase(glm::vec3 a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3& direction);
+
+		glm::vec3 getTriangleNormal(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c);
 	};
 };
 

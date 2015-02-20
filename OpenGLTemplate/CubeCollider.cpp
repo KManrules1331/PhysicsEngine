@@ -1,4 +1,5 @@
 #include "CubeCollider.h"
+#include <iostream>
 
 
 CubeCollider::CubeCollider(Transform* GOTransform) : Collider(GOTransform)
@@ -28,6 +29,7 @@ void CubeCollider::handleCubeCollision(CubeCollider* c)
 	if (detectCubeCollision(c))
 	{
 		//Collision handler
+		std::cout << "Colliding!" << std::endl;
 	}
 }
 
@@ -49,8 +51,7 @@ bool CubeCollider::detectCubeCollision(CubeCollider* c)
 {
 	std::vector<glm::vec3> vertices = getVertices();
 	std::vector<glm::vec3> otherVertices = c->getVertices();
-	std::vector<glm::vec3> minnowVertices = GJKCollisionDetection::getMinnowDifference(vertices, otherVertices);
-	return false;
+	return GJKCollisionDetection::areColliding(vertices, otherVertices);
 }
 
 Collider::ContainingBox CubeCollider::getAABB()

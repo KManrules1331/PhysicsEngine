@@ -32,12 +32,12 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch(key)
 	{
-		case 'w': cam->transform->move(glm::vec3(0.0f, 0.0f, 0.1f));	break;
-		case 'a': cam->transform->move(glm::vec3(-0.1f, 0.0f,  0.0f));	break;
-		case 's': cam->transform->move(glm::vec3(0.0f, 0.0f, -0.1f));	break;
-		case 'd': cam->transform->move(glm::vec3(0.1f, 0.0f, 0.0f));	break;
-		case 'q': cam->transform->move(glm::vec3(0.0f, -0.1f, 0.0f));	break;
-		case 'e': cam->transform->move(glm::vec3(0.0f, 0.1f, 0.0f));	break;
+		case 'w': obj1->transform->move(glm::vec3(0.0f, 0.0f, 0.001f));	break;
+		case 'a': obj1->transform->move(glm::vec3(-0.001f, 0.0f,  0.0f));	break;
+		case 's': obj1->transform->move(glm::vec3(0.0f, 0.0f, -0.001f));	break;
+		case 'd': obj1->transform->move(glm::vec3(0.001f, 0.0f, 0.0f));	break;
+		case 'q': obj1->transform->move(glm::vec3(0.0f, -0.001f, 0.0f));	break;
+		case 'e': obj1->transform->move(glm::vec3(0.0f, 0.001f, 0.0f));	break;
 		case 033:	exit(0);	break;
 	}
 	glutPostRedisplay();
@@ -45,8 +45,8 @@ void keyboard(unsigned char key, int x, int y)
 //TODO: Find out best place to put this method
 void spawnSphere()
 {
-	GameObject* obj = new GameObject(GameObject::Primitive::Sphere, cam->getLookPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
-	scene1->addObject(obj);
+	//GameObject* obj = new GameObject(GameObject::Primitive::Sphere, cam->getLookPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
+	//scene1->addObject(obj);
 }
 void mouseclick(int button, int state, int x, int y)
 {
@@ -73,8 +73,8 @@ void mouselook(int x, int y)
 void init(void)
 {
 	scene1->addObject(new GameObject(GameObject::Primitive::Cube, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->transform->rotate(glm::vec3(1.0f, 0.0f, 0.0f));
+	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.5f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj1->transform->rotate(glm::vec3(45.0f, 45.0f, 45.0f));
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
@@ -83,7 +83,7 @@ void init(void)
 void update(void)
 {
 	scene1->updateScene();
-	obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
+	//obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
 	calculateFPS();
 	glutPostRedisplay();
 }
