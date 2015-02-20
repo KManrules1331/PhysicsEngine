@@ -1,9 +1,8 @@
 #include "CubeCollider.h"
 
 
-CubeCollider::CubeCollider(Transform* GOTransform, float sideLength) : Collider(GOTransform)
+CubeCollider::CubeCollider(Transform* GOTransform) : Collider(GOTransform)
 {
-	this->sideLength = sideLength;
 }
 
 
@@ -48,6 +47,9 @@ bool CubeCollider::detectSphereCollision(SphereCollider* c)
 
 bool CubeCollider::detectCubeCollision(CubeCollider* c)
 {
+	std::vector<glm::vec3> vertices = getVertices();
+	std::vector<glm::vec3> otherVertices = c->getVertices();
+	std::vector<glm::vec3> minnowVertices = GJKCollisionDetection::getMinnowDifference(vertices, otherVertices);
 	return false;
 }
 
@@ -65,4 +67,26 @@ Collider::ContainingBox CubeCollider::getAABB()
 	returnBox.back = center.z + scale.z * factor;
 
 	return returnBox;
+}
+
+std::vector < glm::vec3> CubeCollider::getVertices()
+{
+	//Code specific to the cube collider
+	std::vector<glm::vec3> returnVector;
+	returnVector.push_back(glm::vec3(-0.5f, -0.5f, -0.5f));
+	returnVector.push_back(glm::vec3(-0.5f, -0.5f, 0.5f));
+	returnVector.push_back(glm::vec3(-0.5f, 0.5f, -0.5f));
+	returnVector.push_back(glm::vec3(-0.5f, 0.5f, 0.5f));
+	returnVector.push_back(glm::vec3(0.5f, -0.5f, -0.5f));
+	returnVector.push_back(glm::vec3(0.5f, -0.5f, 0.5f));
+	returnVector.push_back(glm::vec3(0.5f, 0.5f, -0.5f));
+	returnVector.push_back(glm::vec3(0.5f, 0.5f, 0.5f));
+	for (int i = 0; i < returnVector.size(); i++)
+	{
+		glm::vec4 multiplyVector = glm::vec4(returnVector[i], 1.0f);
+		multiplyVector = GOTransform->transformMatrix * multiplyVector;
+		returnVector[i] = glm::vec3(multiplyVector);
+	}
+
+	return returnVector;
 }

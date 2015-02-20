@@ -11,7 +11,7 @@ GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm:
 	case Primitive::Cube:
 		{
 			this->mesh = Mesh::cubeMesh;
-			this->collider = new SphereCollider(this->transform, scale.x);
+			this->collider = new CubeCollider(this->transform);
 			break;
 		}
 	case Primitive::Sphere:

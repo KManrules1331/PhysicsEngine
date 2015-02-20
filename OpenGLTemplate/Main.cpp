@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Mesh.h"
+#include "GJKCollisionDetection.h"
 
 Window* window;
 Scene* scene1;
@@ -71,12 +72,10 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	scene1->addObject(new GameObject(GameObject::Primitive::Sphere, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
+	scene1->addObject(new GameObject(GameObject::Primitive::Cube, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
 	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj1->transform->rotate(glm::vec3(1.0f, 0.0f, 0.0f));
 	scene1->addObject(obj1);
-	scene1->addObject(new GameObject(GameObject::Primitive::Circle, glm::vec3(-1.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-	scene1->addObject(new GameObject(GameObject::Primitive::Square, glm::vec3(-1.0f, -1.0f, -2.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "Collider.h"
+#include "Transform.h"
 class CubeCollider :
 	public Collider
 {
@@ -8,7 +9,7 @@ public:
 	float sideLength;
 
 	//Constructors
-	CubeCollider(Transform* GOTransform, float sideLength);
+	CubeCollider(Transform* GOTransform);
 	~CubeCollider(void);
 
 	//Methods
@@ -22,5 +23,7 @@ public:
 	bool detectCubeCollision(CubeCollider* c) override;
 
 	Collider::ContainingBox getAABB() override;
+private:
+	std::vector<glm::vec3> getVertices();
 };
 
