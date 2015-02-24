@@ -31,20 +31,6 @@ void calculateFPS()
 
 	previousTime = currentTime;
 }
-void keyboard(unsigned char key, int x, int y)
-{
-	switch(key)
-	{
-	case 'w': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.0f, 0.1f)));
-	case 'a': commands.push_back(MoveCommand(glm::vec3(-0.1f, 0.0f, 0.0f)));
-	case 's': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.0f, -0.1f)));
-	case 'd': commands.push_back(MoveCommand(glm::vec3(0.1f, 0.0f, 0.0f)));
-	case 'q': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.1f, 0.0f)));
-	case 'e': commands.push_back(MoveCommand(glm::vec3(0.0f, -0.1f, 0.0f)));
-	case 033:	quit();	break;
-	}
-	glutPostRedisplay();
-}
 //TODO: Find out best place to put this method
 void spawnSphere()
 {
@@ -121,8 +107,8 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouseclick);
 	glutPassiveMotionFunc(mouselook);
 	glutSetCursor(GLUT_CURSOR_NONE);
-	glutKeyboardFunc(Input::getKeyboardInput);
-	glutKeyboardUpFunc(Input::getKeyboardUpInput);
+	glutKeyboardFunc(Input::getKeyboardPress);
+	glutKeyboardUpFunc(Input::getKeyboardRelease);
 	glutIdleFunc(update);
 	glutDisplayFunc(draw);
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
