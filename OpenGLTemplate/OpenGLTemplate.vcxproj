@@ -84,12 +84,16 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="CommandTypes.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="CubeCollider.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GJKCollisionDetection.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
@@ -104,12 +108,15 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="CubeCollider.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GJKCollisionDetection.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />

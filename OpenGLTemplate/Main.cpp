@@ -8,11 +8,14 @@
 #include "Scene.h"
 #include "Mesh.h"
 #include "GJKCollisionDetection.h"
+#include "CommandTypes.h"
+#include "Input.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
 GameObject* obj1;
+std::vector<MoveCommand> commands;
 float framesPerSecond;
 
 using namespace std;
@@ -32,13 +35,13 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch(key)
 	{
-		case 'w': obj1->transform->move(glm::vec3(0.0f, 0.0f, 0.001f));	break;
-		case 'a': obj1->transform->move(glm::vec3(-0.001f, 0.0f,  0.0f));	break;
-		case 's': obj1->transform->move(glm::vec3(0.0f, 0.0f, -0.001f));	break;
-		case 'd': obj1->transform->move(glm::vec3(0.001f, 0.0f, 0.0f));	break;
-		case 'q': obj1->transform->move(glm::vec3(0.0f, -0.001f, 0.0f));	break;
-		case 'e': obj1->transform->move(glm::vec3(0.0f, 0.001f, 0.0f));	break;
-		case 033:	exit(0);	break;
+	case 'w': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.0f, 0.1f)));
+	case 'a': commands.push_back(MoveCommand(glm::vec3(-0.1f, 0.0f, 0.0f)));
+	case 's': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.0f, -0.1f)));
+	case 'd': commands.push_back(MoveCommand(glm::vec3(0.1f, 0.0f, 0.0f)));
+	case 'q': commands.push_back(MoveCommand(glm::vec3(0.0f, 0.1f, 0.0f)));
+	case 'e': commands.push_back(MoveCommand(glm::vec3(0.0f, -0.1f, 0.0f)));
+	case 033:	quit();	break;
 	}
 	glutPostRedisplay();
 }
@@ -83,6 +86,11 @@ void init(void)
 void update(void)
 {
 	scene1->updateScene();
+	for (int i = 0; i < commands.size(); i++)
+	{
+		commands[i].execute(*(obj1));
+	}
+	commands.clear();
 	//obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
 	calculateFPS();
 	glutPostRedisplay();
@@ -92,6 +100,14 @@ void draw(void)
 {
 	scene1->drawScene();
 	std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
+}
+
+void quit(void)
+{
+	delete window;
+	delete scene1;
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
+	exit(0);
 }
 
 int main(int argc, char **argv)
@@ -105,9 +121,11 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouseclick);
 	glutPassiveMotionFunc(mouselook);
 	glutSetCursor(GLUT_CURSOR_NONE);
-	glutKeyboardFunc(keyboard);
+	glutKeyboardFunc(Input::getKeyboardInput);
+	glutKeyboardUpFunc(Input::getKeyboardUpInput);
 	glutIdleFunc(update);
 	glutDisplayFunc(draw);
+	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
 	//Test Vars
 	Mesh::init(scene1->shader);
