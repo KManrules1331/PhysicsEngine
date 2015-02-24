@@ -4,21 +4,32 @@ void Input::SetControlledActor(GameObject* actor)
 {
 	Input::actor = actor;
 }
-void Input::getKeyboardInput(unsigned char key, int x, int y)
+void Input::getKeyboardPress(unsigned char key, int x, int y)
 {
-	if (Inputs[key] = false)
+	if (Inputs[key] == false)
 	{
-		PressBinds[key]->execute(*(actor));
+		if (PressBinds[key])	PressBinds[key]->execute(*(actor));
 		Inputs[key] = true;
 	}
 }
 
-void Input::getKeyboardUpInput(unsigned char key, int x, int y)
+void Input::getKeyboardRelease(unsigned char key, int x, int y)
 {
-	Inputs[key] = false;
+	if (Inputs[key] == true)
+	{
+		if (ReleaseBinds[key])	ReleaseBinds[key]->execute(*(actor));
+		Inputs[key] = false;
+	}
 }
 
-void Input::bindKeyboardEvent(unsigned char key, Command* c)
+void Input::bindKeyboardPress(unsigned char key, Command* c)
 {
+	delete PressBinds[key];
 	PressBinds[key] = c;
+}
+
+void Input::bindKeyboardRelease(unsigned char key, Command* c)
+{
+	delete ReleaseBinds[key];
+	ReleaseBinds[key] = c;
 }
