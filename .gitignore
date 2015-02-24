@@ -181,9 +181,12 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+<<<<<<< HEAD
 
 #glm documentation
 OpenGLTemplate/glm/doc/
 
 #GLEW documentation
 OpenGLTemplate/GLEW/doc/
+=======
+>>>>>>> ae2337c42d93ef1be3b8c4207aa5f980a3e9328e
