@@ -7,9 +7,9 @@ class MoveCommand :
 	public Command
 {
 public:
-	MoveCommand(glm::vec3 displacement);
+	MoveCommand(glm::vec3 displacement, GameObject& actor);
 	~MoveCommand();
-	virtual void execute(GameObject& actor) override;
+	virtual void execute() override;
 
 private:
 	glm::vec3 displacement;

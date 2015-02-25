@@ -72,9 +72,13 @@ void init(void)
 void update(void)
 {
 	scene1->updateScene();
+	if (Input::KeyPressed('w'))
+	{
+		obj1->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+	}
 	for (int i = 0; i < commands.size(); i++)
 	{
-		commands[i].execute(*(obj1));
+		commands[i].execute();
 	}
 	commands.clear();
 	//obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
