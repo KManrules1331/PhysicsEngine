@@ -49,5 +49,16 @@ void GameObject::draw()
 
 void GameObject::update()
 {
+	if (glm::length(frameDisplacement) >= maxSpeed)
+	{
+		frameDisplacement *= maxSpeed / glm::length(frameDisplacement);
+	}
+	transform->move(frameDisplacement);
+	frameDisplacement = glm::vec3(0.0f);
 	collider->CheckCollisions();
+}
+
+void GameObject::addDisplacement(glm::vec3 displacement)
+{
+	frameDisplacement += displacement;
 }
