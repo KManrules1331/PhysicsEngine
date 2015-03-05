@@ -76,6 +76,18 @@ void update(void)
 	{
 		obj1->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
+	if (Input::KeyPressed('a'))
+	{
+		obj1->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+	}
+	if (Input::KeyPressed('s'))
+	{
+		obj1->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+	}
+	if (Input::KeyPressed('d'))
+	{
+		obj1->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+	}
 	for (int i = 0; i < commands.size(); i++)
 	{
 		commands[i].execute();
