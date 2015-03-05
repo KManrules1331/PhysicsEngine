@@ -12,5 +12,5 @@ MoveCommand::~MoveCommand()
 
 void MoveCommand::execute()
 {
-	actor.addDisplacement(displacement);
+	actor.transform->move(displacement);
 }

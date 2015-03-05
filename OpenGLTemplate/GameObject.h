@@ -30,8 +30,6 @@ public:
 	//Methods
 	void draw();
 	void update();
-
-	void addDisplacement(glm::vec3 displacement);
 private:
 	glm::vec3 frameDisplacement;
 	float maxSpeed = 0.1f;

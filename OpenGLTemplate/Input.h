@@ -11,12 +11,14 @@ public:
 	static void getKeyboardRelease(unsigned char key, int x, int y);
 	static void OnKeyboardPress(unsigned char key, Command* c);
 	static void OnKeyboardRelease(unsigned char key, Command* c);
+	static void removeKeyboardPressBind(unsigned char key, Command* c);
+	static void removeKeyboardReleaseBind(unsigned char key, Command* c);
 	static bool KeyPressed(unsigned char key);
 	static void ClearKeyboardPressBinds(unsigned char key = '\0');
 	static void ClearKeyboardReleaseBinds(unsigned char key = '\0');
 
 private:
 	static std::map<unsigned char, bool> Inputs;
-	static std::map<unsigned char, Command*> PressBinds;
-	static std::map<unsigned char, Command*> ReleaseBinds;
+	static std::map<unsigned char, std::vector<Command*>> PressBinds;
+	static std::map<unsigned char, std::vector<Command*>> ReleaseBinds;
 };
