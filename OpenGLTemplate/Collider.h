@@ -7,6 +7,7 @@
 #include "OpenGL.h"
 #include "GJKCollisionDetection.h"
 #include "Transform.h"
+#include "Subject.h"
 
 //Forward Declarations
 class CubeCollider;
@@ -36,9 +37,6 @@ public:
 	//Methods
 	virtual ContainingBox getAABB();
 	void CheckCollisions();
-	virtual void HandleCollision(Collider* c) = 0;
-	virtual void handleSphereCollision(SphereCollider* c) = 0;
-	virtual void handleCubeCollision(CubeCollider* c) = 0;
 	static void init();
 
 	//Different types of collisions
@@ -47,10 +45,14 @@ public:
 	virtual bool detectCubeCollision(CubeCollider* c) = 0;
 
 	void reEvaluate();
+	void addListener(Observer* observer);
+	void removeListener(Observer* observer);
 
 protected:
 	//Methods
 	bool AABBCollision(Collider* c);
+
+	Subject& collisionNotifier;
 
 private:
 	class Octree

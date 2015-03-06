@@ -11,28 +11,6 @@ CubeCollider::~CubeCollider()
 {
 }
 
-void CubeCollider::HandleCollision(Collider* c)
-{
-	c->handleCubeCollision(this);
-}
-
-void CubeCollider::handleSphereCollision(SphereCollider* c)
-{
-	if (detectSphereCollision(c))
-	{
-		//Collision handler
-	}
-}
-
-void CubeCollider::handleCubeCollision(CubeCollider* c)
-{
-	if (detectCubeCollision(c))
-	{
-		//Collision handler
-		std::cout << "Colliding!" << std::endl;
-	}
-}
-
 bool CubeCollider::detectCollision(Collider* c)
 {
 	if (AABBCollision(c))

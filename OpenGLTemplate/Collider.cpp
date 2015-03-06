@@ -27,8 +27,11 @@ void Collider::CheckCollisions()
 	CollisionTree->retrieve(&potentialColliders, this);
 	for(int i = 0; i < potentialColliders.size(); i++)
 	{
-		if(!(potentialColliders[i] == this))
-			HandleCollision(potentialColliders[i]);
+		if (!(potentialColliders[i] == this) && detectCollision(potentialColliders[i]))
+			//TODO: The results of this collision detection needs to
+			// be reflected in either the detectCollision method or outside
+			// here.
+			collisionNotifier.notify(potentialColliders[i], Event::Collision);
 	}
 }
 
@@ -71,4 +74,14 @@ bool Collider::AABBCollision(Collider* c)
 	}
 
 	return false;
+}
+
+void Collider::addListener(Observer* observer)
+{
+	collisionNotifier.addObserver(observer);
+}
+
+void Collider::removeListener(Observer* observer)
+{
+	collisionNotifier.removeObserver(observer);
 }

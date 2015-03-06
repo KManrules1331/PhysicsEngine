@@ -8,7 +8,7 @@
 #include "CubeCollider.h"
 #include "Transform.h"
 
-class GameObject
+class GameObject : public Observer
 {
 public:
 	//Attributes
@@ -30,6 +30,9 @@ public:
 	//Methods
 	void draw();
 	void update();
+
+	//Collision listener
+	virtual void onNotify(Collider* c, Event e) override;
 private:
 	glm::vec3 frameDisplacement;
 	float maxSpeed = 0.1f;

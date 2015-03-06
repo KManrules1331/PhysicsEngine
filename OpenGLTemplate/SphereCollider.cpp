@@ -11,35 +11,6 @@ SphereCollider::~SphereCollider(void)
 {
 }
 
-void SphereCollider::HandleCollision(Collider* c)
-{
-	c->handleSphereCollision(this);
-}
-
-void SphereCollider::handleSphereCollision(SphereCollider* c)
-{
-	if(detectSphereCollision(c))
-	{
-		glm::vec3 cCenter = c->GOTransform->getPosition();
-		glm::vec3 thisCenter = GOTransform->getPosition();
-		glm::vec3 displacement = cCenter - thisCenter;
-		displacement *= (this->radius + c->radius) / sqrt(glm::dot(displacement, displacement));
-		glm::vec3 halfD = displacement * .5f;
-		GOTransform->move(-halfD);
-		c->GOTransform->move(halfD);
-		this->reEvaluate();
-		c->reEvaluate();
-	}
-}
-
-void SphereCollider::handleCubeCollision(CubeCollider* c)
-{
-	if (detectCubeCollision(c))
-	{
-		//CollisionHandler
-	}
-}
-
 bool SphereCollider::detectCollision(Collider* c)
 {
 	if (AABBCollision(c))

@@ -33,6 +33,7 @@ GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm:
 			break;
 		}
 	}
+	this->collider->addListener(this);
 }
 
 
@@ -50,4 +51,10 @@ void GameObject::draw()
 void GameObject::update()
 {
 	collider->CheckCollisions();
+}
+
+//Collision resolution
+void GameObject::onNotify(Collider* c, Event e)
+{
+	//Do something?
 }
