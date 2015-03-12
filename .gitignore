@@ -195,6 +195,9 @@ OpenGLTemplate/GLEW/doc/
 #FreeGLUT
 !OpenGLTemplate/FreeGLUT/*
 
+#SOIL
+!OpenGLTemplate/SOIL/SOIL.lib
+
 #Debug dll's to include
 !Debug/freeglut.dll
 !Debug/glew32.dll
