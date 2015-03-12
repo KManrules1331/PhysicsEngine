@@ -187,3 +187,14 @@ OpenGLTemplate/glm/doc/
 
 #GLEW documentation
 OpenGLTemplate/GLEW/doc/
+
+#Exceptions
+#GLEW
+!OpenGLTemplate/GLEW/lib/Release/Win32/*
+
+#FreeGLUT
+!OpenGLTemplate/FreeGLUT/*
+
+#Debug dll's to include
+!Debug/freeglut.dll
+!Debug/glew32.dll
