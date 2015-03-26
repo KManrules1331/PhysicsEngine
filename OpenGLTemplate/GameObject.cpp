@@ -1,56 +1,52 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->type = p;
 	this->transform = new Transform(position, rotation, scale);
-
-	switch(type)
-	{
-	case Primitive::Cube:
-		{
-			this->mesh = Mesh::cubeMesh;
-			this->collider = new CubeCollisionDetector(*(this->transform));
-			break;
-		}
-	case Primitive::Sphere:
-		{
-			this->mesh = Mesh::sphereMesh;
-			this->collider = new SphereCollisionDetector(*(this->transform), scale.x/2);
-			break;
-		}
-	case Primitive::Square:
-		{
-			this->mesh = Mesh::squareMesh;
-			this->collider = new SphereCollisionDetector(*(this->transform), scale.x / 2);
-			break;
-		}
-	case Primitive::Circle:
-		{
-			this->mesh = Mesh::circleMesh;
-			this->collider = new SphereCollisionDetector(*(this->transform), scale.x);
-			break;
-		}
-	}
 }
 
 
 GameObject::~GameObject(void)
 {
 	delete transform;
-	delete collider;
+	delete collisionListener;
+}
+
+void GameObject::setMesh(Mesh* mesh)
+{
+	this->mesh = mesh;
+}
+void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
+{
+	switch (t)
+	{
+	case CollisionDetector::DetectorType::Cube:
+	{
+		collisionListener = new CubeCollisionDetector(*transform);
+		break;
+	}
+	case CollisionDetector::DetectorType::Sphere:
+	{
+		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x);
+		break;
+	}
+	}
 }
 
 void GameObject::draw()
 {
-	mesh->draw(transform);
+	if (mesh)
+		mesh->draw(transform);
 }
 
 void GameObject::update()
 {
-	std::vector<CollisionDetector*> CollidingBodies;
-	collider->GetCollidingCollisionDetectors(&CollidingBodies);
-	if (CollidingBodies.size() > 1)
-		std::cout << "Colliding" << std::endl;
+	if (collisionListener)
+	{
+		std::vector<CollisionDetector*> CollidingBodies;
+		collisionListener->GetCollidingCollisionDetectors(&CollidingBodies);
+		if (CollidingBodies.size() > 1)
+			std::cout << "Colliding" << std::endl;
+	}
 }

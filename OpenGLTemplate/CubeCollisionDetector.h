@@ -5,6 +5,12 @@ class CubeCollisionDetector :
 	public CollisionDetector
 {
 public:
+
+	enum CollisionType {
+		Cube,
+		Sphere
+	};
+
 	//Constructors
 	CubeCollisionDetector(Transform& GOTransform);
 	~CubeCollisionDetector(void);

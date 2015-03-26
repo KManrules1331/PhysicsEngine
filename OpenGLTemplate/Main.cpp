@@ -61,9 +61,14 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	scene1->addObject(new GameObject(GameObject::Primitive::Cube, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.5f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	GameObject* obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj->setMesh(Mesh::cubeMesh);
+	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	scene1->addObject(obj);
+	obj1 = new GameObject(glm::vec3(1.5f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj1->transform->rotate(glm::vec3(45.0f, 45.0f, 45.0f));
+	obj1->setMesh(Mesh::cubeMesh);
+	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);

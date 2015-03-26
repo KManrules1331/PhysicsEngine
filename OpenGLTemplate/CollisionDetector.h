@@ -15,6 +15,12 @@ class SphereCollisionDetector;
 class CollisionDetector
 {
 public:
+
+	enum DetectorType {
+		Cube,
+		Sphere
+	};
+
 	//Destructors
 	virtual ~CollisionDetector();
 

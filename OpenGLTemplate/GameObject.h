@@ -14,18 +14,22 @@ public:
 	//Attributes
 	Transform* transform;	//OWNS TRANSFORM
 	Mesh* mesh;				//DOES NOT OWN MESH
-	CollisionDetector* collider;		//OWNS COLLIDER
+	CollisionDetector* collisionListener;		//OWNS COLLIDER
 
 	enum Primitive {
 		Cube,
 		Sphere,
 		Square,
 		Circle
-	} type;
+	};
 
 	//Constructors
-	GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	~GameObject(void);
+
+	//InitializerMethods
+	void setMesh(Mesh* mesh);
+	void addCollisionDetector(CollisionDetector::DetectorType t);
 
 	//Methods
 	void draw();
