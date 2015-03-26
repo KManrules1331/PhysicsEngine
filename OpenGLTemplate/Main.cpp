@@ -15,7 +15,6 @@ Window* window;
 Scene* scene1;
 Camera* cam;
 GameObject* obj1;
-std::vector<MoveCommand> commands;
 float framesPerSecond;
 
 using namespace std;
@@ -93,12 +92,6 @@ void update(void)
 	{
 		obj1->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
 	}
-	for (int i = 0; i < commands.size(); i++)
-	{
-		commands[i].execute();
-	}
-	commands.clear();
-	//obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
 	calculateFPS();
 	glutPostRedisplay();
 }
@@ -134,7 +127,7 @@ int main(int argc, char **argv)
 	glutDisplayFunc(draw);
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
-	//Test Vars
+	//Initializers
 	Mesh::init(scene1->shader);
 	CollisionDetector::init();
 	init();
