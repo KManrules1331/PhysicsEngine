@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
 	//Test Vars
 	Mesh::init(scene1->shader);
-	Collider::init();
+	CollisionDetector::init();
 	init();
 
 	glutMainLoop();

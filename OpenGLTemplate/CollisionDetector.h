@@ -9,19 +9,19 @@
 #include "Transform.h"
 
 //Forward Declarations
-class CubeCollider;
-class SphereCollider;
+class CubeCollisionDetector;
+class SphereCollisionDetector;
 
-class Collider
+class CollisionDetector
 {
 public:
+	//Destructors
+	virtual ~CollisionDetector();
+
 	//Attributes
-	Transform* GOTransform;
+	Transform& GOTransform;
 
-	//Constructors
-	Collider(Transform* GOTransform);
-	~Collider(void);
-
+	//AABB type
 	struct ContainingBox
 	{
 		float up;
@@ -32,25 +32,27 @@ public:
 		float back;
 	};
 
-
 	//Methods
 	virtual ContainingBox getAABB();
-	void CheckCollisions();
-	virtual void HandleCollision(Collider* c) = 0;
-	virtual void handleSphereCollision(SphereCollider* c) = 0;
-	virtual void handleCubeCollision(CubeCollider* c) = 0;
+	void GetCollidingCollisionDetectors(std::vector<CollisionDetector*>* CollidingDetectors);
 	static void init();
 
 	//Different types of collisions
-	virtual bool detectCollision(Collider* c) = 0;
-	virtual bool detectSphereCollision(SphereCollider* c) = 0;
-	virtual bool detectCubeCollision(CubeCollider* c) = 0;
+	virtual bool detectCollision(CollisionDetector& c) = 0;
+
+	//CollisionTypes
+	virtual bool detectCubeCollision(CubeCollisionDetector& c) = 0;
+	virtual bool detectSphereCollision(SphereCollisionDetector& c) = 0;
+
 
 	void reEvaluate();
 
 protected:
+	//Constructors
+	CollisionDetector(Transform& GOTransform);
+
 	//Methods
-	bool AABBCollision(Collider* c);
+	bool AABBCollision(CollisionDetector& c);
 
 private:
 	class Octree
@@ -64,9 +66,9 @@ private:
 	
 		//Methods
 		void clear();
-		void insert(Collider* c);
-		std::vector<Collider*>* retrieve(std::vector<Collider*>* returnObjects, Collider* c);
-		void remove(Collider* c);
+		void insert(CollisionDetector* c);
+		std::vector<CollisionDetector*>* retrieve(std::vector<CollisionDetector*>* returnObjects, CollisionDetector& c);
+		void remove(CollisionDetector* c);
 	
 	private:
 		//Attributes
@@ -85,16 +87,15 @@ private:
 		glm::vec3 center;
 		float halfWidth;
 	
-		std::vector<Collider*> colliders;
+		std::vector<CollisionDetector*> colliders;
 	
 		//Methods
-		void insert();
 		void subdivide();
-		int getIndex(Collider* c);
+		int getIndex(CollisionDetector& c);
 		Octree* getNode(int index);
-		Octree* getNode(Collider* c);
+		Octree* getNode(CollisionDetector& c);
 		void queryRange();
 	};
 
-	static Collider::Octree* CollisionTree;
+	static CollisionDetector::Octree* CollisionTree;
 };

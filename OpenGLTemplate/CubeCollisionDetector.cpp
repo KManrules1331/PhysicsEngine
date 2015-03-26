@@ -1,65 +1,43 @@
-#include "CubeCollider.h"
+#include "CubeCollisionDetector.h"
 #include <iostream>
 
 
-CubeCollider::CubeCollider(Transform* GOTransform) : Collider(GOTransform)
+CubeCollisionDetector::CubeCollisionDetector(Transform& GOTransform) : CollisionDetector(GOTransform)
 {
 }
 
 
-CubeCollider::~CubeCollider()
+CubeCollisionDetector::~CubeCollisionDetector()
 {
 }
 
-void CubeCollider::HandleCollision(Collider* c)
-{
-	c->handleCubeCollision(this);
-}
-
-void CubeCollider::handleSphereCollision(SphereCollider* c)
-{
-	if (detectSphereCollision(c))
-	{
-		//Collision handler
-	}
-}
-
-void CubeCollider::handleCubeCollision(CubeCollider* c)
-{
-	if (detectCubeCollision(c))
-	{
-		//Collision handler
-		std::cout << "Colliding!" << std::endl;
-	}
-}
-
-bool CubeCollider::detectCollision(Collider* c)
+bool CubeCollisionDetector::detectCollision(CollisionDetector& c)
 {
 	if (AABBCollision(c))
 	{
-		return c->detectCubeCollision(this);
+		return c.detectCubeCollision(*this);
 	}
 	return false;
 }
 
-bool CubeCollider::detectSphereCollision(SphereCollider* c)
+bool CubeCollisionDetector::detectSphereCollision(SphereCollisionDetector& c)
 {
 	return false;
 }
 
-bool CubeCollider::detectCubeCollision(CubeCollider* c)
+bool CubeCollisionDetector::detectCubeCollision(CubeCollisionDetector& c)
 {
 	std::vector<glm::vec3> vertices = getVertices();
-	std::vector<glm::vec3> otherVertices = c->getVertices();
+	std::vector<glm::vec3> otherVertices = c.getVertices();
 	return GJKCollisionDetection::areColliding(vertices, otherVertices);
 }
 
-Collider::ContainingBox CubeCollider::getAABB()
+CollisionDetector::ContainingBox CubeCollisionDetector::getAABB()
 {
 	ContainingBox returnBox;
 	float factor = sqrt(3) / 2;
-	glm::vec3 center = GOTransform->getPosition();
-	glm::vec3 scale = GOTransform->getScale();
+	glm::vec3 center = GOTransform.getPosition();
+	glm::vec3 scale = GOTransform.getScale();
 	returnBox.right = center.x + scale.x * factor;
 	returnBox.left = center.x - scale.x * factor;
 	returnBox.up = center.y + scale.y * factor;
@@ -70,7 +48,7 @@ Collider::ContainingBox CubeCollider::getAABB()
 	return returnBox;
 }
 
-std::vector < glm::vec3> CubeCollider::getVertices()
+std::vector < glm::vec3> CubeCollisionDetector::getVertices()
 {
 	//Code specific to the cube collider
 	std::vector<glm::vec3> returnVector;
@@ -85,7 +63,7 @@ std::vector < glm::vec3> CubeCollider::getVertices()
 	for (int i = 0; i < returnVector.size(); i++)
 	{
 		glm::vec4 multiplyVector = glm::vec4(returnVector[i], 1.0f);
-		multiplyVector = GOTransform->transformMatrix * multiplyVector;
+		multiplyVector = GOTransform.transformMatrix * multiplyVector;
 		returnVector[i] = glm::vec3(multiplyVector);
 	}
 

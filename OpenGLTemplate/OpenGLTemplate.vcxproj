@@ -83,11 +83,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collider.h" />
+    <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandTypes.h" />
     <ClInclude Include="Constants.h" />
-    <ClInclude Include="CubeCollider.h" />
+    <ClInclude Include="CubeCollisionDetector.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GJKCollisionDetection.h" />
     <ClInclude Include="Input.h" />
@@ -98,7 +98,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="SphereCollider.h" />
+    <ClInclude Include="SphereCollisionDetector.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
@@ -107,9 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="Command.cpp" />
-    <ClCompile Include="CubeCollider.cpp" />
+    <ClCompile Include="CubeCollisionDetector.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GJKCollisionDetection.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -121,7 +121,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Simplex.cpp" />
-    <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="SphereCollisionDetector.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexArrayObject.cpp" />
     <ClCompile Include="Window.cpp" />

@@ -11,25 +11,25 @@ GameObject::GameObject(Primitive p, glm::vec3 position, glm::vec3 rotation, glm:
 	case Primitive::Cube:
 		{
 			this->mesh = Mesh::cubeMesh;
-			this->collider = new CubeCollider(this->transform);
+			this->collider = new CubeCollisionDetector(*(this->transform));
 			break;
 		}
 	case Primitive::Sphere:
 		{
 			this->mesh = Mesh::sphereMesh;
-			this->collider = new SphereCollider(this->transform, scale.x/2);
+			this->collider = new SphereCollisionDetector(*(this->transform), scale.x/2);
 			break;
 		}
 	case Primitive::Square:
 		{
 			this->mesh = Mesh::squareMesh;
-			this->collider = new SphereCollider(this->transform, scale.x / 2);
+			this->collider = new SphereCollisionDetector(*(this->transform), scale.x / 2);
 			break;
 		}
 	case Primitive::Circle:
 		{
 			this->mesh = Mesh::circleMesh;
-			this->collider = new SphereCollider(this->transform, scale.x);
+			this->collider = new SphereCollisionDetector(*(this->transform), scale.x);
 			break;
 		}
 	}
@@ -49,5 +49,8 @@ void GameObject::draw()
 
 void GameObject::update()
 {
-	collider->CheckCollisions();
+	std::vector<CollisionDetector*> CollidingBodies;
+	collider->GetCollidingCollisionDetectors(&CollidingBodies);
+	if (CollidingBodies.size() > 1)
+		std::cout << "Colliding" << std::endl;
 }

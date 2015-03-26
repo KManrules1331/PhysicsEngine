@@ -4,8 +4,8 @@
 //Custom includes
 #include "OpenGL.h"
 #include "Mesh.h"
-#include "SphereCollider.h"
-#include "CubeCollider.h"
+#include "SphereCollisionDetector.h"
+#include "CubeCollisionDetector.h"
 #include "Transform.h"
 
 class GameObject
@@ -14,7 +14,7 @@ public:
 	//Attributes
 	Transform* transform;	//OWNS TRANSFORM
 	Mesh* mesh;				//DOES NOT OWN MESH
-	Collider* collider;		//OWNS COLLIDER
+	CollisionDetector* collider;		//OWNS COLLIDER
 
 	enum Primitive {
 		Cube,
@@ -30,8 +30,5 @@ public:
 	//Methods
 	void draw();
 	void update();
-private:
-	glm::vec3 frameDisplacement;
-	float maxSpeed = 0.1f;
 };
 
