@@ -54,3 +54,18 @@ CollisionDetector::ContainingBox SphereCollisionDetector::getAABB()
 
 	return returnBox;
 }
+
+bool SphereCollisionDetector::getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
+{
+	return c.getSphereCollisionInfo(*this, pointOfContact, normalOfContact);
+}
+
+//CollisionTypes
+bool SphereCollisionDetector::getCubeCollisionInfo(CubeCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
+{
+	return false;
+}
+bool SphereCollisionDetector::getSphereCollisionInfo(SphereCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
+{
+	return false;
+}

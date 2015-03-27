@@ -50,6 +50,11 @@ public:
 	virtual bool detectCubeCollision(CubeCollisionDetector& c) = 0;
 	virtual bool detectSphereCollision(SphereCollisionDetector& c) = 0;
 
+	virtual bool getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
+	
+	//CollisionTypes
+	virtual bool getCubeCollisionInfo(CubeCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
+	virtual bool getSphereCollisionInfo(SphereCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
 
 	void reEvaluate();
 

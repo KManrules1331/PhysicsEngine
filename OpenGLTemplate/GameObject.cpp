@@ -11,6 +11,9 @@ GameObject::~GameObject(void)
 {
 	delete transform;
 	delete collisionListener;
+	if (physicsComponent)
+		HardBodyPhysics::removePhysicsComponent(physicsComponent);
+	delete physicsComponent;
 }
 
 void GameObject::setMesh(Mesh* mesh)
@@ -33,6 +36,11 @@ void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 	}
 	}
 }
+void GameObject::addPhysicsComponent(float Mass, float MOI)
+{
+	physicsComponent = new PhysicsComponent(*transform, *collisionListener, Mass, MOI);
+	HardBodyPhysics::addPhysicsComponent(physicsComponent);
+}
 
 void GameObject::draw()
 {
@@ -42,11 +50,8 @@ void GameObject::draw()
 
 void GameObject::update()
 {
-	if (collisionListener)
+	if (physicsComponent)
 	{
-		std::vector<CollisionDetector*> CollidingBodies;
-		collisionListener->GetCollidingCollisionDetectors(&CollidingBodies);
-		if (CollidingBodies.size() > 1)
-			std::cout << "Colliding" << std::endl;
+		physicsComponent->update();
 	}
 }

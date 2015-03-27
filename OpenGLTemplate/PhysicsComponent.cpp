@@ -1,7 +1,7 @@
 #include "PhysicsComponent.h"
 
 
-PhysicsComponent::PhysicsComponent(Transform& t, float mass, float MOI) : GOTransform{ t }
+PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
 {
 	if (mass == 0.0f) {
 		inverseMass = 0.0f;
@@ -63,5 +63,20 @@ void PhysicsComponent::addForce(glm::vec3 force, glm::vec3 positionOfForce)
 		radiusAP = positionOfForce - GOTransform.getPosition();
 	}
 	acceleration += glm::dot(force, glm::normalize(positionOfForce)) * inverseMass;
-	rotationalAcceleration += glm::cross(force, positionOfForce) * inverseMOI;
+	rotationalAcceleration += glm::cross(force, radiusAP) * inverseMOI;
+}
+
+void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse)
+{
+	glm::vec3 radiusAP;
+	if (positionOfImpulse == GOTransform.getPosition())
+	{
+		radiusAP = impulse;
+	}
+	else
+	{
+		radiusAP = positionOfImpulse - GOTransform.getPosition();
+	}
+	velocity += glm::dot(impulse, glm::normalize(positionOfImpulse)) * inverseMass;
+	rotationalVelocity += glm::cross(impulse, radiusAP) * inverseMOI;
 }

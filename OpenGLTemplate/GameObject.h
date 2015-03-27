@@ -4,6 +4,8 @@
 //Custom includes
 #include "OpenGL.h"
 #include "Mesh.h"
+#include "PhysicsComponent.h"
+#include "HardBodyPhysics.h"
 #include "SphereCollisionDetector.h"
 #include "CubeCollisionDetector.h"
 #include "Transform.h"
@@ -15,6 +17,7 @@ public:
 	Transform* transform;	//OWNS TRANSFORM
 	Mesh* mesh;				//DOES NOT OWN MESH
 	CollisionDetector* collisionListener;		//OWNS COLLIDER
+	PhysicsComponent* physicsComponent;
 
 	enum Primitive {
 		Cube,
@@ -30,6 +33,7 @@ public:
 	//InitializerMethods
 	void setMesh(Mesh* mesh);
 	void addCollisionDetector(CollisionDetector::DetectorType t);
+	void addPhysicsComponent(float Mass, float MOI);
 
 	//Methods
 	void draw();

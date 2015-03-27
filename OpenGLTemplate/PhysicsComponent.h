@@ -1,5 +1,6 @@
 #pragma once
 #include "Transform.h"
+#include "CollisionDetector.h"
 
 class PhysicsComponent
 {
@@ -7,9 +8,10 @@ public:
 	float inverseMass;
 	float inverseMOI;
 	Transform& GOTransform;
+	CollisionDetector& GOCollider;
 
 	//Constructor
-	PhysicsComponent(Transform& t, float mass, float MOI);
+	PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI);
 
 	//Destructor
 	~PhysicsComponent();
