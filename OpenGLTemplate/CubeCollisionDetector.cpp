@@ -124,7 +124,7 @@ std::vector<glm::vec3> CubeCollisionDetector::getNormals()
 void CubeCollisionDetector::addEdgeToList(std::vector<std::vector<glm::vec3>>* list, std::vector<glm::vec3>* points, int pointNum1, int pointNum2)
 {
 	(*list).push_back(std::vector<glm::vec3>());
-	int edgeNum = (*list).size();
+	int edgeNum = (*list).size() - 1;
 	(*list)[edgeNum].push_back((*points)[pointNum1]);
 	(*list)[edgeNum].push_back((*points)[pointNum2]);
 }
@@ -144,7 +144,7 @@ bool CubeCollisionDetector::getCubeCollisionInfo(CubeCollisionDetector& c, glm::
 	{
 		std::vector<glm::vec3> fakeVertexList;
 		fakeVertexList.push_back(vertices[i]);
-		if (GJKCollisionDetection::areColliding(fakeVertexList, c.getVertices()))
+		if (GJKCollisionDetection::areColliding(c.getVertices(), fakeVertexList))
 		{
 			collidingVertices.push_back(vertices[i]);
 		}
@@ -198,13 +198,13 @@ bool CubeCollisionDetector::getCubeCollisionInfo(CubeCollisionDetector& c, glm::
 			std::vector<std::vector<glm::vec3>> otherEdges = c.getEdges();
 			int numEdgesColliding2 = 0;
 			glm::vec3 normal = glm::vec3();
-			for (int i = 0; i < edges.size(); i++)
+			for (int i = 0; i < otherEdges.size(); i++)
 			{
-				if (GJKCollisionDetection::areColliding(getVertices(), edges[i]))
+				if (GJKCollisionDetection::areColliding(otherEdges[i], getVertices()))
 				{
-					for (int j = 0; j < edges[i].size(); j++)
+					for (int j = 0; j < otherEdges[i].size(); j++)
 					{
-						normal += edges[i][j] - c.GOTransform.getPosition();
+						normal += otherEdges[i][j] - c.GOTransform.getPosition();
 					}
 					numEdgesColliding2 += 2;
 				}

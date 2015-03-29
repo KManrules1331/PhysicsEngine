@@ -7,14 +7,14 @@ PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mas
 		inverseMass = 0.0f;
 	}
 	else {
-		inverseMass = 1 / mass;
+		inverseMass = 1.0f / mass;
 	}
 
 	if (MOI == 0.0f) {
 		inverseMOI = 0.0f;
 	}
 	else {
-		inverseMOI = 1 / MOI;
+		inverseMOI = 1.0f / MOI;
 	}
 }
 
@@ -62,8 +62,11 @@ void PhysicsComponent::addForce(glm::vec3 force, glm::vec3 positionOfForce)
 	{
 		radiusAP = positionOfForce - GOTransform.getPosition();
 	}
-	acceleration += glm::dot(force, glm::normalize(positionOfForce)) * inverseMass;
-	rotationalAcceleration += glm::cross(force, radiusAP) * inverseMOI;
+	if (glm::length(force) > 0)
+	{
+		acceleration += glm::normalize(radiusAP) * abs(glm::dot(force, glm::normalize(radiusAP))) * inverseMass;
+		rotationalAcceleration += glm::cross(force, radiusAP) * inverseMOI;
+	}
 }
 
 void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse)
@@ -77,6 +80,13 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 	{
 		radiusAP = positionOfImpulse - GOTransform.getPosition();
 	}
-	velocity += glm::dot(impulse, glm::normalize(positionOfImpulse)) * inverseMass;
-	rotationalVelocity += glm::cross(impulse, radiusAP) * inverseMOI;
+	if (glm::length(impulse) > 0)
+	{
+		GOTransform.move(-velocity);
+		GOTransform.rotate(-rotationalVelocity);
+		velocity += glm::normalize(-radiusAP) * abs(glm::dot(impulse, glm::normalize(radiusAP))) * inverseMass;
+		rotationalVelocity += glm::cross(impulse, radiusAP) * inverseMOI;
+		//GOTransform.move(velocity);
+		//GOTransform.rotate(rotationalVelocity);
+	}
 }

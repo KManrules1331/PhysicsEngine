@@ -9,7 +9,7 @@ bool GJKCollisionDetection::areColliding(const std::vector<glm::vec3>& aVertices
 	while (true)
 	{
 		glm::vec3 vertex = getVertex(aVertices, bVertices, direction);
-		if (glm::dot(vertex, direction) < 0) return false;
+		if (glm::dot(vertex, direction) <= 0) return false;
 		simplex->push_back(vertex);
 		if (simplex->doSimplex(direction)) return true;
 	}
