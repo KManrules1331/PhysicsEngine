@@ -10,8 +10,8 @@ void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, glm::vec
 	glm::vec3 velocityB = b->getVelocity() + glm::cross(b->getRotationalVelocity(), radiusBP);
 	float j = getMomentumMagnitude(1.0f, velocityA - velocityB, normalOfCollision, a->inverseMass, b->inverseMass, radiusAP, radiusBP, a->inverseMOI, b->inverseMOI);
 
-	a->addImpulse(normalOfCollision * j, positionOfCollision);
-	b->addImpulse(normalOfCollision * -j, positionOfCollision);
+	a->addImpulse(normalOfCollision * 0.5f * j, positionOfCollision);
+	b->addImpulse(normalOfCollision * 0.5f * -j, positionOfCollision);
 }
 
 float HardBodyPhysics::getMomentumMagnitude(float e, glm::vec3 combinedVelocities, glm::vec3 normal, float inverseMassA, float inverseMassB, glm::vec3 radiusOfA, glm::vec3 radiusOfB, float InverseIOMA, float InverseIOMB)
@@ -52,9 +52,15 @@ void HardBodyPhysics::update()
 		{
 			if (PhysicsComponents[i]->GOCollider.detectCollision(PhysicsComponents[j]->GOCollider))
 			{
-				glm::vec3 position, normal;
-				if(PhysicsComponents[i]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position, &normal))
-					Collide(PhysicsComponents[i], PhysicsComponents[j], normal, position);
+				glm::vec3 position1, normal1;
+				glm::vec3 position2, normal2;
+				bool collision1, collision2;
+				collision1 = PhysicsComponents[i]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position1, &normal1);
+				collision2 = PhysicsComponents[j]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position2, &normal2);
+				if (collision1)
+					Collide(PhysicsComponents[i], PhysicsComponents[j], normal1, position1);
+				if (collision2)
+					Collide(PhysicsComponents[j], PhysicsComponents[i], normal2, position2);
 			}
 		}
 	}
