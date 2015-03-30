@@ -26,6 +26,7 @@ void Scene::updateScene()
 	{
 		gameObjects[i]->update();
 	}
+	HardBodyPhysics::update();
 }
 
 void Scene::drawScene()

@@ -15,7 +15,6 @@ Window* window;
 Scene* scene1;
 Camera* cam;
 GameObject* obj1;
-std::vector<MoveCommand> commands;
 float framesPerSecond;
 
 using namespace std;
@@ -61,9 +60,19 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	scene1->addObject(new GameObject(GameObject::Primitive::Cube, glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f)));
-	obj1 = new GameObject(GameObject::Primitive::Cube, glm::vec3(1.5f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->transform->rotate(glm::vec3(45.0f, 45.0f, 45.0f));
+	GameObject* obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj->setMesh(Mesh::cubeMesh);
+	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	obj->addPhysicsComponent(1.0f, 0.1f);
+	obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
+	//obj->physicsComponent->addForce(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(-0.5f, -0.5f, 0.0f));
+	scene1->addObject(obj);
+	obj1 = new GameObject(glm::vec3(3.0f, 0.9f, -0.7f), glm::vec3(20.0f, 0.0f, 0.0f), glm::vec3(1.0f));
+	obj1->transform->rotate(glm::vec3(0.0f, 0.0f, 0.0f));
+	obj1->setMesh(Mesh::cubeMesh);
+	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	obj1->addPhysicsComponent(1.0f, 0.1f);
+	obj1->physicsComponent->addForce(glm::vec3(-0.01f, 0.0f, 0.0f), obj1->transform->getPosition());
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
@@ -88,12 +97,6 @@ void update(void)
 	{
 		obj1->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
 	}
-	for (int i = 0; i < commands.size(); i++)
-	{
-		commands[i].execute();
-	}
-	commands.clear();
-	//obj1->transform->rotate(glm::vec3(0.05f, 0.05f, 0.05f));
 	calculateFPS();
 	glutPostRedisplay();
 }
@@ -129,9 +132,9 @@ int main(int argc, char **argv)
 	glutDisplayFunc(draw);
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
-	//Test Vars
+	//Initializers
 	Mesh::init(scene1->shader);
-	Collider::init();
+	CollisionDetector::init();
 	init();
 
 	glutMainLoop();

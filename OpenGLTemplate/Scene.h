@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "GameObject.h"
 #include "ShaderProgram.h"
+#include "HardBodyPhysics.h"
 #include "Camera.h"
 
 class Scene

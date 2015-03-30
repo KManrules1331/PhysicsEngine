@@ -63,6 +63,7 @@ bool GJKCollisionDetection::Simplex::lineCase(glm::vec3 a, glm::vec3 b, glm::vec
 		vertices[1] = a;
 		size = 2;
 		direction = glm::cross(glm::cross(b - a, -a), b - a);
+		if (glm::length(direction) == 0) return true;
 	}
 	else
 	{
@@ -106,6 +107,7 @@ bool GJKCollisionDetection::Simplex::triangleCase(glm::vec3 a, glm::vec3 b, glm:
 				vertices[2] = a;
 				size = 3;
 				direction = abc;
+				if (glm::length(glm::dot(a + b + c, direction)) == 0) return true;
 				return false;
 			}
 			else
@@ -115,6 +117,7 @@ bool GJKCollisionDetection::Simplex::triangleCase(glm::vec3 a, glm::vec3 b, glm:
 				vertices[2] = a;
 				size = 3;
 				direction = -abc;
+				if (glm::length(glm::dot(a + b + c, direction)) == 0) return true;
 				return false;
 			}
 		}

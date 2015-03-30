@@ -84,15 +84,6 @@
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Meshes</Filter>
     </ClInclude>
-    <ClInclude Include="Collider.h">
-      <Filter>Header Files\Colliders</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
-      <Filter>Header Files\Colliders</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeCollider.h">
-      <Filter>Header Files\Colliders</Filter>
-    </ClInclude>
     <ClInclude Include="GJKCollisionDetection.h">
       <Filter>Header Files\Colliders</Filter>
     </ClInclude>
@@ -110,6 +101,21 @@
     </ClInclude>
     <ClInclude Include="MoveCommand.h">
       <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeCollisionDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollisionDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HardBodyPhysics.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,15 +149,6 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Meshes</Filter>
     </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Source Files\Colliders</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>Source Files\Colliders</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeCollider.cpp">
-      <Filter>Source Files\Colliders</Filter>
-    </ClCompile>
     <ClCompile Include="GJKCollisionDetection.cpp">
       <Filter>Source Files\Colliders</Filter>
     </ClCompile>
@@ -169,6 +166,21 @@
     </ClCompile>
     <ClCompile Include="MoveCommand.cpp">
       <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionDetector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeCollisionDetector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollisionDetector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HardBodyPhysics.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

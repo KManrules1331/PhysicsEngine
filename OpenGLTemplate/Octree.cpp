@@ -1,15 +1,15 @@
-#include "Collider.h"
+#include "CollisionDetector.h"
 
 #pragma region Constructor / Destructor
 
-Collider::Octree::Octree(glm::vec3 center, float halfWidth)
+CollisionDetector::Octree::Octree(glm::vec3 center, float halfWidth)
 {
 	this->center = center;
 	this->halfWidth = halfWidth;
 	divided = false;
 }
 
-Collider::Octree::~Octree(void)
+CollisionDetector::Octree::~Octree(void)
 {
 	clear();
 }
@@ -20,7 +20,7 @@ Collider::Octree::~Octree(void)
 
 #pragma region Public
 
-void Collider::Octree::clear()
+void CollisionDetector::Octree::clear()
 {
 	colliders.clear();
 
@@ -45,11 +45,11 @@ void Collider::Octree::clear()
 	divided = false;
 }
 
-void Collider::Octree::insert(Collider* c)
+void CollisionDetector::Octree::insert(CollisionDetector* c)
 {
 	if(divided)
 	{
-		Octree* node = getNode(c);
+		Octree* node = getNode(*c);
 
 		if(node)
 		{
@@ -67,7 +67,7 @@ void Collider::Octree::insert(Collider* c)
 		int i = 0;
 		while(i < colliders.size())
 		{
-			Octree* node = getNode(colliders[i]);
+			Octree* node = getNode(*colliders[i]);
 			if(node)
 			{
 				node->insert(colliders[i]);
@@ -81,7 +81,7 @@ void Collider::Octree::insert(Collider* c)
 	}
 }
 
-std::vector<Collider*>* Collider::Octree::retrieve(std::vector<Collider*>* returnObjects, Collider* c)
+std::vector<CollisionDetector*>* CollisionDetector::Octree::retrieve(std::vector<CollisionDetector*>* returnObjects, CollisionDetector& c)
 {
 	Octree* node = getNode(c);
 	if(node)
@@ -100,7 +100,7 @@ std::vector<Collider*>* Collider::Octree::retrieve(std::vector<Collider*>* retur
 	return returnObjects;
 }
 
-void Collider::Octree::remove(Collider* c)
+void CollisionDetector::Octree::remove(CollisionDetector* c)
 {
 	for(int i = 0; i < 8; i++)
 	{
@@ -118,9 +118,9 @@ void Collider::Octree::remove(Collider* c)
 
 #pragma region Private
 
-const int Collider::Octree::TREE_NODE_CAPACITY = 8;
+const int CollisionDetector::Octree::TREE_NODE_CAPACITY = 8;
 
-void Collider::Octree::subdivide()
+void CollisionDetector::Octree::subdivide()
 {
 	UpRightFront = new Octree(glm::vec3(center.x + halfWidth/2, center.y + halfWidth/2, center.z + halfWidth/2), halfWidth/2);
 	UpRightBack = new Octree(glm::vec3(center.x + halfWidth/2, center.y + halfWidth/2, center.z - halfWidth/2), halfWidth/2);
@@ -134,7 +134,7 @@ void Collider::Octree::subdivide()
 }
 
 // getIndex
-// Method determines in what octree a collider fully belongs to
+// Method determines in what octree a CollisionDetector fully belongs to
 // 0: UpRightFront
 // 1: UpRightBack
 // 2: UpLeftFront
@@ -144,12 +144,12 @@ void Collider::Octree::subdivide()
 // 6: DownLeftFront
 // 7: DownLeftBack
 // -1: Only fits in this quadtree
-int Collider::Octree::getIndex(Collider* c)
+int CollisionDetector::Octree::getIndex(CollisionDetector& c)
 {
 	int index = -1;
 
 	if(!divided) return index;
-	Collider::ContainingBox contBox = c->getAABB();
+	CollisionDetector::ContainingBox contBox = c.getAABB();
 	bool upHalf = (contBox.down > center.y);
 	bool downHalf = (contBox.up < center.y);
 	bool rightHalf = (contBox.left > center.x);
@@ -222,7 +222,7 @@ int Collider::Octree::getIndex(Collider* c)
 // 6: DownLeftFront
 // 7: DownLeftBack
 // returns nullptr if index is -1;
-Collider::Octree* Collider::Octree::getNode(int index)
+CollisionDetector::Octree* CollisionDetector::Octree::getNode(int index)
 {
 	switch(index)
 	{
@@ -256,7 +256,7 @@ Collider::Octree* Collider::Octree::getNode(int index)
 	}
 }
 
-Collider::Octree* Collider::Octree::getNode(Collider* c)
+CollisionDetector::Octree* CollisionDetector::Octree::getNode(CollisionDetector& c)
 {
 	return getNode(getIndex(c));
 }
