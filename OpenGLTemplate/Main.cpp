@@ -67,7 +67,7 @@ void init(void)
 	obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
 	//obj->physicsComponent->addForce(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(-0.5f, -0.5f, 0.0f));
 	scene1->addObject(obj);
-	obj1 = new GameObject(glm::vec3(3.0f, 0.9f, -0.7f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj1 = new GameObject(glm::vec3(3.0f, 0.9f, -0.7f), glm::vec3(20.0f, 0.0f, 0.0f), glm::vec3(1.0f));
 	obj1->transform->rotate(glm::vec3(0.0f, 0.0f, 0.0f));
 	obj1->setMesh(Mesh::cubeMesh);
 	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
