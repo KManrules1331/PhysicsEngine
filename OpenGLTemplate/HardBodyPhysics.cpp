@@ -17,8 +17,8 @@ void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, glm::vec
 float HardBodyPhysics::getMomentumMagnitude(float e, glm::vec3 combinedVelocities, glm::vec3 normal, float inverseMassA, float inverseMassB, glm::vec3 radiusOfA, glm::vec3 radiusOfB, float InverseIOMA, float InverseIOMB)
 {
 	float denom1 = glm::dot(normal, normal) * (inverseMassA + inverseMassB);
-	float denom2 = pow(glm::length(radiusOfA) * glm::length(normal) * sin(glm::angle(radiusOfA, normal)), 2) * InverseIOMA;
-	float denom3 = pow(glm::length(radiusOfB) * glm::length(normal) * sin(glm::angle(radiusOfB, normal)), 2) * InverseIOMB;
+	float denom2 = pow(glm::length(radiusOfA) * glm::length(normal) * sin(glm::angle(glm::normalize(radiusOfA), glm::normalize(normal))), 2) * InverseIOMA;
+	float denom3 = pow(glm::length(radiusOfB) * glm::length(normal) * sin(glm::angle(glm::normalize(radiusOfB), glm::normalize(normal))), 2) * InverseIOMB;
 
 	float denominator = denom1 + denom2 + denom3;
 
