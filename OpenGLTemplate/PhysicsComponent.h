@@ -18,7 +18,7 @@ public:
 
 	//Getters
 	glm::vec3 getVelocity();
-	glm::vec3 getRotationalVelocity();
+	glm::quat getRotationalVelocity();
 
 	//Methods
 	void reset();
@@ -31,8 +31,8 @@ public:
 private:
 	//Attributes
 	glm::vec3 acceleration;
-	glm::vec3 rotationalAcceleration;
+	glm::quat rotationalAcceleration;
 	glm::vec3 velocity;
-	glm::vec3 rotationalVelocity;
+	glm::quat rotationalVelocity;
 };
 

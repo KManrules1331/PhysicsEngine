@@ -3,7 +3,8 @@
 
 GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 {
-	this->transform = new Transform(position, rotation, scale);
+	
+	this->transform = new Transform(position, glm::quat(rotation), scale);
 }
 
 

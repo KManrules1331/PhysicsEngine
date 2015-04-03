@@ -9,18 +9,20 @@ public:
 	glm::mat4 rotationMatrix;
 
 	//Constructor/Destructor
-	Transform(glm::vec3 position = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f));
+	Transform(glm::vec3 position = glm::vec3(0.0f), glm::quat rotation = glm::angleAxis(1.0f, glm::vec3(0.0f)), glm::vec3 scale = glm::vec3(1.0f));
 	~Transform();
 
 	//Methods
 	void move(glm::vec3 displacement);
-	void rotate(glm::vec3 rotation);
+	void rotate(glm::quat rotation);
+	void rotate(float angle, glm::vec3 axis);
 	void changeScale(glm::vec3 scale);
 	void setPosition(glm::vec3 newPosition);
-	void setRotation(glm::vec3 newRotation);
+	void setRotation(glm::quat newRotation);
+	void setRotation(float angle, glm::vec3 axis);
 	void setScale(glm::vec3 newScale);
 	glm::vec3 getPosition();
-	glm::vec3 getRotation();
+	glm::quat getRotation();
 	glm::vec3 getScale();
 	glm::vec3 getForward();
 	glm::vec3 getUp();
@@ -28,7 +30,7 @@ public:
 
 private:
 	glm::vec3 position;
-	glm::vec3 rotation;
+	glm::quat rotation;
 	glm::vec3 scale;
 
 	//Methods
