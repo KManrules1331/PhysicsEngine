@@ -38,7 +38,7 @@ void Mesh::draw(const Transform* transform)
 void Mesh::init(ShaderProgram* shader)
 {
 	Mesh::cubeMesh = Mesh::createCube(shader);
-	Mesh::sphereMesh = Mesh::createSphere(shader);
+	Mesh::sphereMesh = Mesh::createSphere(shader, 10, 10);
 	Mesh::squareMesh = Mesh::createSquare(shader);
 	Mesh::circleMesh = Mesh::createCircle(shader);
 }
@@ -163,7 +163,8 @@ Mesh* Mesh::createSphere(ShaderProgram* shader, int stacks, int slices)
 				u[i+1],	v[j+1],
 				u[i+1],	v[j]
 			};
-			sphere->addSquare(square, textureSquare);
+			//sphere->addSquare(square, textureSquare);
+			sphere->addRoundedSquare(square, textureSquare, glm::vec3(0.0f));
 		}
 
 		xL = xU;
@@ -302,6 +303,58 @@ void Mesh::addSquare(float* vertData, float* textureData)
 		textureData[0],	textureData[1]
 	};
 	addTriangle(tri2, texTri2);
+}
+
+void Mesh::addRoundedSquare(float* vertData, float* textureData, glm::vec3 center)
+{
+	float tri1[9] = {
+		vertData[0], vertData[1], vertData[2],
+		vertData[3], vertData[4], vertData[5],
+		vertData[6], vertData[7], vertData[8]
+	};
+	float texTri1[6] = {
+		textureData[0], textureData[1],
+		textureData[2], textureData[3],
+		textureData[4], textureData[5]
+	};
+	addRoundedTriangle(tri1, texTri1, center);
+
+	float tri2[9] = {
+		vertData[6], vertData[7], vertData[8],
+		vertData[9], vertData[10], vertData[11],
+		vertData[0], vertData[1], vertData[2]
+	};
+	float texTri2[6] = {
+		textureData[4], textureData[5],
+		textureData[6], textureData[7],
+		textureData[0], textureData[1]
+	};
+	addRoundedTriangle(tri2, texTri2, center);
+}
+
+void Mesh::addRoundedTriangle(float* vertData, float* textureData, glm::vec3 center)
+{
+	for (int i = 0; i < 9; i++)
+	{
+		localVertexContainer.push_back(vertData[i]);
+	}
+	glm::vec3 vertices[3];
+	vertices[0] = glm::vec3(vertData[0], vertData[1], vertData[2]);
+	vertices[1] = glm::vec3(vertData[3], vertData[4], vertData[5]);
+	vertices[2] = glm::vec3(vertData[6], vertData[7], vertData[8]);
+
+	for (int i = 0; i < 3; i++)
+	{
+		glm::vec3 normal = glm::normalize(vertices[i] - center);
+		localNormalContainer.push_back(normal.x);
+		localNormalContainer.push_back(normal.y);
+		localNormalContainer.push_back(normal.z);
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		localTexCoordContainer.push_back(textureData[i]);
+	}
 }
 
 std::vector<float> Mesh::divisionLoop(float min, float max, int subdivisions)

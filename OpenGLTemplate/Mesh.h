@@ -38,13 +38,15 @@ private:
 
 	//Mesh functions
 	static Mesh* createCube(ShaderProgram* shader, int subdivisions = 5);
-	static Mesh* createSphere(ShaderProgram* shader, int stacks = 5, int slices = 5);
+	static Mesh* createSphere(ShaderProgram* shader, int stacks = 20, int slices = 20);
 	static Mesh* createSquare(ShaderProgram* shader, int subdivisions = 1);
 	static Mesh* createCircle(ShaderProgram* shader, int slices = 20);
 
 	//Helper functions
 	void addTriangle(float* vertData, float* textureData);
 	void addSquare(float* vertData, float* textureData);
+	void addRoundedSquare(float* vertData, float* textureData, glm::vec3 center);
+	void addRoundedTriangle(float* vertData, float* textureData, glm::vec3 center);
 
 	//Math helper functions
 	static std::vector<float> divisionLoop(float min, float max, int subdivisions);
