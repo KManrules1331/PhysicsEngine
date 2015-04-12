@@ -14,7 +14,7 @@
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* obj1;
+GameObject* obj;
 float framesPerSecond;
 
 using namespace std;
@@ -60,21 +60,16 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	obj1 = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::sphereMesh);
+	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj->setMesh(Mesh::cubeMesh);
+	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	obj->addPhysicsComponent(1.0f, 0.1f);
+	scene1->addObject(obj);
+	GameObject* obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj1->setMesh(Mesh::cubeMesh);
+	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	obj1->addPhysicsComponent(1.0f, 0.1f);
 	scene1->addObject(obj1);
-	//obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	//obj->addPhysicsComponent(1.0f, 0.1f);
-	//obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
-	////obj->physicsComponent->addForce(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(-0.5f, -0.5f, 0.0f));
-	//scene1->addObject(obj);
-	//obj1 = new GameObject(glm::vec3(3.0f, 0.9f, -0.7f), glm::vec3(20.0f, 0.0f, 0.0f), glm::vec3(1.0f));
-	//obj1->transform->rotate(glm::vec3(0.0f, 0.0f, 0.0f));
-	//obj1->setMesh(Mesh::cubeMesh);
-	//obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	//obj1->addPhysicsComponent(1.0f, 0.1f);
-	//obj1->physicsComponent->addForce(glm::vec3(-0.01f, 0.0f, 0.0f), obj1->transform->getPosition());
-	//scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -84,19 +79,23 @@ void update(void)
 	scene1->updateScene();
 	if (Input::KeyPressed('w'))
 	{
-		obj1->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
-		obj1->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+		obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		obj1->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+		obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
-		obj1->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+		obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+	}
+	if (Input::KeyPressed('t'))
+	{
+		obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
 	calculateFPS();
 	glutPostRedisplay();

@@ -19,7 +19,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation)
 
 #pragma endregion
 
-	this->transform = new Transform(position, rotation);
+	this->transform = new Transform(position, glm::quat(rotation));
 	//Called to initialize matrices
 	projectionData = glm::vec4(1.0f, 10.0f, 1.0f, 1.0f);
 }

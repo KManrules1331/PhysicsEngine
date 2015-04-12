@@ -1,7 +1,7 @@
 #include "Transform.h"
 
 
-Transform::Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+Transform::Transform(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 {
 	this->position = position;
 	this->rotation = rotation;
@@ -20,9 +20,15 @@ void Transform::move(glm::vec3 displacement)
 	position += displacement;
 	updateTransformMatrix();
 }
-void Transform::rotate(glm::vec3 rotation)
+void Transform::rotate(glm::quat rotation)
 {
-	this->rotation += rotation;
+	this->rotation *= rotation;
+	updateTransformMatrix();
+}
+void Transform::rotate(float angle, glm::vec3 axis)
+{
+	glm::quat rotation = glm::angleAxis(angle, axis);
+	this->rotation *= rotation;
 	updateTransformMatrix();
 }
 void Transform::changeScale(glm::vec3 scale)
@@ -35,9 +41,15 @@ void Transform::setPosition(glm::vec3 newPosition)
 	position = newPosition;
 	updateTransformMatrix();
 }
-void Transform::setRotation(glm::vec3 newRotation)
+void Transform::setRotation(glm::quat newRotation)
 {
 	rotation = newRotation;
+	updateTransformMatrix();
+}
+void Transform::setRotation(float angle, glm::vec3 axis)
+{
+	glm::quat newRotation = glm::angleAxis(angle, axis);
+	this->rotation = newRotation;
 	updateTransformMatrix();
 }
 void Transform::setScale(glm::vec3 newScale)
@@ -49,7 +61,7 @@ glm::vec3 Transform::getPosition()
 {
 	return this->position;
 }
-glm::vec3 Transform::getRotation()
+glm::quat Transform::getRotation()
 {
 	return this->rotation;
 }
@@ -95,24 +107,7 @@ void Transform::updateTransformMatrix()
 
 void Transform::updateRotationMatrix()
 {
-	glm::vec3 angles = rotation * (PI / 180);
-	glm::vec3 cosAngles = glm::vec3(cos(angles.x), cos(angles.y), cos(angles.z));
-	glm::vec3 sinAngles = glm::vec3(sin(angles.x), sin(angles.y), sin(angles.z));
-
-	glm::mat4 rotationX = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, cosAngles.x, sinAngles.x, 0.0f,
-		0.0f, -sinAngles.x, cosAngles.x, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 rotationY = glm::mat4(cosAngles.y, 0.0f, -sinAngles.y, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		sinAngles.y, 0.0f, cosAngles.y, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 rotationZ = glm::mat4(cosAngles.z, -sinAngles.z, 0.0f, 0.0f,
-		sinAngles.z, cosAngles.z, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-
-	rotationMatrix = rotationZ * rotationY * rotationX;
+	rotationMatrix = glm::toMat4(rotation);
 }
 
 #pragma endregion
