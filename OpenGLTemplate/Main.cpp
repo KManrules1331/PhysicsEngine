@@ -10,6 +10,7 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
+#include "Spring.h"
 
 Window* window;
 Scene* scene1;
@@ -61,15 +62,17 @@ void mouselook(int x, int y)
 void init(void)
 {
 	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj->setMesh(Mesh::cubeMesh);
-	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj->addPhysicsComponent(1.0f, 0.1f);
+	obj->setMesh(Mesh::sphereMesh);
+	obj->addPhysicsComponent(0.0f, 0.0f);
 	scene1->addObject(obj);
 	GameObject* obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::cubeMesh);
-	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
+	obj1->setMesh(Mesh::sphereMesh);
 	obj1->addPhysicsComponent(1.0f, 0.1f);
 	scene1->addObject(obj1);
+	Spring* spring = new Spring(*(obj->physicsComponent), *(obj1->physicsComponent), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	spring->setMesh(Mesh::cubeMesh);
+	scene1->addObject(spring);
+	Input::OnKeyboardPress('y', new MoveCommand(glm::vec3(-0.5f, 0.0f, 0.0f), *obj));
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }

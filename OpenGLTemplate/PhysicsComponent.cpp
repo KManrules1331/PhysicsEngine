@@ -1,7 +1,7 @@
 #include "PhysicsComponent.h"
 
 
-PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
+PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector* d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
 {
 	if (mass == 0.0f) {
 		inverseMass = 0.0f;
@@ -42,6 +42,10 @@ void PhysicsComponent::update() {
 	//Update consistent variables
 	velocity += acceleration;
 	rotationalVelocity *= rotationalAcceleration;
+
+	//That thing that reduces energy
+	velocity *= 0.99f;
+	rotationalVelocity *= 0.99f;
 
 	GOTransform.move(velocity);
 	GOTransform.rotate(rotationalVelocity);

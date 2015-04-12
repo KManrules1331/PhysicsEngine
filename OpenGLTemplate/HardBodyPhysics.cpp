@@ -48,15 +48,17 @@ void HardBodyPhysics::update()
 {
 	for (int i = 0; i < PhysicsComponents.size(); i++)
 	{
+		if (!PhysicsComponents[i]->GOCollider) continue;
 		for (int j = i + 1; j < PhysicsComponents.size(); j++)
 		{
-			if (PhysicsComponents[i]->GOCollider.detectCollision(PhysicsComponents[j]->GOCollider))
+			if (!PhysicsComponents[j]->GOCollider) continue;
+			if (PhysicsComponents[i]->GOCollider->detectCollision(*(PhysicsComponents[j]->GOCollider)))
 			{
 				glm::vec3 position1, normal1;
 				glm::vec3 position2, normal2;
 				bool collision1, collision2;
-				collision1 = PhysicsComponents[i]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position1, &normal1);
-				collision2 = PhysicsComponents[j]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position2, &normal2);
+				collision1 = PhysicsComponents[i]->GOCollider->getCollisionInfo(*(PhysicsComponents[j]->GOCollider), &position1, &normal1);
+				collision2 = PhysicsComponents[j]->GOCollider->getCollisionInfo(*(PhysicsComponents[j]->GOCollider), &position2, &normal2);
 				if (collision1)
 					Collide(PhysicsComponents[i], PhysicsComponents[j], normal1, position1);
 				if (collision2)

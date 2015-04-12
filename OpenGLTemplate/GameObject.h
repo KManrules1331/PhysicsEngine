@@ -36,7 +36,7 @@ public:
 	void addPhysicsComponent(float Mass, float MOI);
 
 	//Methods
-	void draw();
-	void update();
+	virtual void draw();
+	virtual void update();
 };
 

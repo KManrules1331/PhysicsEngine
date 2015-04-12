@@ -8,10 +8,10 @@ public:
 	float inverseMass;
 	float inverseMOI;
 	Transform& GOTransform;
-	CollisionDetector& GOCollider;
+	CollisionDetector* GOCollider;	//DOES NOT OWN, BUT USES POINTER TO
 
 	//Constructor
-	PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI);
+	PhysicsComponent(Transform& t, CollisionDetector* d, float mass, float MOI);
 
 	//Destructor
 	~PhysicsComponent();
