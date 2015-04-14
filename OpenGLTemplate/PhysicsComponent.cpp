@@ -45,7 +45,7 @@ void PhysicsComponent::update() {
 
 	//That thing that reduces energy
 	velocity *= 0.99f;
-	rotationalVelocity *= 0.99f;
+	//rotationalVelocity *= 0.99f;
 
 	GOTransform.move(velocity);
 	GOTransform.rotate(rotationalVelocity);
