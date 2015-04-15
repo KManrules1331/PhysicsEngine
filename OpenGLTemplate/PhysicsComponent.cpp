@@ -45,7 +45,7 @@ void PhysicsComponent::update() {
 
 	//That thing that reduces energy
 	velocity *= 0.99f;
-	//rotationalVelocity *= 0.99f;
+	rotationalVelocity = glm::angleAxis(glm::angle(rotationalVelocity) * 0.99f, glm::axis(rotationalVelocity));
 
 	GOTransform.move(velocity);
 	GOTransform.rotate(rotationalVelocity);
@@ -67,7 +67,10 @@ void PhysicsComponent::addForce(glm::vec3 force, glm::vec3 positionOfForce)
 	{
 		radiusAP = positionOfForce - GOTransform.getPosition();
 		axis = glm::normalize(glm::cross(force, radiusAP));
-		axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+		if (glm::length(axis) > 0)
+			axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+		else
+			axis = glm::vec3(1.0f, 0.0f, 0.0f);
 	}
 	if (glm::length(force) > 0)
 	{
@@ -99,7 +102,5 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 		GOTransform.rotate(-rotationalVelocity);
 		velocity += glm::normalize(radiusAP) * glm::dot(impulse, glm::normalize(radiusAP)) * inverseMass;
 		rotationalVelocity *= glm::angleAxis(glm::length(glm::cross(impulse, radiusAP)) * inverseMOI, axis);
-		//GOTransform.move(velocity);
-		//GOTransform.rotate(rotationalVelocity);
 	}
 }

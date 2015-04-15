@@ -10,12 +10,12 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
-#include "Spring.h"
+#include "Web.h"
 
+Web* w;
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* obj;
 float framesPerSecond;
 
 using namespace std;
@@ -61,18 +61,8 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj->setMesh(Mesh::sphereMesh);
-	obj->addPhysicsComponent(0.0f, 0.0f);
-	scene1->addObject(obj);
-	GameObject* obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::sphereMesh);
-	obj1->addPhysicsComponent(1.0f, 0.1f);
-	scene1->addObject(obj1);
-	Spring* spring = new Spring(*(obj->physicsComponent), *(obj1->physicsComponent), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	spring->setMesh(Mesh::cubeMesh);
-	scene1->addObject(spring);
-	Input::OnKeyboardPress('y', new MoveCommand(glm::vec3(-0.5f, 0.0f, 0.0f), *obj));
+	w = new Web(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	scene1->addObject(w);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -82,23 +72,24 @@ void update(void)
 	scene1->updateScene();
 	if (Input::KeyPressed('w'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
-		obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
-		obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
+		w->twinge();
+		//obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
 	calculateFPS();
 	glutPostRedisplay();

@@ -9,6 +9,7 @@ public:
 	~Spring();
 
 	void update() override;
+	void draw() override;
 
 private:
 	PhysicsComponent& a;

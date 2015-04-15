@@ -22,13 +22,21 @@ void Spring::update() {
 	glm::vec3 diff = bPosition - aPosition;
 	float displacement = glm::length(diff) - restingLength;
 
-	this->transform->setPosition((aPosition + bPosition) * 0.5f);
-	this->transform->setScale(glm::vec3(0.1f, glm::length(diff), 0.1f));
-	this->transform->setRotation(glm::angleAxis(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), bPosition - transform->getPosition()), glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), bPosition - transform->getPosition()))));
-
 	diff = glm::normalize(diff);
 	diff *= k * displacement;
 	a.addForce(diff, aPosition);
 	diff *= -1;
 	b.addForce(diff, bPosition);
+}
+
+void Spring::draw() {
+	glm::vec3 aPosition = glm::vec3(a.GOTransform.transformMatrix * aLoc);
+	glm::vec3 bPosition = glm::vec3(b.GOTransform.transformMatrix * bLoc);
+	glm::vec3 diff = bPosition - aPosition;
+
+	this->transform->setPosition((aPosition + bPosition) * 0.5f);
+	this->transform->setScale(glm::vec3(0.01f, glm::length(diff), 0.01f));
+	this->transform->setRotation(glm::angleAxis(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(bPosition - aPosition)), glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), bPosition - aPosition))));
+
+	GameObject::draw();
 }
