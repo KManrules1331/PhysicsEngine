@@ -111,5 +111,5 @@ void Web::addNode(glm::vec3 position, bool immovable)
 void Web::twinge()
 {
 	int nodeTwinge = rand() % ((layers - 1) * radials) + 1;
-	Nodes[nodeTwinge]->physicsComponent->addForce(glm::vec3(0.0f, -0.5f, 0.0f), glm::vec3(0.0f));
+	Nodes[nodeTwinge]->transform->move(glm::vec3(0.0f, -0.5f, 0.0f));
 }
