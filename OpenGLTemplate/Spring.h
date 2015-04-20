@@ -18,6 +18,6 @@ private:
 	glm::vec4 bLoc;
 
 	float restingLength;
-	const float k = 1.0f;
+	float k;
 };
 
