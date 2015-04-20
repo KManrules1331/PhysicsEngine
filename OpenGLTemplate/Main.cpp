@@ -17,6 +17,7 @@ Window* window;
 Scene* scene1;
 Camera* cam;
 float framesPerSecond;
+float dt;
 
 using namespace std;
 void calculateFPS()
