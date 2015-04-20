@@ -37,6 +37,6 @@ public:
 
 	//Methods
 	virtual void draw();
-	virtual void update();
+	virtual void update(float dt);
 };
 

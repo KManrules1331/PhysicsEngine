@@ -18,30 +18,22 @@ Transform::~Transform()
 void Transform::move(glm::vec3 displacement)
 {
 	position += displacement;
-	assert(!std::isnan(position.x) && !std::isnan(position.y) && !std::isnan(position.z));
-	assert(!std::isinf(position.x) && !std::isinf(position.y) && !std::isinf(position.z));
 	updateTransformMatrix();
 }
 void Transform::rotate(glm::quat rotation)
 {
 	this->rotation *= rotation;
-	assert(!std::isnan(rotation.x) && !std::isnan(rotation.y) && !std::isnan(rotation.z) && !std::isnan(rotation.w));
-	assert(!std::isinf(rotation.x) && !std::isinf(rotation.y) && !std::isinf(rotation.z) && !std::isnan(rotation.w));
 	updateTransformMatrix();
 }
 void Transform::rotate(float angle, glm::vec3 axis)
 {
 	glm::quat rotation = glm::angleAxis(angle, axis);
 	this->rotation *= rotation;
-	assert(!std::isnan(rotation.x) && !std::isnan(rotation.y) && !std::isnan(rotation.z) && !std::isnan(rotation.w));
-	assert(!std::isinf(rotation.x) && !std::isinf(rotation.y) && !std::isinf(rotation.z) && !std::isnan(rotation.w));
 	updateTransformMatrix();
 }
 void Transform::changeScale(glm::vec3 scale)
 {
 	this->scale += scale;
-	assert(!std::isnan(scale.x) && !std::isnan(scale.y) && !std::isnan(scale.z));
-	assert(!std::isinf(scale.x) && !std::isinf(scale.y) && !std::isinf(scale.z));
 	updateTransformMatrix();
 }
 void Transform::setPosition(glm::vec3 newPosition)
@@ -100,6 +92,13 @@ glm::vec3 Transform::getRight()
 
 void Transform::updateTransformMatrix()
 {
+	glm::clamp(position, glm::vec3(-1000000.0f), glm::vec3(1000000.0f));
+	//assert(!std::isnan(position.x) && !std::isnan(position.y) && !std::isnan(position.z));
+	//assert(!std::isinf(position.x) && !std::isinf(position.y) && !std::isinf(position.z));
+	//assert(!std::isnan(scale.x) && !std::isnan(scale.y) && !std::isnan(scale.z));
+	//assert(!std::isinf(scale.x) && !std::isinf(scale.y) && !std::isinf(scale.z));
+	//assert(!std::isnan(rotation.x) && !std::isnan(rotation.y) && !std::isnan(rotation.z) && !std::isnan(rotation.w));
+	//assert(!std::isinf(rotation.x) && !std::isinf(rotation.y) && !std::isinf(rotation.z) && !std::isnan(rotation.w));
 	updateRotationMatrix();
 	glm::mat4 positionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,

@@ -15,13 +15,17 @@ Spring::~Spring()
 {
 }
 
-void Spring::update() {
+void Spring::update(float dt) {
 	glm::vec3 aPosition = glm::vec3(a.GOTransform.transformMatrix * aLoc);
 	glm::vec3 bPosition = glm::vec3(b.GOTransform.transformMatrix * bLoc);
 
 	glm::vec3 diff = bPosition - aPosition;
 	float displacement = glm::length(diff) - restingLength;
-	if (!std::isfinite(displacement)) displacement = std::numeric_limits<float>::max();
+	if (!std::isfinite(displacement))
+	{
+		displacement = std::numeric_limits<float>::max();
+		diff *= 1.0f / diff.x;
+	}
 
 	diff = glm::normalize(diff);
 	diff *= k * displacement * 0.5f;

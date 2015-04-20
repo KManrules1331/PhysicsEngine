@@ -20,13 +20,13 @@ Scene::~Scene(void)
 	}
 }
 
-void Scene::updateScene()
+void Scene::updateScene(float dt)
 {
 	for(int i = 0; i < gameObjects.size(); i++)
 	{
-		gameObjects[i]->update();
+		gameObjects[i]->update(dt);
 	}
-	HardBodyPhysics::update();
+	HardBodyPhysics::update(dt);
 }
 
 void Scene::drawScene()

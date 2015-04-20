@@ -31,6 +31,8 @@ void calculateFPS()
 	framesPerSecond = 1000.0f / secondsPerFrame;
 
 	previousTime = currentTime;
+
+	dt = secondsPerFrame / 1000.0f;
 }
 //TODO: Find out best place to put this method
 void spawnSphere()
@@ -70,7 +72,8 @@ void init(void)
 
 void update(void)
 {
-	scene1->updateScene();
+	calculateFPS();
+	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
 		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
@@ -92,7 +95,6 @@ void update(void)
 		w->twinge();
 		//obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
-	calculateFPS();
 	glutPostRedisplay();
 }
 

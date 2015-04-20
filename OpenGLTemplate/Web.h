@@ -8,7 +8,7 @@ public:
 	Web(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	~Web();
 
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 
 	void twinge();

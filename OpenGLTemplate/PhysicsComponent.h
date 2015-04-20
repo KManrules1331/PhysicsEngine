@@ -22,7 +22,7 @@ public:
 
 	//Methods
 	void reset();
-	void update();
+	void update(float dt);
 
 	//MovementMethods?
 	void addForce(glm::vec3 force, glm::vec3 positionOfForce);

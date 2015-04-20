@@ -44,7 +44,7 @@ void HardBodyPhysics::removePhysicsComponent(PhysicsComponent* b)
 	}
 }
 
-void HardBodyPhysics::update()
+void HardBodyPhysics::update(float dt)
 {
 	for (int i = 0; i < PhysicsComponents.size(); i++)
 	{

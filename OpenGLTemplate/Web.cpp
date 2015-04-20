@@ -17,15 +17,15 @@ Web::~Web()
 }
 
 
-void Web::update()
+void Web::update(float dt)
 {
 	for (int i = 0; i < Springs.size(); i++)
 	{
-		Springs[i]->update();
+		Springs[i]->update(dt);
 	}
 	for (int i = 0; i < Nodes.size(); i++)
 	{
-		Nodes[i]->update();
+		Nodes[i]->update(dt);
 	}
 }
 

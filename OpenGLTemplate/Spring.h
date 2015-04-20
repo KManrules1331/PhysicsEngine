@@ -8,7 +8,7 @@ public:
 	Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeAAnchorPoint, glm::vec3 nodeBAnchorPoint);
 	~Spring();
 
-	void update() override;
+	void update(float dt) override;
 	void draw() override;
 
 private:
@@ -18,6 +18,6 @@ private:
 	glm::vec4 bLoc;
 
 	float restingLength;
-	const float k = 0.9f;
+	const float k = 1.0f;
 };
 
