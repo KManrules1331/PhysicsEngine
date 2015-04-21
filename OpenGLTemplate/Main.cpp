@@ -16,6 +16,7 @@ Scene* scene1;
 Camera* cam;
 GameObject* obj;
 float framesPerSecond;
+float dt;
 
 using namespace std;
 void calculateFPS()
@@ -24,9 +25,10 @@ void calculateFPS()
 
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 
-	float secondsPerFrame = currentTime - previousTime;
+	float milliSecondsPerFrame = currentTime - previousTime;
 
-	framesPerSecond = 1000.0f / secondsPerFrame;
+	framesPerSecond = 1000.0f / milliSecondsPerFrame;
+	dt = milliSecondsPerFrame / 1000.0f;
 
 	previousTime = currentTime;
 }
@@ -68,7 +70,7 @@ void init(void)
 	GameObject* obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj1->setMesh(Mesh::cubeMesh);
 	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(1.0f, 0.1f);
+	obj1->addPhysicsComponent(10.0f, 0.1f);
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
@@ -76,7 +78,8 @@ void init(void)
 
 void update(void)
 {
-	scene1->updateScene();
+	calculateFPS();
+	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
 		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
@@ -95,9 +98,8 @@ void update(void)
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(0.01f, 0.0f, 0.0f), obj->transform->getPosition());
+		obj->physicsComponent->addForce(glm::vec3(0.1f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
-	calculateFPS();
 	glutPostRedisplay();
 }
 

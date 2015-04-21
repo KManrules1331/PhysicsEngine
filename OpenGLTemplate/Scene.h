@@ -18,7 +18,7 @@ public:
 	ShaderProgram* shader;
 
 	//Methods
-	void updateScene();
+	void updateScene(float dt);
 	void drawScene();
 	void addObject(GameObject* obj);
 

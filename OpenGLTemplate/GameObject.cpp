@@ -49,10 +49,10 @@ void GameObject::draw()
 		mesh->draw(transform);
 }
 
-void GameObject::update()
+void GameObject::update(float dt)
 {
 	if (physicsComponent)
 	{
-		physicsComponent->update();
+		physicsComponent->update(dt);
 	}
 }

@@ -38,13 +38,13 @@ void PhysicsComponent::reset() {
 	rotationalVelocity = glm::quat();
 }
 
-void PhysicsComponent::update() {
+void PhysicsComponent::update(float dt) {
 	//Update consistent variables
-	velocity += acceleration;
-	rotationalVelocity *= rotationalAcceleration;
+	velocity += acceleration * dt;
+	rotationalVelocity *= glm::angleAxis(glm::angle(rotationalAcceleration) * dt, glm::axis(rotationalAcceleration));
 
-	GOTransform.move(velocity);
-	GOTransform.rotate(rotationalVelocity);
+	GOTransform.move(velocity * dt);
+	GOTransform.rotate(glm::angleAxis(glm::angle(rotationalVelocity) * dt, glm::axis(rotationalVelocity)));
 
 	//Reset frame variables
 	acceleration = glm::vec3(0.0f);
