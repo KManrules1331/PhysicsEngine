@@ -14,7 +14,7 @@
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* obj;
+GameObject* obj, *obj1;
 float framesPerSecond;
 float dt;
 
@@ -67,10 +67,10 @@ void init(void)
 	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
 	obj->addPhysicsComponent(1.0f, 0.1f);
 	scene1->addObject(obj);
-	GameObject* obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj1->setMesh(Mesh::cubeMesh);
 	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(10.0f, 0.1f);
+	obj1->addPhysicsComponent(0.0f, 0.1f);
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
@@ -98,8 +98,9 @@ void update(void)
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(0.1f, 0.0f, 0.0f), obj->transform->getPosition());
+		obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
+	obj->physicsComponent->addForce(glm::normalize(obj1->transform->getPosition() - obj->transform->getPosition()) * 0.1f, obj->transform->getPosition());
 	glutPostRedisplay();
 }
 

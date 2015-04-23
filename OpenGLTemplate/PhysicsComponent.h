@@ -34,5 +34,6 @@ private:
 	glm::quat rotationalAcceleration;
 	glm::vec3 velocity;
 	glm::quat rotationalVelocity;
+	static float dampeningFactor;
 };
 

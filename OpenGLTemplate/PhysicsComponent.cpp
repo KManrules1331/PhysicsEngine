@@ -1,5 +1,6 @@
 #include "PhysicsComponent.h"
 
+float PhysicsComponent::dampeningFactor = 0.8f;
 
 PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
 {
@@ -42,6 +43,11 @@ void PhysicsComponent::update(float dt) {
 	//Update consistent variables
 	velocity += acceleration * dt;
 	rotationalVelocity *= glm::angleAxis(glm::angle(rotationalAcceleration) * dt, glm::axis(rotationalAcceleration));
+
+	//Dampening
+	float frameDamp = std::max(1.0f - ((1.0f - dampeningFactor) * dt), 0.0f);
+	velocity *= frameDamp;
+	rotationalVelocity = glm::angleAxis(glm::angle(rotationalVelocity) * frameDamp, glm::axis(rotationalVelocity));
 
 	GOTransform.move(velocity * dt);
 	GOTransform.rotate(glm::angleAxis(glm::angle(rotationalVelocity) * dt, glm::axis(rotationalVelocity)));
@@ -91,8 +97,8 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 	}
 	if (glm::length(impulse) > 0)
 	{
-		GOTransform.move(-velocity);
-		GOTransform.rotate(-rotationalVelocity);
+		//GOTransform.move(-velocity);
+		//GOTransform.rotate(-rotationalVelocity);
 		velocity += glm::normalize(radiusAP) * glm::dot(impulse, glm::normalize(radiusAP)) * inverseMass;
 		rotationalVelocity *= glm::angleAxis(glm::length(glm::cross(impulse, radiusAP)) * inverseMOI, axis);
 		//GOTransform.move(velocity);
