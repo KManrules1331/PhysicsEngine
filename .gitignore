@@ -201,3 +201,4 @@ OpenGLTemplate/GLEW/doc/
 #Debug dll's to include
 !Debug/freeglut.dll
 !Debug/glew32.dll
+*.zip
