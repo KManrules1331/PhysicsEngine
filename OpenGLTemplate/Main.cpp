@@ -32,12 +32,6 @@ void calculateFPS()
 
 	previousTime = currentTime;
 }
-//TODO: Find out best place to put this method
-void spawnSphere()
-{
-	//GameObject* obj = new GameObject(GameObject::Primitive::Sphere, cam->getLookPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
-	//scene1->addObject(obj);
-}
 void mouseclick(int button, int state, int x, int y)
 {
 	if(state == GLUT_DOWN)
@@ -46,7 +40,6 @@ void mouseclick(int button, int state, int x, int y)
 		{
 		case GLUT_LEFT_BUTTON:
 			{
-				spawnSphere();
 				break;
 			}
 		case GLUT_RIGHT_BUTTON:
@@ -70,7 +63,7 @@ void init(void)
 	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj1->setMesh(Mesh::cubeMesh);
 	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(0.0f, 0.1f);
+	obj1->addPhysicsComponent(0.01f, 0.1f);
 	scene1->addObject(obj1);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
@@ -101,6 +94,7 @@ void update(void)
 		obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
 	obj->physicsComponent->addForce(glm::normalize(obj1->transform->getPosition() - obj->transform->getPosition()) * 0.1f, obj->transform->getPosition());
+	obj1->physicsComponent->addForce(glm::vec3(2.0f, 0.0f, 0.0f) - obj1->transform->getPosition(), obj1->transform->getPosition());
 	glutPostRedisplay();
 }
 
