@@ -4,6 +4,9 @@ std::vector<PhysicsComponent*> HardBodyPhysics::PhysicsComponents;
 
 void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, glm::vec3 normalOfCollision, glm::vec3 positionOfCollision)
 {
+	//All code and private functions mentioned in this section
+	//Derive from this article: http://chrishecker.com/images/e/e7/Gdmphys3.pdf
+
 	glm::vec3 radiusAP = positionOfCollision - a->GOTransform.getPosition();
 	glm::vec3 radiusBP = positionOfCollision - b->GOTransform.getPosition();
 	glm::vec3 velocityA = a->getVelocity() + glm::cross(glm::axis(a->getRotationalVelocity()) * glm::angle(a->getRotationalVelocity()), radiusAP);
@@ -56,11 +59,11 @@ void HardBodyPhysics::update()
 				glm::vec3 position2, normal2;
 				bool collision1, collision2;
 				collision1 = PhysicsComponents[i]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position1, &normal1);
-				collision2 = PhysicsComponents[j]->GOCollider.getCollisionInfo(PhysicsComponents[j]->GOCollider, &position2, &normal2);
+				//collision2 = PhysicsComponents[j]->GOCollider.getCollisionInfo(PhysicsComponents[i]->GOCollider, &position2, &normal2);
 				if (collision1)
 					Collide(PhysicsComponents[i], PhysicsComponents[j], normal1, position1);
-				if (collision2)
-					Collide(PhysicsComponents[j], PhysicsComponents[i], normal2, position2);
+				//if (collision2)
+					//Collide(PhysicsComponents[j], PhysicsComponents[i], normal2, position2);
 			}
 		}
 	}

@@ -39,6 +39,8 @@ void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 }
 void GameObject::addPhysicsComponent(float Mass, float MOI)
 {
+	if (!collisionListener)
+		assert(false);
 	physicsComponent = new PhysicsComponent(*transform, *collisionListener, Mass, MOI);
 	HardBodyPhysics::addPhysicsComponent(physicsComponent);
 }
