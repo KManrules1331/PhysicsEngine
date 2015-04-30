@@ -10,11 +10,12 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
+#include "Trampoline.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* obj, *obj1;
+Trampoline* t;
 float framesPerSecond;
 float dt;
 
@@ -55,16 +56,8 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj->setMesh(Mesh::cubeMesh);
-	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj->addPhysicsComponent(1.0f, 0.1f);
-	scene1->addObject(obj);
-	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::cubeMesh);
-	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(0.01f, 0.1f);
-	scene1->addObject(obj1);
+	t = new Trampoline(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	scene1->addObject(t);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -75,26 +68,24 @@ void update(void)
 	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
-		obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
-		obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
+		//obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
-	obj->physicsComponent->addForce(glm::normalize(obj1->transform->getPosition() - obj->transform->getPosition()) * 0.1f, obj->transform->getPosition());
-	obj1->physicsComponent->addForce(glm::vec3(2.0f, 0.0f, 0.0f) - obj1->transform->getPosition(), obj1->transform->getPosition());
 	glutPostRedisplay();
 }
 
