@@ -60,6 +60,7 @@ void init(void)
 	scene1->addObject(t);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
+	Input::OnKeyboardPress('y', t->getPullCommand());
 }
 
 void update(void)

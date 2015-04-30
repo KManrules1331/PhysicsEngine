@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Spring.h"
+#include "CommandTypes.h"
 
 class Trampoline :
 	public GameObject
@@ -11,6 +12,8 @@ public:
 
 	void update(float dt) override;
 	void draw() override;
+
+	Command* getPullCommand();
 
 private:
 	int width;

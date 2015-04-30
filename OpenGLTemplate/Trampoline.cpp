@@ -3,8 +3,8 @@
 
 Trampoline::Trampoline(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(position, rotation, scale)
 {
-	width = 5;
-	height = 5;
+	width = 10;
+	height = 10;
 	populateNodes(width, height);
 	populateSprings(width, height);
 }
@@ -106,4 +106,12 @@ void Trampoline::addNode(glm::vec3 position, bool immovable)
 		node->addPhysicsComponent(1.0f, 1.0f);
 	}
 	Nodes.push_back(node);
+}
+
+Command* Trampoline::getPullCommand()
+{
+	if (Nodes.size() % 2 == 1)
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, -0.5f), *(Nodes[width * height / 2]));
+	else
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, -0.5f), *(Nodes[width * (height - 1) / 2]));
 }

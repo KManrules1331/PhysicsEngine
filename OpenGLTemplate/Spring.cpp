@@ -8,7 +8,7 @@ Spring::Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeA
 	bLoc = glm::vec4(nodeBAnchorPoint, 1.0f);
 
 	restingLength = glm::length((b.GOTransform.transformMatrix * bLoc) - (a.GOTransform.transformMatrix * aLoc));
-	k = 20.0f;
+	k = 2000.0f;
 }
 
 
