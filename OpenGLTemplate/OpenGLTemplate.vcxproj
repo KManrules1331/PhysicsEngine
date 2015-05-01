@@ -83,6 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cloth.h" />
+    <ClInclude Include="ClothNode.h" />
+    <ClInclude Include="ClothStrand.h" />
     <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandTypes.h" />
@@ -111,6 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cloth.cpp" />
+    <ClCompile Include="ClothNode.cpp" />
+    <ClCompile Include="ClothStrand.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CubeCollisionDetector.cpp" />

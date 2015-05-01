@@ -48,7 +48,7 @@ void Spring::draw() {
 		axis = glm::vec3(0.0f, 0.0f, 1.0f);
 	else
 		axis = glm::normalize(axis);
-	this->transform->setRotation(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(bPosition - aPosition)), glm::normalize(axis));
+	this->transform->setRotation(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(bPosition - aPosition)), axis);
 
 	GameObject::draw();
 }
