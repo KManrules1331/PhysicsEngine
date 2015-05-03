@@ -1,14 +1,14 @@
 #include "Spring.h"
 
 
-Spring::Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeAAnchorPoint, glm::vec3 nodeBAnchorPoint) : GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f)), a{ nodeA }, b{ nodeB }
+Spring::Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeAAnchorPoint, glm::vec3 nodeBAnchorPoint, float k ) : GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f)), a{ nodeA }, b{ nodeB }
 {
 	//aLoc and bLoc are relative to the object's 0 transform.  To get world coordinates, multiply by node's transform matrices
 	aLoc = glm::vec4(nodeAAnchorPoint, 1.0f);
 	bLoc = glm::vec4(nodeBAnchorPoint, 1.0f);
 
 	restingLength = glm::length((b.GOTransform.transformMatrix * bLoc) - (a.GOTransform.transformMatrix * aLoc));
-	k = 2000.0f;
+	this->k = k;
 }
 
 

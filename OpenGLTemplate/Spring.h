@@ -6,7 +6,7 @@ class Spring :
 	public GameObject
 {
 public:
-	Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeAAnchorPoint, glm::vec3 nodeBAnchorPoint);
+	Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeAAnchorPoint, glm::vec3 nodeBAnchorPoint, float k = 200.0f);
 	~Spring();
 
 	void update(float dt) override;

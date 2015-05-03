@@ -1,6 +1,6 @@
 #include "PhysicsComponent.h"
 
-float PhysicsComponent::dampeningFactor = 0.8f;
+float PhysicsComponent::dampeningFactor = 0.9f;
 
 PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
 {
@@ -45,8 +45,10 @@ void PhysicsComponent::update(float dt) {
 	rotationalVelocity *= glm::angleAxis(glm::angle(rotationalAcceleration) * dt, glm::axis(rotationalAcceleration));
 
 	//Dampening
-	float frameDamp = std::max(1.0f - ((1.0f - dampeningFactor) * dt), 0.0f);
+	float frameDamp = std::max(1.0f - ((1.0f - dampeningFactor) * dt * glm::length(velocity)), 0.0f);
 	velocity *= frameDamp;
+	if (glm::length(velocity) > 10000.0f)
+		velocity = glm::normalize(velocity) * 10000.0f;
 	rotationalVelocity = glm::angleAxis(glm::angle(rotationalVelocity) * frameDamp, glm::axis(rotationalVelocity));
 
 	GOTransform.move(velocity * dt);

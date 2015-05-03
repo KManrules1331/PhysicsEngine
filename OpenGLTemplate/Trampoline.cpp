@@ -46,8 +46,16 @@ void Trampoline::populateSprings(int width, int height)
 	{
 		for (int j = 0; j < height - 1; j++)
 		{
-			addSpring(j * width + i, j * width + i + 1);	// Horizontal
-			addSpring(j * width + i, (j + 1) * width + i);	// Vertical
+			addSpring(j * width + i, j * width + i + 1);		// Horizontal
+			addSpring(j * width + i, (j + 1) * width + i);		// Vertical
+			addSpring(j * width + i, (j + 1) * width + i + 1);	// DownRight
+		}
+	}
+	for (int i = 1; i < width; i++)
+	{
+		for (int j = 0; j < height - 1; j++)
+		{
+			addSpring(j * width + i, (j + 1) * width + i - 1);
 		}
 	}
 	for (int i = 0; i < width - 1; i++) //Bottom row
@@ -111,7 +119,7 @@ void Trampoline::addNode(glm::vec3 position, bool immovable)
 Command* Trampoline::getPullCommand()
 {
 	if (Nodes.size() % 2 == 1)
-		return new MoveCommand(glm::vec3(0.0f, 0.0f, -0.5f), *(Nodes[width * height / 2]));
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, -5.5f), *(Nodes[width * height / 2]));
 	else
-		return new MoveCommand(glm::vec3(0.0f, 0.0f, -0.5f), *(Nodes[width * (height - 1) / 2]));
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, -5.5f), *(Nodes[width * (height - 1) / 2]));
 }
