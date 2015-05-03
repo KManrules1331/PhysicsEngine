@@ -1,6 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include "ClothStrand.h"
+
+#include <queue>
+
 class ClothNode :
 	public GameObject
 {
@@ -14,7 +17,6 @@ private:
 	std::vector<ClothStrand*> strands;
 	std::vector<ClothNode*> nodes;
 	glm::vec3 prevPosition;
-	bool checked;
 
 	void checkNodes();
 };

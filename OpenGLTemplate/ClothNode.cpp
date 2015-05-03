@@ -16,7 +16,6 @@ void ClothNode::update(float dt)
 	physicsComponent->update(dt);
 	if (prevPosition != transform->getPosition())
 	{
-		checked = false;
 		checkNodes();
 		prevPosition = transform->getPosition();
 	}
@@ -25,28 +24,32 @@ void ClothNode::update(float dt)
 void ClothNode::connectNode(ClothNode* otherNode)
 {
 	nodes.push_back(otherNode);
-	strands.push_back(new ClothStrand(glm::length(
-		transform->getPosition() - 
+	otherNode->nodes.push_back(this);
+	ClothStrand* strand = new ClothStrand(glm::length(
+		transform->getPosition() -
 		otherNode->transform->getPosition()
-		)));
+		));
+	strands.push_back(strand);
+	otherNode->strands.push_back(strand);
 }
 
-//Currently depth-first search, should change to breadth-first search
+//Breadth first search of nodes centered around one method is called
+//Method will check surrounding nodes and pull nodes if necessary
+//If a node is pulled, that node will check it's surrounding nodes as well
 void ClothNode::checkNodes()
 {
-	if (!checked)
+	std::queue<ClothNode*> uncheckedNodes;
+	uncheckedNodes.push(this);
+	while (!uncheckedNodes.empty())
 	{
-		for (int i = 0; i < strands.size(); i++)
+		ClothNode* node = uncheckedNodes.front();
+		uncheckedNodes.pop();
+		for (int i = 0; i < node->nodes.size(); i++)
 		{
-			if (strands[i]->pull(*physicsComponent, *(nodes[i]->physicsComponent)))
+			if (node->strands[i]->pull(*(node->physicsComponent), *(node->nodes[i]->physicsComponent)))
 			{
-				nodes[i]->checked = false;
+				uncheckedNodes.push(node->nodes[i]);
 			}
-		}
-		checked = true;
-		for (int i = 0; i < nodes.size(); i++)
-		{
-			nodes[i]->checkNodes();
 		}
 	}
 }

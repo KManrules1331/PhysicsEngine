@@ -11,11 +11,12 @@
 #include "CommandTypes.h"
 #include "Input.h"
 #include "Trampoline.h"
+#include "Cloth.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
-Trampoline* t;
+Cloth* c;
 float framesPerSecond;
 float dt;
 
@@ -56,11 +57,10 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	t = new Trampoline(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	scene1->addObject(t);
+	c = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	scene1->addObject(c);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
-	Input::OnKeyboardPress('y', t->getPullCommand());
 }
 
 void update(void)
