@@ -17,7 +17,7 @@ bool ClothStrand::pull(PhysicsComponent& anchorNode, PhysicsComponent& flexibleN
 	glm::vec3 diff = anchorNode.GOTransform.getPosition() - flexibleNode.GOTransform.getPosition();
 	glm::vec3 movement;
 	//If it needs to pull
-	if (glm::length(diff) > restingLength)
+	if (glm::length(diff) > restingLength * 1.01f)	//Constant is for error rounding
 	{
 		//Find where node should be
 		movement = diff - (diff * (restingLength / glm::length(diff)));

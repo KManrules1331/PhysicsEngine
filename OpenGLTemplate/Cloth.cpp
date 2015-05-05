@@ -1,10 +1,10 @@
 #include "Cloth.h"
 
 
-Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(position, rotation, scale)
+Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width, int height) : GameObject(position, rotation, scale)
 {
-	float width = 5;
-	float height = 5;
+	this->width = width;
+	this->height = height;
 	populateNodes(width, height);
 	populateStrands(width, height);
 }
@@ -77,4 +77,27 @@ void Cloth::populateStrands(int width, int height)
 void Cloth::addStrand(ClothNode* nodeA, ClothNode* nodeB)
 {
 	nodeA->connectNode(nodeB);
+}
+
+//Testing Method
+Command* Cloth::pull()
+{
+	if (Nodes.size() % 2 == 1)
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, 0.5f), *(Nodes[width * height / 2]));
+	else
+		return new MoveCommand(glm::vec3(0.0f, 0.0f, 0.5f), *(Nodes[width * (height - 1) / 2]));
+}
+
+Command* Cloth::pullCorners(glm::vec3 displacement)
+{
+	Command* a = new MoveCommand(displacement, *(Nodes[0]));
+	Command* b = new MoveCommand(displacement, *(Nodes[width - 1]));
+	Command* c = new MoveCommand(displacement, *(Nodes[height * (width - 1) - 1]));
+	Command* d = new MoveCommand(displacement, *(Nodes[height * width - 1]));
+	MultiCommand* multiCommand = new MultiCommand();
+	multiCommand->addCommand(a);
+	multiCommand->addCommand(b);
+	multiCommand->addCommand(c);
+	multiCommand->addCommand(d);
+	return multiCommand;
 }

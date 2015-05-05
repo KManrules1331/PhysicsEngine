@@ -57,10 +57,11 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	c = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	c = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f), 10, 10);
 	scene1->addObject(c);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
+	Input::OnKeyboardPress('t', c->pullCorners(glm::vec3(0.0f, 0.0f, 0.5f)));
 }
 
 void update(void)

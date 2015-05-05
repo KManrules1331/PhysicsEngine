@@ -98,6 +98,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="MultiCommand.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="resource.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="MultiCommand.cpp" />
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
