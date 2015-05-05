@@ -1,7 +1,7 @@
 #include "MoveCommand.h"
 
 
-MoveCommand::MoveCommand(glm::vec3 displacement, GameObject& actor) : Command(actor)
+MoveCommand::MoveCommand(glm::vec3 displacement, GameObject& actor) : actor{ actor }
 {
 	this->displacement = displacement;
 }

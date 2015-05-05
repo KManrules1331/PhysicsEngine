@@ -12,6 +12,7 @@ public:
 	virtual void execute() override;
 
 private:
+	GameObject& actor;
 	glm::vec3 displacement;
 };
 

@@ -4,10 +4,8 @@
 class Command
 {
 public:
-	Command(GameObject& actor);
+	Command();
 	virtual ~Command();
 	virtual void execute() = 0;
-protected:
-	GameObject& actor;
 };
 
