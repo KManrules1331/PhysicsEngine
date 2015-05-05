@@ -5,6 +5,9 @@
 std::map<unsigned char, bool> Input::Inputs;
 std::map<unsigned char, std::vector<Command*>> Input::PressBinds;
 std::map<unsigned char, std::vector<Command*>> Input::ReleaseBinds;
+std::map<int, bool> Input::MouseInputs;
+std::map<int, std::vector<Command*>> Input::MousePressBinds;
+std::map<int, std::vector<Command*>> Input::MouseReleaseBinds;
 
 #pragma endregion
 
@@ -109,4 +112,24 @@ void Input::ClearKeyboardReleaseBinds(unsigned char key)
 		return;
 	}
 	ReleaseBinds[key].clear();
+}
+
+void Input::getMouseClick(int button, int state, int x, int y)
+{
+	if (state == GLUT_DOWN)
+	{
+		if (MouseInputs[button] == false)
+		{
+			int numCommands = MousePressBinds[button].size();
+			for (int i = 0; i < numCommands; i++)
+			{
+				MousePressBinds[button][i]->execute();
+			}
+			MouseInputs[button] = true;
+		}
+	}
+	else if (state == GLUT_UP)
+	{
+
+	}
 }

@@ -27,6 +27,7 @@ public:
 	static bool ButtonPressed(int button);
 	static void ClearMousePressBinds(int button = -1);
 	static void ClearMouseReleaseBinds(int button = -1);
+
 private:
 	static std::map<unsigned char, bool> Inputs;
 	static std::map<int, bool> MouseInputs;
