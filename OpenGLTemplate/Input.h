@@ -7,9 +7,13 @@
 class Input
 {
 public:
+	static struct MousePosition {
+		int x;
+		int y;
+	};
 	//Keyboard functions
-	static void getKeyboardPress(unsigned char key, int x, int y);
-	static void getKeyboardRelease(unsigned char key, int x, int y);
+	static void recordKeyboardPress(unsigned char key, int x, int y);
+	static void recordKeyboardRelease(unsigned char key, int x, int y);
 	static void OnKeyboardPress(unsigned char key, Command* c);
 	static void OnKeyboardRelease(unsigned char key, Command* c);
 	static void removeKeyboardPressBind(unsigned char key, Command* c);
@@ -19,7 +23,9 @@ public:
 	static void ClearKeyboardReleaseBinds(unsigned char key = '\0');
 
 	//Mouse Functions
-	static void getMouseClick(int button, int state, int x, int y);
+	static void recordMouseClick(int button, int state, int x, int y);
+	static void recordMousePos(int x, int y);
+	static Input::MousePosition getMousePos();
 	static void OnMousePress(int button, Command* c);
 	static void OnMouseRelease(int button, Command* c);
 	static void removeMousePressBind(int button, Command* c);
@@ -35,4 +41,7 @@ private:
 	static std::map<int, std::vector<Command*>> MousePressBinds;
 	static std::map<unsigned char, std::vector<Command*>> ReleaseBinds;
 	static std::map<int, std::vector<Command*>> MouseReleaseBinds;
+	static Input::MousePosition mousePosition;
+
+	static void RemoveCommand(std::vector<Command*>& commandList, Command* c);
 };

@@ -32,33 +32,6 @@ void calculateFPS()
 
 	previousTime = currentTime;
 }
-//TODO: Find out best place to put this method
-void spawnSphere()
-{
-	//GameObject* obj = new GameObject(GameObject::Primitive::Sphere, cam->getLookPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
-	//scene1->addObject(obj);
-}
-void mouseclick(int button, int state, int x, int y)
-{
-	if(state == GLUT_DOWN)
-	{
-		switch(button)
-		{
-		case GLUT_LEFT_BUTTON:
-			{
-				spawnSphere();
-				break;
-			}
-		case GLUT_RIGHT_BUTTON:
-			{
-				break;
-			}
-		}
-	}
-	glutPostRedisplay();
-}
-void mouselook(int x, int y)
-{}
 
 void init(void)
 {
@@ -126,11 +99,11 @@ int main(int argc, char **argv)
 	cam = new Camera(glm::vec3(0.0f, 0.0f, 0.0f));
 	Light* light = new Light(glm::vec3(0.0f, 3.0f, 0.0f));
 	scene1 = new Scene(cam, light);
-	glutMouseFunc(mouseclick);
-	glutPassiveMotionFunc(mouselook);
+	glutMouseFunc(Input::recordMouseClick);
+	glutPassiveMotionFunc(Input::recordMousePos);
 	glutSetCursor(GLUT_CURSOR_NONE);
-	glutKeyboardFunc(Input::getKeyboardPress);
-	glutKeyboardUpFunc(Input::getKeyboardRelease);
+	glutKeyboardFunc(Input::recordKeyboardPress);
+	glutKeyboardUpFunc(Input::recordKeyboardRelease);
 	glutIdleFunc(update);
 	glutDisplayFunc(draw);
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
