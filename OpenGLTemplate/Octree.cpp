@@ -64,7 +64,7 @@ void CollisionDetector::Octree::insert(CollisionDetector* c)
 	{
 		subdivide();
 
-		int i = 0;
+		unsigned int i = 0;
 		while(i < colliders.size())
 		{
 			Octree* node = getNode(*colliders[i]);
@@ -224,6 +224,7 @@ int CollisionDetector::Octree::getIndex(CollisionDetector& c)
 // returns nullptr if index is -1;
 CollisionDetector::Octree* CollisionDetector::Octree::getNode(int index)
 {
+	//TODO//This should have a default case to clear out that compiler warning
 	switch(index)
 	{
 	case -1:

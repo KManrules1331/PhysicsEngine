@@ -105,3 +105,10 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 		//GOTransform.rotate(rotationalVelocity);
 	}
 }
+
+//Move the component by the offset vector
+//Moves instantly with no change in velocity or acceleration
+void PhysicsComponent::move(glm::vec3 offset)
+{
+	GOTransform.move(offset);
+}

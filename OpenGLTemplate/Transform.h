@@ -28,6 +28,9 @@ public:
 	glm::vec3 getUp();
 	glm::vec3 getRight();
 
+	//I need this for something so I added it
+	glm::mat4 getInverseMatrix() const;
+
 private:
 	glm::vec3 position;
 	glm::quat rotation;
