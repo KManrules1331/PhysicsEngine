@@ -201,4 +201,10 @@ OpenGLTemplate/GLEW/doc/
 #Debug dll's to include
 !Debug/freeglut.dll
 !Debug/glew32.dll
+
+#Debug Shader files
+![Dd]ebug/Shaders
+![Dd]ebug/Shaders/*.glsl
+
+#No Zip files I accidentally include
 *.zip
