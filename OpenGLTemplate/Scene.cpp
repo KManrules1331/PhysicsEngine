@@ -14,7 +14,7 @@ Scene::~Scene(void)
 	delete shader;
 	delete camera;
 	delete light;
-	for(int i = 0; i < gameObjects.size(); i++)
+	for(unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		delete gameObjects[i];
 	}
@@ -22,7 +22,7 @@ Scene::~Scene(void)
 
 void Scene::updateScene(float dt)
 {
-	for(int i = 0; i < gameObjects.size(); i++)
+	for(unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		gameObjects[i]->update(dt);
 	}
@@ -33,7 +33,7 @@ void Scene::drawScene()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	shader->updateUniforms(camera, light);
-	for(int i = 0; i < gameObjects.size(); i++)
+	for(unsigned int i = 0; i < gameObjects.size(); i++)
 	{
 		gameObjects[i]->draw();
 	}

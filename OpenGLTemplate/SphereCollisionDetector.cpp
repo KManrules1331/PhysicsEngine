@@ -19,15 +19,22 @@ bool SphereCollisionDetector::detectCollision(CollisionDetector& c)
 	}
 	return false;
 }
-
+//DONE//
 bool SphereCollisionDetector::detectSphereCollision(SphereCollisionDetector& c)
 {
 	return getDistance(c.GOTransform.getPosition()) <= c.radius + this->radius;
 }
-
+//This is NOT a perfect collision detection//USE AS MID PHASE CULLING
 bool SphereCollisionDetector::detectCubeCollision(CubeCollisionDetector& c)
 {
-	return false;
+	glm::vec3 relPosition = transformVec3(GOTransform.getPosition(), c.GOTransform.getInverseMatrix());
+
+	//Test by if the sphere is not touching the cube in any of the 3 dimensions
+	if (glm::abs(relPosition.x - radius) > c.getHalfsize() ||
+		glm::abs(relPosition.y - radius) > c.getHalfsize() ||
+		glm::abs(relPosition.z - radius) > c.getHalfsize())
+		return false;
+	return true;
 }
 
 float SphereCollisionDetector::getDistance(glm::vec3 point)
@@ -61,6 +68,7 @@ bool SphereCollisionDetector::getCollisionInfo(CollisionDetector& c, glm::vec3* 
 }
 
 //CollisionTypes
+//This runs on the original dispatch track
 bool SphereCollisionDetector::getCubeCollisionInfo(CubeCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
 {
 	return false;
@@ -69,3 +77,85 @@ bool SphereCollisionDetector::getSphereCollisionInfo(SphereCollisionDetector& c,
 {
 	return false;
 }
+
+//SAT dispatch track is below//////////////////////////////////////////////////
+
+//Simple dummy method to dispatch properly//DONE//
+bool SphereCollisionDetector::getSATCollisionInfo(CollisionDetector& c, Contact* contact)
+{
+	return c.getSATCollisionInfo(*this, contact);
+}
+
+//Cube to sphere collision
+//Algorithm from Ian Millington
+//I am 75% sure this will work but we should test it anyway 
+//Assumes an absence of a prior test intersection query
+//The boolean flag that is returned will serve as the pixel-perfect collision detection
+bool SphereCollisionDetector::getSATCollisionInfo(CubeCollisionDetector& c, Contact* contact)
+{
+	//Find the point in the box that is closest to the sphere
+	glm::vec3 closestPoint;
+	float dist;
+
+	//This is the sphere center in box local coordinates
+	glm::vec3 localSphereCenter = transformVec3(GOTransform.getPosition(), c.GOTransform.getInverseMatrix());
+	
+	//Clamp coordinates of the closest point to the box 
+	dist = localSphereCenter.x;
+	if (dist > c.getHalfsize()) dist = c.getHalfsize();
+	if (dist < -c.getHalfsize()) dist = -c.getHalfsize();
+	closestPoint.x = dist;
+
+	dist = localSphereCenter.y;
+	if (dist > c.getHalfsize()) dist = c.getHalfsize();
+	if (dist < -c.getHalfsize()) dist = -c.getHalfsize();
+	closestPoint.y = dist;
+
+	dist = localSphereCenter.z;
+	if (dist > c.getHalfsize()) dist = c.getHalfsize();
+	if (dist < -c.getHalfsize()) dist = -c.getHalfsize();
+	closestPoint.z = dist;
+
+	//Convert our point to world coordinates
+	closestPoint = transformVec3(closestPoint, c.GOTransform.transformMatrix);
+
+	//Check to see if it is actually colliding//This is out pixel perfect collision detection 
+	glm::vec3 collisionLine = GOTransform.getPosition() - closestPoint;
+	float distSqr = glm::dot(collisionLine, collisionLine);
+	if (distSqr > square(radius * radius))
+		return false;
+
+	//Now fill the contact data structure
+	contact->normal = glm::normalize(collisionLine);
+	contact->position = closestPoint;
+	contact->depth = glm::sqrt(distSqr);
+
+	return true;
+}
+
+//DONE//Cube to sphere collision//Just need to test this somehow
+bool SphereCollisionDetector::getSATCollisionInfo(SphereCollisionDetector& c, Contact* contact)
+{
+	SphereCollisionDetector& a = *this;
+
+	//Point of contact is located on the line between the centers
+	//Contact always points at a
+	glm::vec3 midline = a.GOTransform.getPosition() - c.GOTransform.getPosition();
+	contact->normal = glm::normalize(midline);
+
+	//This is probably redundant but I am running a test intersection query because I need to calculate depth anyway
+	float depth = (a.radius + c.radius) - glm::length(midline);
+	if (depth < 0)
+		return false;
+
+	//Find depth
+	contact->depth = depth;
+
+	//Find position
+	//Using the point halfway between the spheres centers
+	//Don't think it makes any difference if the contact moves up or down the midline
+	contact->position = c.GOTransform.getPosition() + midline * 0.5f;
+
+	return true;
+}
+

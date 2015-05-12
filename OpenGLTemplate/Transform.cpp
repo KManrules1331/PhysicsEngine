@@ -88,6 +88,11 @@ glm::vec3 Transform::getRight()
 	return glm::vec3(rightVector);
 }
 
+glm::mat4 Transform::getInverseMatrix() const
+{
+	return glm::inverse(transformMatrix);
+}
+
 #pragma region MatrixUpdaters
 
 void Transform::updateTransformMatrix()

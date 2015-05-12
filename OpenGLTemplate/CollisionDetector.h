@@ -8,6 +8,13 @@
 #include "GJKCollisionDetection.h"
 #include "Transform.h"
 
+//Store all data necessary for collision resolution
+struct Contact{
+	glm::vec3 position;
+	glm::vec3 normal;
+	float depth;
+};
+
 //Forward Declarations
 class CubeCollisionDetector;
 class SphereCollisionDetector;
@@ -51,10 +58,15 @@ public:
 	virtual bool detectSphereCollision(SphereCollisionDetector& c) = 0;
 
 	virtual bool getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
-	
+
 	//CollisionTypes
 	virtual bool getCubeCollisionInfo(CubeCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
 	virtual bool getSphereCollisionInfo(SphereCollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact) = 0;
+
+	//New dispatch track//I think I have all the methods I need here
+	virtual bool getSATCollisionInfo(CubeCollisionDetector& c, Contact* contact) = 0;
+	virtual bool getSATCollisionInfo(SphereCollisionDetector& c, Contact* contact) = 0;
+	virtual bool getSATCollisionInfo(CollisionDetector& c, Contact* contact) = 0;
 
 	void reEvaluate();
 

@@ -28,6 +28,9 @@ public:
 	void addForce(glm::vec3 force, glm::vec3 positionOfForce);
 	void addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse);
 
+	//I need this to resolve interpenetrations
+	void move(glm::vec3 offset);
+
 private:
 	//Attributes
 	glm::vec3 acceleration;

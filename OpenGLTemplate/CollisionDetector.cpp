@@ -21,10 +21,12 @@ void CollisionDetector::init()
 	CollisionTree = new Octree(glm::vec3(0.0f), 100.0f);
 }
 
+//Broad phase culling//No modification necessary for SAT
+//Return a vector of collisionDetectors that could be colliding with this
 void CollisionDetector::GetCollidingCollisionDetectors(std::vector<CollisionDetector*>* CollidingDetectors)
 {
 	CollisionTree->retrieve(CollidingDetectors, *this);
-	for(int i = 0; i < CollidingDetectors->size(); i++)
+	for(unsigned int i = 0; i < CollidingDetectors->size(); i++)
 	{
 		if (!((*CollidingDetectors)[i] == this))
 		{
