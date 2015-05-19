@@ -48,7 +48,7 @@ void GameObject::addPhysicsComponent(float Mass, float MOI)
 void GameObject::draw()
 {
 	if (mesh)
-		mesh->draw(transform);
+		mesh->draw(transform, &color[0]);
 }
 
 void GameObject::update(float dt)

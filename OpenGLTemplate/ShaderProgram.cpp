@@ -22,6 +22,7 @@ ShaderProgram::ShaderProgram(char* vertexShader, char* fragmentShader)
 	projMatrix = glGetUniformLocation(program, "projMatrix");
 	viewMatrix = glGetUniformLocation(program, "viewMatrix");
 	lightPosition = glGetUniformLocation(program, "lightPosition");
+	color = glGetUniformLocation(program, "color");
 
 	//Load textures
 	loadTexture("texture.png", &textures[WALL]);
@@ -41,10 +42,11 @@ ShaderProgram::~ShaderProgram(void)
 
 #pragma region Public
 
-void ShaderProgram::drawMesh(const float* transformMatrix, const float* rotationMatrix, VertexArrayObject* VAO, Texture_IDs texture)
+void ShaderProgram::drawMesh(const float* transformMatrix, const float* rotationMatrix, VertexArrayObject* VAO, const float* color)
 {
 	VAO->activate();
-	glBindTexture(GL_TEXTURE_2D, textures[texture]);
+	//glBindTexture(GL_TEXTURE_2D, textures[texture]);
+	glUniform4fv(this->color, 1, color);
 	glUniformMatrix4fv(this->transformMatrix, 1, GL_FALSE, transformMatrix);
 	glUniformMatrix4fv(this->rotationMatrix, 1, GL_FALSE, rotationMatrix);
 	glDrawElements(GL_TRIANGLES, VAO->numVertices, GL_UNSIGNED_SHORT, (void*)0);

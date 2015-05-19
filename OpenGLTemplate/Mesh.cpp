@@ -30,9 +30,9 @@ Mesh::~Mesh(void)
 
 #pragma region Public
 
-void Mesh::draw(const Transform* transform)
+void Mesh::draw(const Transform* transform, const float* color)
 {
-	shader->drawMesh(&(transform->transformMatrix[0][0]), &(transform->rotationMatrix[0][0]), VAO, textureID);
+	shader->drawMesh(&(transform->transformMatrix[0][0]), &(transform->rotationMatrix[0][0]), VAO, color);
 }
 
 void Mesh::init(ShaderProgram* shader)

@@ -132,7 +132,7 @@ void CubeCollisionDetector::addEdgeToList(std::vector<std::vector<glm::vec3>>* l
 	(*list)[edgeNum].push_back((*points)[pointNum2]);
 }
 
-inline float CubeCollisionDetector::getHalfsize() const{ return halfsize; }
+float CubeCollisionDetector::getHalfsize() const{ return halfsize; }
 
 bool CubeCollisionDetector::getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
 {

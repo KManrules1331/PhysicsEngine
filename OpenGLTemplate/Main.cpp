@@ -15,7 +15,7 @@
 Window* window;
 Scene* scene1;
 Camera* cam;
-Trampoline* t;
+GameObject* a;
 float framesPerSecond;
 float dt;
 
@@ -56,11 +56,12 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	t = new Trampoline(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	scene1->addObject(t);
+	a = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	a->setMesh(Mesh::sphereMesh);
+	a->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	scene1->addObject(a);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
-	Input::OnKeyboardPress('y', t->getPullCommand());
 }
 
 void update(void)

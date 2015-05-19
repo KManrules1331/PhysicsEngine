@@ -18,6 +18,7 @@ public:
 	Mesh* mesh;				//DOES NOT OWN MESH
 	CollisionDetector* collisionListener;		//OWNS COLLIDER
 	PhysicsComponent* physicsComponent;
+	glm::vec4 color;
 
 	enum Primitive {
 		Cube,

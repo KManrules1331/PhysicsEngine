@@ -7,6 +7,9 @@ uniform vec3 cameraPosition;
 uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
 
+//Color vars
+uniform vec4 color;
+
 //Shading Vars
 uniform vec3 lightPosition;
 uniform sampler2D tex;
@@ -21,7 +24,6 @@ out vec3 L;
 out vec3 E;
 out vec3 H;
 out vec3 N;
-out vec2 textureCoordinates;
 
 void main()
 {
@@ -47,6 +49,4 @@ void main()
 	E = normalize(cameraPosition - worldCoord3v);
 	H = normalize(L + E);
 	N = normalize(worldNormal3v);
-
-	textureCoordinates = vTexCoord;
 }
