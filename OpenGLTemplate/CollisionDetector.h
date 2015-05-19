@@ -68,6 +68,10 @@ public:
 	virtual bool getSATCollisionInfo(SphereCollisionDetector& c, Contact* contact) = 0;
 	virtual bool getSATCollisionInfo(CollisionDetector& c, Contact* contact) = 0;
 
+	//For inertia tensors
+	//Takes angle axis representing torque in world coords and returns deltaAcceleration in world coords
+	virtual glm::vec3 getAngularAcceleration(glm::vec3 torque, float inverseMass) const = 0;
+
 	void reEvaluate();
 
 protected:
@@ -118,6 +122,8 @@ private:
 		Octree* getNode(int index);
 		Octree* getNode(CollisionDetector& c);
 		void queryRange();
+
+		glm::mat3 inertiaTensor;
 	};
 
 	static CollisionDetector::Octree* CollisionTree;

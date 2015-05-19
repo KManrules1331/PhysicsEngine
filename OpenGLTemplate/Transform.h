@@ -21,6 +21,7 @@ public:
 	void setRotation(glm::quat newRotation);
 	void setRotation(float angle, glm::vec3 axis);
 	void setScale(glm::vec3 newScale);
+	void setScale(glm::mat4 newScale);
 	glm::vec3 getPosition();
 	glm::quat getRotation();
 	glm::vec3 getScale();
@@ -30,6 +31,7 @@ public:
 
 	//I need this for something so I added it
 	glm::mat4 getInverseMatrix() const;
+	glm::mat4 getInverseRotationMatrix() const;
 
 private:
 	glm::vec3 position;

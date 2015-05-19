@@ -32,6 +32,8 @@ public:
 	bool getSATCollisionInfo(CollisionDetector& c, Contact* contact) override;
 	bool getSATCollisionInfo(SphereCollisionDetector& c, Contact* contact) override;
 
+	glm::vec3 getAngularAcceleration(glm::vec3 torque, float inverseMass) const override;
+
 	CollisionDetector::ContainingBox getAABB() override;
 
 	//Some getters

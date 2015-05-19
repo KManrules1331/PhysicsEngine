@@ -16,9 +16,10 @@ void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, glm::vec
 //SAT implementation of this method 
 void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, Contact contact)
 {
-	//Move objects to eliminate intersections
-	a->move(contact.normal * contact.depth);
-	b->move(-contact.normal * contact.depth);
+	//Move each object by half the collision depth
+	//TODO//Modify to be proportional to their masses
+	a->move(-contact.normal * (contact.depth / 2.0f));
+	b->move(contact.normal * (contact.depth / 2.0f));
 
 	//Get the impulse scalar
 	glm::vec3 radiusAP = contact.position -a->GOTransform.getPosition();
@@ -26,11 +27,11 @@ void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, Contact 
 	glm::vec3 velocityA = a->getVelocity() + glm::cross(glm::axis(a->getRotationalVelocity()) * glm::angle(a->getRotationalVelocity()), radiusAP);
 	glm::vec3 velocityB = b->getVelocity() + glm::cross(glm::axis(b->getRotationalVelocity()) * glm::angle(b->getRotationalVelocity()), radiusBP);
 	float j = getMomentumMagnitude(1.0f, velocityA - velocityB, contact.normal, a->inverseMass, b->inverseMass, radiusAP, radiusBP, a->inverseMOI, b->inverseMOI);
-
+	j = glm::abs(j);
 	//Apply impulse
 	//TODO//Determine if direction is correct
-	a->addImpulse(contact.normal * j, contact.position);
-	b->addImpulse(contact.normal * -j, contact.position);
+	a->addImpulse(-contact.normal * j, contact.position);
+	b->addImpulse(contact.normal * j, contact.position);
 }
 
 float HardBodyPhysics::getMomentumMagnitude(float e, glm::vec3 combinedVelocities, glm::vec3 normal, float inverseMassA, float inverseMassB, glm::vec3 radiusOfA, glm::vec3 radiusOfB, float InverseIOMA, float InverseIOMB)
@@ -70,17 +71,12 @@ void HardBodyPhysics::update()
 	{
 		for (unsigned int j = i + 1; j < PhysicsComponents.size(); j++)
 		{
-			if (PhysicsComponents[i]->GOCollider.detectCollision(PhysicsComponents[j]->GOCollider))
-			{
-				//TODO//Add code to resolve collision//
-				//TODO//Figure out if the contact is pointing in the wrong direction
-				//I might be able to change this to use a single contact and one call to getSATCollisionInfo
-				Contact contact;
-				bool collision;
-				collision = PhysicsComponents[i]->GOCollider.getSATCollisionInfo(PhysicsComponents[j]->GOCollider, &contact);
-				if (collision)
-					Collide(PhysicsComponents[i], PhysicsComponents[j], contact);
-			}
+			//Get contact and resolve any collision
+			Contact contact;
+			bool collision;
+			collision = PhysicsComponents[i]->GOCollider.getSATCollisionInfo(PhysicsComponents[j]->GOCollider, &contact);
+			if (collision)
+				Collide(PhysicsComponents[i], PhysicsComponents[j], contact);
 		}
 	}
 }

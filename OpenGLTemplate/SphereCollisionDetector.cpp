@@ -1,9 +1,11 @@
 #include "SphereCollisionDetector.h"
+#include "CubeCollisionDetector.h"
 
 
 SphereCollisionDetector::SphereCollisionDetector(Transform& GOTransform, float radius) : CollisionDetector(GOTransform)
 {
 	this->radius = radius;
+	this->radius = 0.5f;
 }
 
 
@@ -13,11 +15,7 @@ SphereCollisionDetector::~SphereCollisionDetector(void)
 
 bool SphereCollisionDetector::detectCollision(CollisionDetector& c)
 {
-	if (AABBCollision(c))
-	{
-		return c.detectSphereCollision(*this);
-	}
-	return false;
+	return c.detectSphereCollision(*this);
 }
 //DONE//
 bool SphereCollisionDetector::detectSphereCollision(SphereCollisionDetector& c)
@@ -30,9 +28,9 @@ bool SphereCollisionDetector::detectCubeCollision(CubeCollisionDetector& c)
 	glm::vec3 relPosition = transformVec3(GOTransform.getPosition(), c.GOTransform.getInverseMatrix());
 
 	//Test by if the sphere is not touching the cube in any of the 3 dimensions
-	if (glm::abs(relPosition.x - radius) > c.getHalfsize() ||
-		glm::abs(relPosition.y - radius) > c.getHalfsize() ||
-		glm::abs(relPosition.z - radius) > c.getHalfsize())
+	if (glm::abs(relPosition.x) - radius > c.getHalfsize() ||
+		glm::abs(relPosition.y) - radius > c.getHalfsize() ||
+		glm::abs(relPosition.z) - radius > c.getHalfsize())
 		return false;
 	return true;
 }
@@ -60,6 +58,16 @@ CollisionDetector::ContainingBox SphereCollisionDetector::getAABB()
 	returnBox.back = center.z + scale.z / 2;
 
 	return returnBox;
+}
+
+glm::vec3 SphereCollisionDetector::getAngularAcceleration(glm::vec3 torque, float inverseMass) const
+{
+	//This also is optimized to not use an intertia matrix because the moment of inertia is the same
+	//about all axes
+	if (inverseMass == 0)
+		return glm::vec3();
+	return torque * ((0.4f * radius * radius) / inverseMass);
+
 }
 
 bool SphereCollisionDetector::getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
@@ -119,16 +127,16 @@ bool SphereCollisionDetector::getSATCollisionInfo(CubeCollisionDetector& c, Cont
 	//Convert our point to world coordinates
 	closestPoint = transformVec3(closestPoint, c.GOTransform.transformMatrix);
 
-	//Check to see if it is actually colliding//This is out pixel perfect collision detection 
+	//Check to see if it is actually colliding//This is our pixel perfect collision detection 
 	glm::vec3 collisionLine = GOTransform.getPosition() - closestPoint;
 	float distSqr = glm::dot(collisionLine, collisionLine);
-	if (distSqr > square(radius * radius))
+	if (distSqr > square(radius))
 		return false;
 
 	//Now fill the contact data structure
-	contact->normal = glm::normalize(collisionLine);
+	contact->normal = -glm::normalize(collisionLine);
 	contact->position = closestPoint;
-	contact->depth = glm::sqrt(distSqr);
+	contact->depth = radius - glm::sqrt(distSqr);
 
 	return true;
 }

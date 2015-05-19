@@ -57,6 +57,11 @@ void Transform::setScale(glm::vec3 newScale)
 	scale = newScale;
 	updateTransformMatrix();
 }
+void Transform::setScale(glm::mat4 newScale)
+{
+	//TODO//Find a way to implement multiplying by a scale matrix
+	transformMatrix = newScale * transformMatrix;
+}
 glm::vec3 Transform::getPosition()
 {
 	return this->position;
@@ -91,6 +96,11 @@ glm::vec3 Transform::getRight()
 glm::mat4 Transform::getInverseMatrix() const
 {
 	return glm::inverse(transformMatrix);
+}
+
+glm::mat4 Transform::getInverseRotationMatrix() const
+{
+	return glm::inverse(rotationMatrix);
 }
 
 #pragma region MatrixUpdaters

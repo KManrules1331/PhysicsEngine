@@ -11,6 +11,10 @@
 #include "CommandTypes.h"
 #include "Input.h"
 
+//TODO//Get deform matrix to shader
+//Test sphere-cube collisions
+//Test sphere-cube collisions with soft body enabled
+
 Window* window;
 Scene* scene1;
 Camera* cam;
@@ -62,16 +66,21 @@ void mouselook(int x, int y)
 
 void init(void)
 {
+	//Add one object to the scene
 	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj->setMesh(Mesh::cubeMesh);
 	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj->addPhysicsComponent(1.0f, 0.1f);
+	obj->addPhysicsComponent(1.0f, 0.1f, true);
 	scene1->addObject(obj);
+
+	//Add the second object//The one that doesn't move
 	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	obj1->setMesh(Mesh::cubeMesh);
 	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(0.0f, 0.1f);
+	obj1->addPhysicsComponent(3.0f, 0.1f);
 	scene1->addObject(obj1);
+
+	//Setup scene camera
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -107,7 +116,7 @@ void update(void)
 void draw(void)
 {
 	scene1->drawScene();
-	std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
+	//std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
 }
 
 void quit(void)

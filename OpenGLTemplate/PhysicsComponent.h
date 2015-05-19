@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "CollisionDetector.h"
 
+#include <iostream>
+
 class PhysicsComponent
 {
 public:
@@ -11,7 +13,7 @@ public:
 	CollisionDetector& GOCollider;
 
 	//Constructor
-	PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI);
+	PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI, bool softBody = false);
 
 	//Destructor
 	~PhysicsComponent();
@@ -31,6 +33,11 @@ public:
 	//I need this to resolve interpenetrations
 	void move(glm::vec3 offset);
 
+	//For soft body physics
+	glm::mat4 getDeformMat() const;
+	glm::vec3 getScaleVector() const;
+	bool isSoftBody() const;
+
 private:
 	//Attributes
 	glm::vec3 acceleration;
@@ -38,5 +45,15 @@ private:
 	glm::vec3 velocity;
 	glm::quat rotationalVelocity;
 	static float dampeningFactor;
+
+	//Attributes for soft body physics
+	//This will only work for a single deformation at a time
+	bool softBody;
+	float elasticity = 0.9f;				//Values 0 - 1
+	glm::mat4 deformationMat;		//Just a scale matrix
+	glm::vec3 deformDirection;
+	glm::vec3 scaleVector;
+	float deformAmount;				//Analogous to displacement
+	float deformVelocity;			//Analogous to velocity
 };
 

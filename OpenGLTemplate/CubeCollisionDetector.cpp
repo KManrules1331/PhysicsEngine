@@ -1,4 +1,5 @@
 #include "CubeCollisionDetector.h"
+#include "SphereCollisionDetector.h"
 #include <iostream>
 
 
@@ -15,16 +16,15 @@ CubeCollisionDetector::~CubeCollisionDetector()
 
 bool CubeCollisionDetector::detectCollision(CollisionDetector& c)
 {
-	if (AABBCollision(c))
-	{
-		return c.detectCubeCollision(*this);
-	}
-	return false;
+	//TODO//Implement AABB again
+	//I believe there was a problem with the expression "factor = sqrt(3) / 2;" casting maybe...
+	return c.detectCubeCollision(*this);
 }
 
 bool CubeCollisionDetector::detectSphereCollision(SphereCollisionDetector& c)
 {
-	return false;
+	//Implement logic here
+	return c.detectCubeCollision(*this);
 }
 
 bool CubeCollisionDetector::detectCubeCollision(CubeCollisionDetector& c)
@@ -132,7 +132,17 @@ void CubeCollisionDetector::addEdgeToList(std::vector<std::vector<glm::vec3>>* l
 	(*list)[edgeNum].push_back((*points)[pointNum2]);
 }
 
-inline float CubeCollisionDetector::getHalfsize() const{ return halfsize; }
+float CubeCollisionDetector::getHalfsize() const{ return halfsize; }
+
+glm::vec3 CubeCollisionDetector::getAngularAcceleration(glm::vec3 torque, float inverseMass) const 
+{
+	//Because this is strictly limited to cubes I am optimizing to eliminate the use of an inertia tensor
+	//The moment of inertia of a cube happens to be the same about all axes
+	if (inverseMass == 0)
+		return glm::vec3();
+	float sideLength = halfsize * 2.0f;
+	return torque * (sideLength * sideLength) / (inverseMass * 6.0f);
+}
 
 bool CubeCollisionDetector::getCollisionInfo(CollisionDetector& c, glm::vec3* pointOfContact, glm::vec3* normalOfContact)
 {
@@ -233,20 +243,19 @@ bool CubeCollisionDetector::getSphereCollisionInfo(SphereCollisionDetector& c, g
 	return false;
 }
 
-//New SAT dispatch track
+//New SAT dispatch track///////////////////////////////////////////////////////////////////////////
 bool CubeCollisionDetector::getSATCollisionInfo(CollisionDetector& c, Contact* contact)
 {
 	return c.getSATCollisionInfo(*this, contact);
 }
 bool CubeCollisionDetector::getSATCollisionInfo(SphereCollisionDetector& c, Contact* contact)
 {
-	//TODO//Implement cube-sphere collision
-	return false;
+	return c.getSATCollisionInfo(*this, contact);
 }
 
+//TODO//Modify so that contact always points at "this"
 //Dispatch track is working properly and this method is being reached
 //Entry point for collision resolution//Should be done here as long as getFaceContact methods work
-//DONE//
 bool CubeCollisionDetector::getSATCollisionInfo(CubeCollisionDetector& b, Contact* contact)
 {
 	//Code is from the old "handleCollision method"	
@@ -304,7 +313,6 @@ std::vector<glm::vec3> CubeCollisionDetector::getWorldEdgeAxes() const
 //Don't know what I even used this for...
 //Returns in model coordinates//Just a vector containing e1, e2, e3
 std::vector<glm::vec3> CubeCollisionDetector::getModelEdgeAxes() const{ return edgeAxes; }
-
 
 //NOT DONE//
 //Returns contact from two objects//Checks all face to vertex contacts

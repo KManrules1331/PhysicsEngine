@@ -33,7 +33,7 @@ public:
 	//InitializerMethods
 	void setMesh(Mesh* mesh);
 	void addCollisionDetector(CollisionDetector::DetectorType t);
-	void addPhysicsComponent(float Mass, float MOI);
+	void addPhysicsComponent(float Mass, float MOI, bool softBody = false);
 
 	//Methods
 	void draw();
