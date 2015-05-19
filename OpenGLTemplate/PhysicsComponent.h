@@ -20,6 +20,10 @@ public:
 	glm::vec3 getVelocity();
 	glm::quat getRotationalVelocity();
 
+	//Setters
+	void setVelocity(glm::vec3 newVelocity);
+	void setRotationalVelocity(glm::quat newRotationalVelocity);
+
 	//Methods
 	void reset();
 	void update(float dt);
@@ -32,11 +36,11 @@ public:
 	void move(glm::vec3 offset);
 
 private:
-	//Attributes
 	glm::vec3 acceleration;
 	glm::quat rotationalAcceleration;
 	glm::vec3 velocity;
 	glm::quat rotationalVelocity;
 	static float dampeningFactor;
+
 };
 

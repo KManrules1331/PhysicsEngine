@@ -10,12 +10,12 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
-#include "Trampoline.h"
+#include "Cloth.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
-Trampoline* t;
+Cloth* t;
 float framesPerSecond;
 float dt;
 
@@ -30,6 +30,8 @@ void calculateFPS()
 
 	framesPerSecond = 1000.0f / milliSecondsPerFrame;
 	dt = milliSecondsPerFrame / 1000.0f;
+
+	dt = glm::clamp(dt, 0.0f, 0.1f);
 
 	previousTime = currentTime;
 }
@@ -56,7 +58,7 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	t = new Trampoline(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	t = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	scene1->addObject(t);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
