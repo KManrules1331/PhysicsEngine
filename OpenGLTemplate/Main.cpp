@@ -10,15 +10,13 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
-
-//TODO//Get deform matrix to shader
-//Test sphere-cube collisions
-//Test sphere-cube collisions with soft body enabled
+#include "Cloth.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* obj, *obj1;
+GameObject* a;
+Cloth* t;
 float framesPerSecond;
 float dt;
 
@@ -34,13 +32,9 @@ void calculateFPS()
 	framesPerSecond = 1000.0f / milliSecondsPerFrame;
 	dt = milliSecondsPerFrame / 1000.0f;
 
+	dt = glm::clamp(dt, 0.0f, 0.1f);
+
 	previousTime = currentTime;
-}
-//TODO: Find out best place to put this method
-void spawnSphere()
-{
-	//GameObject* obj = new GameObject(GameObject::Primitive::Sphere, cam->getLookPosition(), glm::vec3(0.0f), glm::vec3(1.0f));
-	//scene1->addObject(obj);
 }
 void mouseclick(int button, int state, int x, int y)
 {
@@ -50,7 +44,6 @@ void mouseclick(int button, int state, int x, int y)
 		{
 		case GLUT_LEFT_BUTTON:
 			{
-				spawnSphere();
 				break;
 			}
 		case GLUT_RIGHT_BUTTON:
@@ -66,23 +59,24 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	//Add one object to the scene
-	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj->setMesh(Mesh::cubeMesh);
-	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj->addPhysicsComponent(1.0f, 0.1f, true);
-	scene1->addObject(obj);
-
-	//Add the second object//The one that doesn't move
-	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::cubeMesh);
-	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(3.0f, 0.1f);
-	scene1->addObject(obj1);
-
-	//Setup scene camera
+	t = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	scene1->addObject(t);
+	/*a = new GameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
+	a->setMesh(Mesh::sphereMesh);
+	a->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	a->addPhysicsComponent(1.0f, 1.0f);
+	scene1->addObject(a);
+	GameObject* b = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
+	b->setMesh(Mesh::sphereMesh);
+	b->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	b->addPhysicsComponent(0.0f, 0.0f);
+	scene1->addObject(b);
+	Spring* s = new Spring(*(a->physicsComponent), *(b->physicsComponent), glm::vec3(0.0f), glm::vec3(0.0f), 0.1f);
+	s->setMesh(Mesh::cubeMesh);
+	scene1->addObject(s);*/
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
+	Input::OnKeyboardPress('y', t->getPullCommand());
 }
 
 void update(void)
@@ -91,32 +85,31 @@ void update(void)
 	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
-		obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
-		obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+		//obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
+		//obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
-	obj->physicsComponent->addForce(glm::normalize(obj1->transform->getPosition() - obj->transform->getPosition()) * 0.1f, obj->transform->getPosition());
 	glutPostRedisplay();
 }
 
 void draw(void)
 {
 	scene1->drawScene();
-	//std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
+	std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
 }
 
 void quit(void)

@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cloth.h" />
     <ClInclude Include="CollisionDetector.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandTypes.h" />
@@ -101,7 +102,9 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="SphereCollisionDetector.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Trampoline.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexArrayObject.h" />
@@ -109,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cloth.cpp" />
     <ClCompile Include="CollisionDetector.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CubeCollisionDetector.cpp" />
@@ -126,6 +130,8 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Simplex.cpp" />
     <ClCompile Include="SphereCollisionDetector.cpp" />
+    <ClCompile Include="Spring.cpp" />
+    <ClCompile Include="Trampoline.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexArrayObject.cpp" />
     <ClCompile Include="Window.cpp" />

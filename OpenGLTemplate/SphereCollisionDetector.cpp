@@ -153,8 +153,6 @@ bool SphereCollisionDetector::getSATCollisionInfo(SphereCollisionDetector& c, Co
 
 	//This is probably redundant but I am running a test intersection query because I need to calculate depth anyway
 	float depth = (a.radius + c.radius) - glm::length(midline);
-	if (depth < 0)
-		return false;
 
 	//Find depth
 	contact->depth = depth;
@@ -163,6 +161,9 @@ bool SphereCollisionDetector::getSATCollisionInfo(SphereCollisionDetector& c, Co
 	//Using the point halfway between the spheres centers
 	//Don't think it makes any difference if the contact moves up or down the midline
 	contact->position = c.GOTransform.getPosition() + midline * 0.5f;
+
+	if (depth < 0)
+		return false;
 
 	return true;
 }
