@@ -3,8 +3,8 @@
 
 Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(position, rotation, scale)
 {
-	this->width = 5;
-	this->height = 5;
+	this->width = 3;
+	this->height = 3;
 	createCloth(width, height);
 }
 
@@ -43,14 +43,14 @@ void Cloth::draw()
 	{
 		StructuralSprings[i]->draw();
 	}
-	for (int i = 0; i < ShearSprings.size(); i++)
+	/*for (int i = 0; i < ShearSprings.size(); i++)
 	{
 		ShearSprings[i]->draw();
 	}
 	for (int i = 0; i < BendSprings.size(); i++)
 	{
 		BendSprings[i]->draw();
-	}
+	}*/
 }
 
 void Cloth::createCloth(int width, int height)

@@ -15,6 +15,7 @@
 Window* window;
 Scene* scene1;
 Camera* cam;
+GameObject* a;
 Cloth* t;
 float framesPerSecond;
 float dt;
@@ -60,6 +61,19 @@ void init(void)
 {
 	t = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	scene1->addObject(t);
+	/*a = new GameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
+	a->setMesh(Mesh::sphereMesh);
+	a->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	a->addPhysicsComponent(1.0f, 1.0f);
+	scene1->addObject(a);
+	GameObject* b = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
+	b->setMesh(Mesh::sphereMesh);
+	b->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	b->addPhysicsComponent(0.0f, 0.0f);
+	scene1->addObject(b);
+	Spring* s = new Spring(*(a->physicsComponent), *(b->physicsComponent), glm::vec3(0.0f), glm::vec3(0.0f), 0.1f);
+	s->setMesh(Mesh::cubeMesh);
+	scene1->addObject(s);*/
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 	Input::OnKeyboardPress('y', t->getPullCommand());
