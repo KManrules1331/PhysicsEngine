@@ -32,7 +32,7 @@ void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 	}
 	case CollisionDetector::DetectorType::Sphere:
 	{
-		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x);
+		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x * 0.5f);
 		break;
 	}
 	}
@@ -46,18 +46,13 @@ void GameObject::addPhysicsComponent(float Mass, float MOI, bool softBody)
 void GameObject::draw()
 {
 	//Need to get deformation matrix to shader and didn't know how else to do it
-	if (physicsComponent->isSoftBody())
+	if (physicsComponent && physicsComponent->isSoftBody())
 	{
 		//auto deformVec = physicsComponent->getScaleVector();
 		//transform->setScale(deformVec);
-		if (mesh)
-			mesh->draw(transform);
 	}
-	else
-	{
-		if (mesh)
-			mesh->draw(transform);
-	}
+	if (mesh)
+		mesh->draw(transform);
 }
 
 void GameObject::update(float dt)

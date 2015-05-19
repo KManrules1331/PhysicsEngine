@@ -157,18 +157,15 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 	}
 	if (glm::length(impulse) > 0)
 	{
-		//GOTransform.move(-velocity);
-		//GOTransform.rotate(-rotationalVelocity);
-		//velocity += glm::normalize(radiusAP) * glm::dot(impulse, glm::normalize(radiusAP)) * inverseMass;
-		//rotationalVelocity *= glm::angleAxis(glm::length(glm::cross(impulse, radiusAP)) * inverseMOI, axis);
-		velocity += impulse * inverseMass;
-		//GOTransform.move(velocity);
-		//GOTransform.rotate(rotationalVelocity);
+		velocity += glm::normalize(radiusAP) * glm::dot(impulse, glm::normalize(radiusAP)) * inverseMass;
+		rotationalVelocity *= glm::angleAxis(glm::length(glm::cross(impulse, radiusAP)) * inverseMOI, axis);
 
-		float torqueScalar = glm::length(impulse) * glm::length(radiusAP);
-		axis *= torqueScalar;
-		axis = GOCollider.getAngularAcceleration(axis, inverseMass);
-		rotationalVelocity *= glm::angleAxis(glm::length(axis), glm::normalize(axis));
+
+		//velocity += impulse * inverseMass;
+		//float torqueScalar = glm::length(impulse) * glm::length(radiusAP);
+		//axis *= torqueScalar;
+		//axis = GOCollider.getAngularAcceleration(axis, inverseMass);
+		//rotationalVelocity *= glm::angleAxis(glm::length(axis), glm::normalize(axis));
 	}
 
 	//SOFT BODY PHYSICS STUFF

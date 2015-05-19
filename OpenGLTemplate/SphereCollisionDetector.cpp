@@ -5,7 +5,6 @@
 SphereCollisionDetector::SphereCollisionDetector(Transform& GOTransform, float radius) : CollisionDetector(GOTransform)
 {
 	this->radius = radius;
-	this->radius = 0.5f;
 }
 
 

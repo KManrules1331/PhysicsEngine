@@ -22,6 +22,10 @@ public:
 	glm::vec3 getVelocity();
 	glm::quat getRotationalVelocity();
 
+	//Setters
+	void setVelocity(glm::vec3 newVelocity);
+	void setRotationalVelocity(glm::quat newRotationalVelocity);
+
 	//Methods
 	void reset();
 	void update(float dt);

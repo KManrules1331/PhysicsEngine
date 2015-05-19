@@ -59,9 +59,7 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	t = new Cloth(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	scene1->addObject(t);
-	/*a = new GameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
+	a = new GameObject(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(0.1f));
 	a->setMesh(Mesh::sphereMesh);
 	a->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
 	a->addPhysicsComponent(1.0f, 1.0f);
@@ -73,10 +71,10 @@ void init(void)
 	scene1->addObject(b);
 	Spring* s = new Spring(*(a->physicsComponent), *(b->physicsComponent), glm::vec3(0.0f), glm::vec3(0.0f), 0.1f);
 	s->setMesh(Mesh::cubeMesh);
-	scene1->addObject(s);*/
+	scene1->addObject(s);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
-	Input::OnKeyboardPress('y', t->getPullCommand());
+	Input::OnKeyboardPress('y', new MoveCommand(glm::vec3(2.0f, 0.0f, 0.0f), *a));
 }
 
 void update(void)
