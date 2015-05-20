@@ -39,5 +39,7 @@ public:
 	//Methods
 	virtual void draw();
 	virtual void update(float dt);
+
+	void setColor(int r, int g, int b, int a);
 };
 

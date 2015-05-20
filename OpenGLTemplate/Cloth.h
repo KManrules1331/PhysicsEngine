@@ -9,13 +9,14 @@ public:
 	std::vector<GameObject*> ClothNodes;
 
 	//Constructors/Destructors
-	Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+	Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width, int height);
 	~Cloth();
 
 	//Methods
 	void draw() override;
 	void update(float dt) override;
 	Command* getPullCommand();
+	void addForce(const glm::vec3& force);
 
 private:
 	//Attributes

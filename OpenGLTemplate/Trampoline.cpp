@@ -1,10 +1,11 @@
 #include "Trampoline.h"
 
 
-Trampoline::Trampoline(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(position, rotation, scale)
+Trampoline::Trampoline(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width, int height) : GameObject(position, rotation, scale)
 {
-	width = 10;
-	height = 10;
+	this->width = width;
+	this->height = height;
+	cloth = new Cloth(position, rotation, scale * (float(width - 2) / float(width)), width - 2, height - 2);
 	populateNodes(width, height);
 	populateSprings(width, height);
 }
@@ -14,6 +15,7 @@ Trampoline::~Trampoline()
 {
 	Springs.clear();
 	Nodes.clear();
+	delete cloth;
 }
 
 void Trampoline::update(float dt)
@@ -26,6 +28,7 @@ void Trampoline::update(float dt)
 	{
 		Nodes[i]->update(dt);
 	}
+	cloth->update(dt);
 }
 
 void Trampoline::draw()
@@ -38,65 +41,63 @@ void Trampoline::draw()
 	{
 		Nodes[i]->draw();
 	}
+	cloth->draw();
 }
 
 void Trampoline::populateSprings(int width, int height)
 {
-	for (int i = 0; i < width - 1; i++)
+	for (int i = 1; i < width - 1; i++)
 	{
-		for (int j = 0; j < height - 1; j++)
-		{
-			addSpring(j * width + i, j * width + i + 1);		// Horizontal
-			addSpring(j * width + i, (j + 1) * width + i);		// Vertical
-			addSpring(j * width + i, (j + 1) * width + i + 1);	// DownRight
-		}
+		//Bottom row to Bottom row cloth
+		addSpring(2 * i, i - 1);
+
+		//Top row to Top row cloth
+		int index = (width - 2) *(height - 3) + (i - 1);
+		addSpring(2 * i + 1, index);
 	}
-	for (int i = 1; i < width; i++)
+	for (int i = 1; i < height - 1; i++)
 	{
-		for (int j = 0; j < height - 1; j++)
-		{
-			addSpring(j * width + i, (j + 1) * width + i - 1);
-		}
-	}
-	for (int i = 0; i < width - 1; i++) //Bottom row
-	{
-		addSpring((height - 1) * width + i, (height - 1) * width + i + 1);
-	}
-	for (int j = 0; j < height - 1; j++) //Right Column
-	{
-		addSpring((j + 1) * width - 1, (j + 2) * width - 1);
+		//Left row to Left row cloth
+		int trampIndex = 2 * width + (i - 1) * 2;
+		int clothIndex = (i - 1) * (width - 2);
+		addSpring(trampIndex, clothIndex);
+
+		//Right row to right row cloth
+		trampIndex = 2 * width + (i - 1) * 2 + 1;
+		clothIndex = (i - 1) * (width - 2) + (width - 3);
+		addSpring(trampIndex, clothIndex);
 	}
 }
 
 void Trampoline::addSpring(int nodeIndex1, int nodeIndex2)
 {
 	PhysicsComponent& a = *(Nodes[nodeIndex1]->physicsComponent);
-	PhysicsComponent& b = *(Nodes[nodeIndex2]->physicsComponent);
-	Spring* spring = new Spring(a, b, glm::vec3(0.0f), glm::vec3(0.0f));
+	PhysicsComponent& b = *(cloth->ClothNodes[nodeIndex2]->physicsComponent);
+	Spring* spring = new Spring(a, b, glm::vec3(0.0f), glm::vec3(0.0f), 10.0f);
 	spring->setMesh(Mesh::cubeMesh);
+	spring->setColor(192, 192, 192, 255);
 	Springs.push_back(spring);
 }
 
 void Trampoline::populateNodes(int width, int height)
 {
-	float distanceBetweenNodes = 0.5f;
+	float dX = 1.0f / (width - 1);
+	float dY = 1.0f / (height - 1);
 	for (int i = 0; i < width; i++)
 	{
-		for (int j = 0; j < height; j++)
-		{
-			//X = -(dBM * width / 2.0f) + (i * dBM)
-			//Y = (dBM * height / 2.0f) - (j * dBM)
-			float X = -(distanceBetweenNodes * (width - 1) / 2.0f) + (i * distanceBetweenNodes);
-			float Y = (distanceBetweenNodes * (height - 1) / 2.0f) - (j * distanceBetweenNodes);
-			if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
-			{
-				addNode(glm::vec3(X, Y, 0.0f), true);
-			}
-			else
-			{
-				addNode(glm::vec3(X, Y, 0.0f), false);
-			}
-		}
+		glm::vec3 pos = glm::vec3(-0.5f + dX * i, -0.5f, 0.0f);
+		addNode(pos, true);
+
+		pos = glm::vec3(-0.5f + dX * i, 0.5f, 0.0f);
+		addNode(pos, true);
+	}
+	for (int i = 1; i < height - 1; i++)
+	{
+		glm::vec3 pos = glm::vec3(-0.5f, -0.5f + dY * i, 0.0f);
+		addNode(pos, true);
+		
+		pos = glm::vec3(0.5f, -0.5f + dY * i, 0.0f);
+		addNode(pos, true);
 	}
 }
 
@@ -104,6 +105,7 @@ void Trampoline::addNode(glm::vec3 position, bool immovable)
 {
 	GameObject* node = new GameObject(glm::vec3(transform->transformMatrix * glm::vec4(position, 1.0f)), glm::vec3(0.0f), glm::vec3(0.1f));
 	node->setMesh(Mesh::sphereMesh);
+	node->setColor(192, 192, 192, 255);
 	node->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
 	if (immovable)
 	{

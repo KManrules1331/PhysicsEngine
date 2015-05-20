@@ -125,7 +125,7 @@ void Spring::getDerivative(const State& initStateA, const State& initStateB, Sta
 
 void Spring::getAcceleration(const State& stateA, const State& stateB, glm::vec3* accelA, glm::vec3* accelB)
 {
-	const float q = 0.1f;
+	const float q = 1.0f;
 	glm::vec3 diff = stateA.position - stateB.position;
 	float displacement = glm::length(diff) - restingLength;
 	if (!std::isfinite(displacement))
@@ -135,6 +135,6 @@ void Spring::getAcceleration(const State& stateA, const State& stateB, glm::vec3
 	}
 	diff = glm::normalize(diff);
 	diff *= displacement * k * 0.5f;
-	*(accelA) = -diff * a.inverseMass - q* stateA.velocity;
+	*(accelA) = -diff * a.inverseMass - q * stateA.velocity;
 	*(accelB) = diff * b.inverseMass - q * stateB.velocity;
 }

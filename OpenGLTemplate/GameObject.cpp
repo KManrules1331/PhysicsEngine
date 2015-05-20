@@ -58,3 +58,15 @@ void GameObject::update(float dt)
 		physicsComponent->update(dt);
 	}
 }
+
+void GameObject::setColor(int r, int g, int b, int a)
+{
+	r = glm::clamp(r, 0, 256);
+	g = glm::clamp(g, 0, 256);
+	b = glm::clamp(b, 0, 256);
+	a = glm::clamp(a, 0, 256);
+	color.r = 1.0f / 256.0f * r;
+	color.g = 1.0f / 256.0f * g;
+	color.b = 1.0f / 256.0f * b;
+	color.a = 1.0f / 256.0f * a;
+}

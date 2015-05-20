@@ -16,6 +16,7 @@ Window* window;
 Scene* scene1;
 Camera* cam;
 GameObject* a;
+Cloth* t;
 float framesPerSecond;
 float dt;
 
@@ -30,6 +31,10 @@ void calculateFPS()
 
 	framesPerSecond = 1000.0f / milliSecondsPerFrame;
 	dt = milliSecondsPerFrame / 1000.0f;
+
+	//For debug purposes, dt should never be
+	//above .1
+	dt = glm::clamp(dt, 0.0f, 0.1f);
 
 	previousTime = currentTime;
 }
@@ -56,10 +61,17 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	a = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+	a = new GameObject(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
 	a->setMesh(Mesh::sphereMesh);
-	a->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	a->setColor(256, 0, 0, 255);
+	a->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	a->addPhysicsComponent(2.0f, 1.0f);
 	scene1->addObject(a);
+	a->physicsComponent->setVelocity(glm::vec3(0.0f, -1.0f, 0.0));
+	//t = new Cloth(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(PI/2.0f, 0.0f, 0.0f), glm::vec3(2.0f), 15, 15);
+	//scene1->addObject(t);
+	Trampoline* t = new Trampoline(glm::vec3(0.0f), glm::vec3(PI/2.0f, 0.0f, 0.0f), glm::vec3(3.0f), 10, 10);
+	scene1->addObject(t);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -67,9 +79,11 @@ void init(void)
 void update(void)
 {
 	calculateFPS();
+	a->physicsComponent->addForce(glm::vec3(0.0f, -0.1f, 0.0f), a->transform->getPosition());
 	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
+		cam->transform->move(glm::vec3(0.0f, 0.25f, 0.0f));
 		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
@@ -78,6 +92,7 @@ void update(void)
 	}
 	if (Input::KeyPressed('s'))
 	{
+		cam->transform->move(glm::vec3(0.0f, -0.25f, 0.0f));
 		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))

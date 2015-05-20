@@ -8,6 +8,8 @@ Window::Window(char* name, int width, int height, glm::vec4 color)
 	this->width = width; this->height = height;
 	glutCreateWindow(name);
 	glClearColor(color.r, color.g, color.b, color.a);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 
