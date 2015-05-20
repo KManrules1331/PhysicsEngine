@@ -32,7 +32,7 @@ void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 	}
 	case CollisionDetector::DetectorType::Sphere:
 	{
-		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x);
+		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x * 0.5f);
 		break;
 	}
 	}
