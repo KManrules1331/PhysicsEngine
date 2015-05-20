@@ -5,21 +5,27 @@ class Cloth :
 	public GameObject
 {
 public:
+	//Attributes
+	std::vector<GameObject*> ClothNodes;
+
+	//Constructors/Destructors
 	Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	~Cloth();
 
+	//Methods
 	void draw() override;
 	void update(float dt) override;
-
 	Command* getPullCommand();
+
 private:
-	std::vector<GameObject*> ClothNodes;
+	//Attributes
 	std::vector<Spring*> StructuralSprings;
 	std::vector<Spring*> ShearSprings;
 	std::vector<Spring*> BendSprings;
 	int width;
 	int height;
 
+	//Methods
 	void createCloth(int width, int height);
 	void populateNodes(int width, int height);
 	void addNode(glm::vec3 position, bool immovable);
