@@ -18,21 +18,27 @@ public:
 	Command* getPullCommand();
 	void addForce(const glm::vec3& force);
 
-private:
-	//Attributes
+protected:
 	std::vector<Spring*> StructuralSprings;
 	std::vector<Spring*> ShearSprings;
 	std::vector<Spring*> BendSprings;
+
+	Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+
+
+	void addNode(glm::vec3 position, bool immovable);
+	void addSpring(GameObject& node1, GameObject& node2, std::vector<Spring*>& springList);
+
+private:
+	//Attributes
 	int width;
 	int height;
 
 	//Methods
 	void createCloth(int width, int height);
 	void populateNodes(int width, int height);
-	void addNode(glm::vec3 position, bool immovable);
 	void populateStructuralSprings(int width, int height);
 	void populateShearSprings(int width, int height);
 	void populateBendSprings(int width, int height);
-	void addSpring(GameObject& node1, GameObject& node2, std::vector<Spring*>& springList);
 };
 

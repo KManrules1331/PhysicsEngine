@@ -10,13 +10,12 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
-#include "Trampoline.h"
+#include "SoftBodySphere.h"
 
 Window* window;
 Scene* scene1;
 Camera* cam;
-GameObject* a;
-Cloth* t;
+SoftBodySphere* s;
 float framesPerSecond;
 float dt;
 
@@ -61,17 +60,8 @@ void mouselook(int x, int y)
 
 void init(void)
 {
-	a = new GameObject(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	a->setMesh(Mesh::sphereMesh);
-	a->setColor(256, 0, 0, 255);
-	a->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
-	a->addPhysicsComponent(2.0f, 1.0f);
-	scene1->addObject(a);
-	a->physicsComponent->setVelocity(glm::vec3(0.0f, -1.0f, 0.0));
-	//t = new Cloth(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(PI/2.0f, 0.0f, 0.0f), glm::vec3(2.0f), 15, 15);
-	//scene1->addObject(t);
-	Trampoline* t = new Trampoline(glm::vec3(0.0f), glm::vec3(PI/2.0f, 0.0f, 0.0f), glm::vec3(3.0f), 10, 10);
-	scene1->addObject(t);
+	s = new SoftBodySphere(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(3.0f));
+	scene1->addObject(s);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
 	cam->transform->setPosition(camPosition);
 }
@@ -79,7 +69,6 @@ void init(void)
 void update(void)
 {
 	calculateFPS();
-	a->physicsComponent->addForce(glm::vec3(0.0f, -0.1f, 0.0f), a->transform->getPosition());
 	scene1->updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{

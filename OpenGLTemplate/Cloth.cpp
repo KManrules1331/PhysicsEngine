@@ -8,6 +8,10 @@ Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width,
 	createCloth(width, height);
 }
 
+Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObject(position, rotation, scale)
+{
+}
+
 
 Cloth::~Cloth()
 {
@@ -42,10 +46,10 @@ void Cloth::update(float dt)
 
 void Cloth::draw()
 {
-	/*for (int i = 0; i < ClothNodes.size(); i++)
+	for (int i = 0; i < ClothNodes.size(); i++)
 	{
 		ClothNodes[i]->draw();
-	}*/
+	}
 	for (int i = 0; i < StructuralSprings.size(); i++)
 	{
 		StructuralSprings[i]->draw();
@@ -81,6 +85,7 @@ void Cloth::createCloth(int width, int height)
 //Necessary components.
 void Cloth::addNode(glm::vec3 position, bool immovable)
 {
+	position = glm::vec3(transform->transformMatrix * glm::vec4(position, 1.0f));
 	GameObject* node = new GameObject(position, glm::vec3(0.0f), glm::vec3(0.1f));
 	node->setMesh(Mesh::sphereMesh);
 	node->setColor(255, 204, 153, 255);
@@ -113,7 +118,6 @@ void Cloth::populateNodes(int width, int height)
 		for (int i = 0; i < width; i++)
 		{
 			glm::vec3 pos = glm::vec3(pX + dX * i, pY + dY * j, position.z);
-			pos = glm::vec3(transform->transformMatrix * glm::vec4(pos, 1.0f));
 			if (j == 0 || j == height - 1 || i == 0 || i == width - 1)
 				addNode(pos, false);
 			else
