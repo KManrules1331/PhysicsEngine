@@ -100,6 +100,21 @@ void Cloth::addNode(glm::vec3 position, bool immovable)
 	}
 	ClothNodes.push_back(node);
 }
+void Cloth::addNode(GameObject* node, bool immovable)
+{
+	node->setMesh(Mesh::sphereMesh);
+	node->setColor(255, 204, 153, 255);
+	node->addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	if (immovable)
+	{
+		node->addPhysicsComponent(0.0f, 0.0f);
+	}
+	else
+	{
+		node->addPhysicsComponent(0.1f, 0.1f);
+	}
+	ClothNodes.push_back(node);
+}
 
 //Method populates cloth with ClothNodes and adds the nodes to the
 //ClothNodes collection.

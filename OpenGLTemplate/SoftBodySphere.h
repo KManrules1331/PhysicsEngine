@@ -1,5 +1,6 @@
 #pragma once
 #include "Cloth.h"
+
 class SoftBodySphere :
 	public Cloth
 {
@@ -8,6 +9,12 @@ public:
 	~SoftBodySphere();
 
 private:
+	struct ClothList {
+		int rightIndex;
+		int downIndex;
+		int nodeIndex;
+		~ClothList();
+	};
 	int width;
 	int height;
 	int depth;
@@ -15,6 +22,8 @@ private:
 
 	void pushNode(Transform* node);
 	void makeCube();
-	void populateStructuralSprings();
+	void populateStructuralSprings(std::vector<ClothList*>& list);
+
+	void makeAllSprings(ClothList* a);
 };
 

@@ -27,6 +27,7 @@ protected:
 
 
 	void addNode(glm::vec3 position, bool immovable);
+	void addNode(GameObject* node, bool immovable);
 	void addSpring(GameObject& node1, GameObject& node2, std::vector<Spring*>& springList);
 
 private:

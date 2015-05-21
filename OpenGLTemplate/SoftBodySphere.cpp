@@ -8,11 +8,9 @@ SoftBodySphere::SoftBodySphere(glm::vec3 position, glm::vec3 rotation, glm::vec3
 	depth = 5;
 	radius = scale.x * 0.5f;
 	makeCube();
-	for (int i = 0; i < ClothNodes.size(); i++)
-	{
-		pushNode(ClothNodes[i]->transform);
-	}
-	populateStructuralSprings();
+	
+	std::vector<ClothList*> list;
+	populateStructuralSprings(list);
 }
 
 
@@ -33,10 +31,111 @@ void SoftBodySphere::pushNode(Transform* node)
 
 void SoftBodySphere::makeCube()
 {
+	std::vector<ClothList> list;
 	float halfSideLength = 0.5f * (1.0f / glm::sqrt(3.0f));
+	glm::vec3 TopLeftBack = glm::vec3(-halfSideLength, halfSideLength, halfSideLength);
+
 	float dX = (2 * halfSideLength) / (width - 1);
 	float dY = (2 * halfSideLength) / (height - 1);
 	float dZ = (2 * halfSideLength) / (depth - 1);
+
+	for (int k = 0; k < depth; k++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			glm::vec3 pos = TopLeftBack + glm::vec3(dX * i, 0.0f, -dZ * k);
+			ClothList listItem;
+			listItem.nodeIndex = ClothNodes.size();
+			if (i == width - 1)
+			{
+				if (k == 0)
+				{
+					listItem.rightIndex = (width * depth) + (width * (height - 1)) + (width * (depth - 1)) + (width * (height - 2));
+				}
+				else if (k == depth - 1)
+				{
+					listItem.rightIndex = list.size() - depth;
+				}
+				else
+				{
+					int offset = (width * depth) + (width * (height - 1)) + (width * (depth - 1)) + (width * (height - 2)) + (depth - 2) * (height - 2);
+					listItem.rightIndex = k - 1 + offset;
+				}
+			}
+			else
+			{
+				listItem.rightIndex = list.size() + 1;
+			}
+			listItem.downIndex = list.size() + width;
+			list.push_back(listItem);
+			addNode(pos, false);
+		}
+	}
+	glm::vec3 TopLeftFront = glm::vec3(-halfSideLength, halfSideLength, -halfSideLength);
+	for (int j = 1; j < height; j++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			glm::vec3 pos = TopLeftFront + glm::vec3(dX * i, -dY * j, 0.0f);
+			ClothList listItem;
+			listItem.nodeIndex = ClothNodes.size();
+			if (i == width - 1)
+			{
+				if (j == height - 1)
+				{
+					listItem.rightIndex = list.size() - height;
+				}
+				else
+				{
+					int offset = (width * depth) + (width * (height - 1)) + (width * (depth - 1)) + (width * (height - 2)) + (depth - 2) * (height - 2);
+					listItem.rightIndex = j * (depth - 2) + offset;
+				}
+			}
+			addNode(pos, false);
+		}
+	}
+
+	glm::vec3 BottomLeftFront = glm::vec3(-halfSideLength, -halfSideLength, -halfSideLength);
+	for (int k = 1; k < depth; k++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			glm::vec3 pos = BottomLeftFront + glm::vec3(dX * i, 0.0f, dZ * k);
+			addNode(pos, false);
+		}
+	}
+
+	glm::vec3 BottomLeftBack = glm::vec3(-halfSideLength, -halfSideLength, halfSideLength);
+	for (int j = 1; j < height - 1; j++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			glm::vec3 pos = BottomLeftBack + glm::vec3(dX * i, dY * j, 0.0f);
+			addNode(pos, false);
+		}
+	}
+
+	for (int j = 1; j < height - 1; j++)
+	{
+		for (int k = 1; k < depth - 1; k++)
+		{
+			glm::vec3 pos = TopLeftBack + glm::vec3(0.0f, -dY * j, -dZ * k);
+			addNode(pos, false);
+		}
+	}
+
+	glm::vec3 TopRightBack = glm::vec3(halfSideLength, halfSideLength, halfSideLength);
+	for (int j = 1; j < height - 1; j++)
+	{
+		for (int k = 1; k < depth - 1; k++)
+		{
+			glm::vec3 pos = TopRightBack + glm::vec3(0.0f, -dY * j, -dZ * k);
+			addNode(pos, false);
+		}
+	}
+
+	/*std::vector<ClothList*> nodes;
+	int index = 0;
 	//TopFace
 	glm::vec3 TRBCorner = glm::vec3(halfSideLength, halfSideLength, halfSideLength);
 	for (int i = 0; i < width; i++)
@@ -44,8 +143,17 @@ void SoftBodySphere::makeCube()
 		for (int k = 0; k < depth; k++)
 		{
 			glm::vec3 pos = TRBCorner - glm::vec3(dX * i, 0.0f, dZ * k);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
+	}
+	for (int i = 0; i < index; i++)
+	{
+		if (i >= depth)
+			nodes[i]->right = nodes[i - depth];
+		if ((i + 1) % depth != 0)
+			nodes[i]->down = nodes[i + 1];
 	}
 
 	//BottomFace
@@ -55,10 +163,20 @@ void SoftBodySphere::makeCube()
 		for (int k = 0; k < depth; k++)
 		{
 			glm::vec3 pos = BRBCorner - glm::vec3(dX * i, 0.0f, dZ * k);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
 	}
+	for (int i = width * depth; i < index; i++)
+	{
+		if (i >= depth + width * depth)
+			nodes[i]->right = nodes[i - depth];
+		if ((i + 1) % depth != 0)
+			nodes[i]->down = nodes[i + 1];
+	}
 
+	int frontOffset = index;
 	//FrontFace
 	glm::vec3 TRFCorner = glm::vec3(halfSideLength, halfSideLength, -halfSideLength);
 	for (int i = 0; i < width; i++)
@@ -66,47 +184,116 @@ void SoftBodySphere::makeCube()
 		for (int j = 1; j < height - 1; j++)
 		{
 			glm::vec3 pos = TRFCorner - glm::vec3(dX * i, dY * j, 0.0f);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
+	}
+	
+	for (int i = 0; i < index - frontOffset; i++)
+	{
+		if (i > height - 3)
+			nodes[i + frontOffset]->right = nodes[i + frontOffset - height - 2];
+		if ((i + 1) % (height - 2) != 0)
+			nodes[i + frontOffset]->down = nodes[i + frontOffset + 1];
 	}
 
 	//BackFace
+	int backOffset = index;
 	for (int i = 0; i < width; i++)
 	{
 		for (int j = 1; j < height - 1; j++)
 		{
 			glm::vec3 pos = TRBCorner - glm::vec3(dX * i, dY * j, 0.0f);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
+	}
+	for (int i = 0; i < index - backOffset; i++)
+	{
+		if (i >= depth - 2)
+			nodes[i + backOffset]->right = nodes[i + backOffset - depth - 2];
+		if ((i + 1) % (depth - 2) != 0)
+			nodes[i + backOffset]->down = nodes[i + backOffset - 1];
 	}
 
 	//RightFace
+	int rightOffset = index;
 	for (int j = 1; j < height - 1; j++)
 	{
 		for (int k = 1; k < depth - 1; k++)
 		{
 			glm::vec3 pos = TRBCorner - glm::vec3(0.0f, dY * j, dZ * k);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
 	}
-
+	for (int i = 0; i < index - rightOffset; i++)
+	{
+		if ((i + 1) % (depth - 2) != 0)
+			nodes[i + rightOffset]->down = nodes[i + rightOffset + 1];
+		if (i < index - rightOffset - depth + 1)
+			nodes[i + rightOffset]->right = nodes[i + rightOffset + depth - 2];
+	}
 
 	//LeftFace
+	int leftOffset = index;
 	glm::vec3 TLBCorner = glm::vec3(-halfSideLength, halfSideLength, halfSideLength);
 	for (int j = 1; j < height - 1; j++)
 	{
 		for (int k = 1; k < depth - 1; k++)
 		{
 			glm::vec3 pos = TLBCorner - glm::vec3(0.0f, dY * j, dZ * k);
-			addNode(pos, false);
+			nodes.push_back(new ClothList{ nullptr, nullptr, new GameObject(pos, glm::vec3(0.0f), glm::vec3(0.1f)) });
+			index++;
+			//addNode(pos, false);
 		}
+	}
+	for (int i = 0; i < index - leftOffset; i++)
+	{
+		if ((i + 1) % (depth - 2) != 0)
+			nodes[i + leftOffset]->down = nodes[i + leftOffset + 1];
+		if (i >= depth - 2)
+			nodes[i + leftOffset]->right = nodes[i + leftOffset - depth + 2];
 	}
 
 
+
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		pushNode(nodes[i]->node->transform);
+		addNode(nodes[i]->node, false);
+	}
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		makeAllSprings(nodes[i]);
+	}*/
 }
 
-void SoftBodySphere::populateStructuralSprings()
+void SoftBodySphere::makeAllSprings(ClothList* a)
 {
+	if (a->down != nullptr && a->down->node)
+		addSpring(*(a->node), *(a->down->node), StructuralSprings);
+	if (a->right != nullptr && a->right->node)
+		addSpring(*(a->node), *(a->right->node), StructuralSprings);
+}
+
+void SoftBodySphere::populateStructuralSprings(std::vector<ClothList*>& list)
+{
+	//Radial
+	ClothList* node = new ClothList();
+	node->node = ClothNodes[0];
+	for (int r = 0; r < 2 * height + 2 * depth - 1; r++)
+	{
+		for (int i = 0; i < width - 1; i++)
+		{
+			
+		}
+	}
+
+	/*
 	//Top
 	for (int i = 0; i < width - 1; i++)
 	{
@@ -280,5 +467,9 @@ void SoftBodySphere::populateStructuralSprings()
 	{
 		int backOffset = 2 * width * height + width * (height - 2);
 		addSpring(*(ClothNodes[offset + j * (depth - 2)]), *(ClothNodes[backOffset + j + ((width - 1) * (height - 2))]), StructuralSprings);
-	}
+	}*/
+}
+
+SoftBodySphere::ClothList::~ClothList()
+{
 }
