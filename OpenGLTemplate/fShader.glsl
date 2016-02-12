@@ -5,9 +5,9 @@ in vec3 L;
 in vec3 E;
 in vec3 H;
 in vec3 N;
-in vec2 textureCoordinates;
 
 //Uniforms
+uniform vec4 color;
 uniform sampler2D tex;
 
 void main()
@@ -18,8 +18,8 @@ void main()
 
 	float gloss = .7;
 
-	//Get color of pixel from texture
-	vec4 hue = texture(tex, textureCoordinates);
+	
+	vec4 hue = color;
 
 	//Light Science
 	diffuse *= max(dot(L,N), 0.0);

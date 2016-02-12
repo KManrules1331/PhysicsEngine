@@ -30,9 +30,9 @@ Mesh::~Mesh(void)
 
 #pragma region Public
 
-void Mesh::draw(const Transform* transform)
+void Mesh::draw(const Transform* transform, const float* color)
 {
-	shader->drawMesh(&(transform->transformMatrix[0][0]), &(transform->rotationMatrix[0][0]), VAO, textureID);
+	shader->drawMesh(&(transform->getTransformMatrix()[0][0]), &(transform->getRotationMatrix()[0][0]), VAO, color);
 }
 
 void Mesh::init(ShaderProgram* shader)
@@ -217,7 +217,7 @@ Mesh* Mesh::createCircle(ShaderProgram* shader, int slices)
 
 	int n = x.size();
 
-	for (int i = 0; i < x.size(); i++)
+	for (unsigned int i = 0; i < x.size(); i++)
 	{
 		u[i] = u[i] + 0.5f;
 		v[i] = v[i] + 0.5f;
@@ -374,7 +374,7 @@ std::vector<float> Mesh::sinRadialLoopDivisions(float radius, float minAngle, fl
 	std::vector<float> returnVector;
 	std::vector<float> angles = divisionLoop(minAngle, maxAngle, subdivisions);
 
-	for(int i = 0; i < angles.size(); i++)
+	for(unsigned int i = 0; i < angles.size(); i++)
 	{
 		returnVector.push_back(radius * sin(angles[i]));
 	}
@@ -386,7 +386,7 @@ std::vector<float> Mesh::cosRadialLoopDivisions(float radius, float minAngle, fl
 	std::vector<float> returnVector;
 	std::vector<float> angles = divisionLoop(minAngle, maxAngle, subdivisions);
 
-	for(int i = 0; i < angles.size(); i++)
+	for(unsigned int i = 0; i < angles.size(); i++)
 	{
 		returnVector.push_back(radius * cos(angles[i]));
 	}

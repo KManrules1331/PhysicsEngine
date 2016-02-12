@@ -23,7 +23,7 @@ public:
 
 	//Methods
 	static void init(ShaderProgram* shader);
-	void draw(const Transform* transform);
+	void draw(const Transform* transform, const float* color);
 
 private:
 	//Attributes

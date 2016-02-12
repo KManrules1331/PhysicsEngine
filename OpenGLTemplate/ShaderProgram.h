@@ -28,7 +28,7 @@ public:
 
 #pragma region Methods
 
-	void drawMesh(const float* transformMatrix, const float* rotationMatrix, VertexArrayObject* VAO, Texture_IDs texture);
+	void drawMesh(const float* transformMatrix, const float* rotationMatrix, VertexArrayObject* VAO, const float* color);
 	void loadData(std::vector<float>* vertices, std::vector<float>* normals, std::vector<float>* textureCoordinates);
 	void updateUniforms(Camera*, Light*);
 	void loadTexture(char*, GLuint*);
@@ -51,6 +51,7 @@ private:
 	GLuint viewMatrix;
 	GLuint lightPosition;
 	GLuint texture;
+	GLuint color;
 
 	//Shader Attributes
 	GLuint vPosition;

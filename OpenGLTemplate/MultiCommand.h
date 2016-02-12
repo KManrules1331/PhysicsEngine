@@ -5,14 +5,12 @@ class MultiCommand :
 {
 public:
 	MultiCommand();
-	virtual ~MultiCommand();
-
-	void addCommand(Command* c);
-	void clearCommands();
+	~MultiCommand();
 
 	void execute() override;
 
+	void addCommand(Command* c);
+	void removeCommand(Command* c);
 private:
 	std::vector<Command*> commands;
 };
-

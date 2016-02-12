@@ -9,6 +9,10 @@ GJKCollisionDetection::Simplex::Simplex()
 	}
 }
 
+GJKCollisionDetection::Simplex::~Simplex()
+{
+}
+
 bool GJKCollisionDetection::Simplex::push_back(glm::vec3 vertex)
 {
 	if (size >= 4) return false;

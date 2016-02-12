@@ -1,6 +1,6 @@
 #include "PhysicsComponent.h"
 
-float PhysicsComponent::dampeningFactor = 0.8f;
+float PhysicsComponent::dampeningFactor = 0.9f;
 
 PhysicsComponent::PhysicsComponent(Transform& t, CollisionDetector& d, float mass, float MOI) : GOTransform{ t }, GOCollider{ d }
 {
@@ -29,9 +29,19 @@ glm::vec3 PhysicsComponent::getVelocity()
 	return velocity;
 }
 
+void PhysicsComponent::setVelocity(glm::vec3 newVelocity)
+{
+	velocity = newVelocity;
+}
+
 glm::quat PhysicsComponent::getRotationalVelocity()
 {
 	return rotationalVelocity;
+}
+
+void PhysicsComponent::setRotationalVelocity(glm::quat newRotationalVelocity)
+{
+	rotationalVelocity = newRotationalVelocity;
 }
 
 void PhysicsComponent::reset() {
@@ -45,9 +55,11 @@ void PhysicsComponent::update(float dt) {
 	rotationalVelocity *= glm::angleAxis(glm::angle(rotationalAcceleration) * dt, glm::axis(rotationalAcceleration));
 
 	//Dampening
-	float frameDamp = std::max(1.0f - ((1.0f - dampeningFactor) * dt), 0.0f);
-	velocity *= frameDamp;
-	rotationalVelocity = glm::angleAxis(glm::angle(rotationalVelocity) * frameDamp, glm::axis(rotationalVelocity));
+	//float frameDamp = std::max(1.0f - ((1.0f - dampeningFactor) * dt * glm::length(velocity)), 0.0f);
+	//velocity *= frameDamp;
+	if (glm::length(velocity) > 10000.0f)
+		velocity = glm::normalize(velocity) * 10000.0f;
+	//rotationalVelocity = glm::angleAxis(glm::angle(rotationalVelocity) * frameDamp, glm::axis(rotationalVelocity));
 
 	GOTransform.move(velocity * dt);
 	GOTransform.rotate(glm::angleAxis(glm::angle(rotationalVelocity) * dt, glm::axis(rotationalVelocity)));
@@ -69,7 +81,7 @@ void PhysicsComponent::addForce(glm::vec3 force, glm::vec3 positionOfForce)
 	{
 		radiusAP = positionOfForce - GOTransform.getPosition();
 		axis = glm::normalize(glm::cross(force, radiusAP));
-		axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+		axis = glm::vec3(glm::inverse(GOTransform.getRotationMatrix()) * axis);
 	}
 	if (glm::length(force) > 0)
 	{
@@ -91,7 +103,7 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 		radiusAP = positionOfImpulse - GOTransform.getPosition();
 		axis = glm::normalize(glm::cross(impulse, radiusAP));
 		if (glm::length(axis) > 0)
-			axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+			axis = glm::vec3(glm::inverse(GOTransform.getRotationMatrix()) * axis);
 		else
 			axis = glm::vec3(1.0f, 0.0f, 0.0f);
 	}
@@ -104,4 +116,11 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 		//GOTransform.move(velocity);
 		//GOTransform.rotate(rotationalVelocity);
 	}
+}
+
+//Move the component by the offset vector
+//Moves instantly with no change in velocity or acceleration
+void PhysicsComponent::move(glm::vec3 offset)
+{
+	GOTransform.move(offset);
 }

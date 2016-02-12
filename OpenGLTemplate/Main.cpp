@@ -10,11 +10,13 @@
 #include "GJKCollisionDetection.h"
 #include "CommandTypes.h"
 #include "Input.h"
+#include "SoftBodySphere.h"
 
-Window* window;
-Scene* scene1;
-Camera* cam;
-GameObject* obj, *obj1;
+Window window;
+Scene scene1;
+Camera cam;
+GameObject a;
+SoftBodySphere* s;
 float framesPerSecond;
 float dt;
 
@@ -30,63 +32,95 @@ void calculateFPS()
 	framesPerSecond = 1000.0f / milliSecondsPerFrame;
 	dt = milliSecondsPerFrame / 1000.0f;
 
+	//For debug purposes, dt should never be
+	//above .1
+	dt = glm::clamp(dt, 0.0f, 0.1f);
+
 	previousTime = currentTime;
 }
+void mouseclick(int button, int state, int x, int y)
+{
+	if(state == GLUT_DOWN)
+	{
+		switch(button)
+		{
+		case GLUT_LEFT_BUTTON:
+			{
+				break;
+			}
+		case GLUT_RIGHT_BUTTON:
+			{
+				break;
+			}
+		}
+	}
+	glutPostRedisplay();
+}
+void mouselook(int x, int y)
+{}
 
 void init(void)
 {
-	obj = new GameObject(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj->setMesh(Mesh::cubeMesh);
-	obj->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj->addPhysicsComponent(1.0f, 0.1f);
-	scene1->addObject(obj);
-	obj1 = new GameObject(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f), glm::vec3(1.0f));
-	obj1->setMesh(Mesh::cubeMesh);
-	obj1->addCollisionDetector(CollisionDetector::DetectorType::Cube);
-	obj1->addPhysicsComponent(0.0f, 0.1f);
-	scene1->addObject(obj1);
+	a.setTransform(Transform(glm::vec3(0.0f, 4.0f, 0.0f), glm::quat(), glm::vec3(3.0f)));
+	a.setMesh(Mesh::sphereMesh);
+	a.setColor(255, 0, 0, 255);
+	a.addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	a.addPhysicsComponent(4.0f, 1.0f);
+	a.physicsComponent->setVelocity(glm::vec3(-0.05f, -0.8f, 0.0f));
+	scene1.addObject(&a);
+	s = new SoftBodySphere(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(3.0f));
+	scene1.addObject(s);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
-	cam->transform->setPosition(camPosition);
+	cam.m_transform.setPosition(camPosition);
 }
 
 void update(void)
 {
 	calculateFPS();
-	scene1->updateScene(dt);
+	scene1.updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
+		cam.m_transform.move(cam.m_transform.getForward() * 0.25f);
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
-		obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
+		cam.m_transform.move(cam.m_transform.getRight() * -0.25f);
+		//obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
+		cam.m_transform.move(cam.m_transform.getForward() * -0.25f);
+		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
-		obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+		cam.m_transform.move(cam.m_transform.getRight() * 0.25f);
+		//obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+	}
+	if (Input::KeyPressed('q'))
+	{
+		cam.m_transform.move(cam.m_transform.getUp() * 0.25f);
+	}
+	if (Input::KeyPressed('e'))
+	{
+		cam.m_transform.move(cam.m_transform.getUp() * -0.25f);
 	}
 	if (Input::KeyPressed('t'))
 	{
-		obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
+		//obj->physicsComponent->addForce(glm::vec3(500.0f, 0.0f, 0.0f), obj->transform->getPosition());
 	}
-	obj->physicsComponent->addForce(glm::normalize(obj1->transform->getPosition() - obj->transform->getPosition()) * 0.1f, obj->transform->getPosition());
 	glutPostRedisplay();
 }
 
 void draw(void)
 {
-	scene1->drawScene();
+	scene1.drawScene();
 	std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
 }
 
 void quit(void)
 {
-	delete window;
-	delete scene1;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
 	exit(0);
 }
@@ -94,13 +128,14 @@ void quit(void)
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	window = new Window();
+	window.Init();
 	glewInit();
-	cam = new Camera(glm::vec3(0.0f, 0.0f, 0.0f));
-	Light* light = new Light(glm::vec3(0.0f, 3.0f, 0.0f));
-	scene1 = new Scene(cam, light);
-	glutMouseFunc(Input::recordMouseClick);
-	glutPassiveMotionFunc(Input::recordMousePos);
+	Light light(glm::vec3(0.0f, 3.0f, 0.0f));
+	scene1.setCamera(&cam);
+	scene1.setLight(&light);
+	scene1.Init();
+	glutMouseFunc(mouseclick);
+	glutPassiveMotionFunc(mouselook);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glutKeyboardFunc(Input::recordKeyboardPress);
 	glutKeyboardUpFunc(Input::recordKeyboardRelease);
@@ -109,7 +144,7 @@ int main(int argc, char **argv)
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
 	//Initializers
-	Mesh::init(scene1->shader);
+	Mesh::init(scene1.shader);
 	CollisionDetector::init();
 	init();
 
