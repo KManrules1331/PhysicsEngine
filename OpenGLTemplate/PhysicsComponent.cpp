@@ -81,7 +81,7 @@ void PhysicsComponent::addForce(glm::vec3 force, glm::vec3 positionOfForce)
 	{
 		radiusAP = positionOfForce - GOTransform.getPosition();
 		axis = glm::normalize(glm::cross(force, radiusAP));
-		axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+		axis = glm::vec3(glm::inverse(GOTransform.getRotationMatrix()) * axis);
 	}
 	if (glm::length(force) > 0)
 	{
@@ -103,7 +103,7 @@ void PhysicsComponent::addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse
 		radiusAP = positionOfImpulse - GOTransform.getPosition();
 		axis = glm::normalize(glm::cross(impulse, radiusAP));
 		if (glm::length(axis) > 0)
-			axis = glm::vec3(glm::inverse(GOTransform.rotationMatrix) * glm::vec4(axis, 1.0f));
+			axis = glm::vec3(glm::inverse(GOTransform.getRotationMatrix()) * axis);
 		else
 			axis = glm::vec3(1.0f, 0.0f, 0.0f);
 	}

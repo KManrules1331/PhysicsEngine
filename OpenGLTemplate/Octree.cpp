@@ -102,10 +102,11 @@ std::vector<CollisionDetector*>* CollisionDetector::Octree::retrieve(std::vector
 
 void CollisionDetector::Octree::remove(CollisionDetector* c)
 {
+	Octree* node = nullptr;
 	for(int i = 0; i < 8; i++)
 	{
-		Octree* node = getNode(i);
-		if(node)
+		node = getNode(i);
+		if(node != nullptr)
 		{
 			node->remove(c);
 		}

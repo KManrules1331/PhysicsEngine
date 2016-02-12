@@ -65,7 +65,7 @@ std::vector < glm::vec3> CubeCollisionDetector::getVertices() const
 	for (unsigned int i = 0; i < returnVector.size(); i++)
 	{
 		glm::vec4 multiplyVector = glm::vec4(returnVector[i], 1.0f);
-		multiplyVector = GOTransform.transformMatrix * multiplyVector;
+		multiplyVector = GOTransform.getTransformMatrix() * multiplyVector;
 		returnVector[i] = glm::vec3(multiplyVector);
 	}
 
@@ -116,9 +116,7 @@ std::vector<glm::vec3> CubeCollisionDetector::getNormals() const
 	returnVector.push_back(glm::vec3(0.0f, 0.0f, -1.0f));
 	for (unsigned int i = 0; i < returnVector.size(); i++)
 	{
-		glm::vec4 multiplyVector = glm::vec4(returnVector[i], 1.0f);
-		multiplyVector = GOTransform.rotationMatrix * multiplyVector;
-		returnVector[i] = glm::vec3(multiplyVector);
+		returnVector[i] = GOTransform.getRotationMatrix() * returnVector[i];
 	}
 
 	return returnVector;
@@ -293,7 +291,7 @@ bool CubeCollisionDetector::getSATCollisionInfo(CubeCollisionDetector& b, Contac
 std::vector<glm::vec3> CubeCollisionDetector::getWorldEdgeAxes() const
 {
 	//Update model matrix
-	glm::mat4 model = GOTransform.transformMatrix;
+	glm::mat4 model = GOTransform.getTransformMatrix();
 	std::vector<glm::vec3> temp;
 	for (const glm::vec3& axis : edgeAxes)
 		temp.push_back(glm::vec3{ model * glm::vec4{ axis, 1.0f } });
@@ -383,9 +381,9 @@ Contact CubeCollisionDetector::getEdgeContact(const CubeCollisionDetector& a, co
 
 	//Transform to world coords
 	for (unsigned int i = 0; i < aPoints.size(); i++)
-		aPoints[i] = glm::vec3{ a.GOTransform.transformMatrix * glm::vec4{ aPoints[i], 1.0f } };
+		aPoints[i] = glm::vec3{ a.GOTransform.getTransformMatrix() * glm::vec4{ aPoints[i], 1.0f } };
 	for (unsigned int i = 0; i < bPoints.size(); i++)
-		bPoints[i] = glm::vec3{ b.GOTransform.transformMatrix * glm::vec4{ bPoints[i], 1.0f } };
+		bPoints[i] = glm::vec3{ b.GOTransform.getTransformMatrix() * glm::vec4{ bPoints[i], 1.0f } };
 
 	//Determine which in each set is closest to other object
 	glm::vec3 point1 = findClosest(aPoints, b.GOTransform.getPosition());
@@ -580,7 +578,7 @@ std::vector<glm::vec3> CubeCollisionDetector::getWorldVerts() const
 	for (unsigned int i = 0; i < verts.size(); i++)
 	{
 		glm::vec4 multiplyVector = glm::vec4(verts[i], 1.0f);
-		multiplyVector = GOTransform.transformMatrix * multiplyVector;
+		multiplyVector = GOTransform.getTransformMatrix() * multiplyVector;
 		temp[i] = glm::vec3(multiplyVector);
 	}
 	return temp;
@@ -597,6 +595,6 @@ glm::vec3 CubeCollisionDetector::getWorldVert(GLuint i) const
 glm::vec3 CubeCollisionDetector::getWorldEdgeAxis(GLuint index) const
 {
 	glm::vec4 multiplyVector = glm::vec4(edgeAxes[index], 1.0f);
-	multiplyVector = GOTransform.transformMatrix * multiplyVector;
+	multiplyVector = GOTransform.getTransformMatrix() * multiplyVector;
 	return glm::vec3(multiplyVector);
 }

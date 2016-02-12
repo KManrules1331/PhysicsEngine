@@ -32,7 +32,7 @@ Mesh::~Mesh(void)
 
 void Mesh::draw(const Transform* transform, const float* color)
 {
-	shader->drawMesh(&(transform->transformMatrix[0][0]), &(transform->rotationMatrix[0][0]), VAO, color);
+	shader->drawMesh(&(transform->getTransformMatrix()[0][0]), &(transform->getRotationMatrix()[0][0]), VAO, color);
 }
 
 void Mesh::init(ShaderProgram* shader)

@@ -7,7 +7,7 @@ Spring::Spring(PhysicsComponent& nodeA, PhysicsComponent& nodeB, glm::vec3 nodeA
 	aLoc = glm::vec4(nodeAAnchorPoint, 1.0f);
 	bLoc = glm::vec4(nodeBAnchorPoint, 1.0f);
 
-	restingLength = glm::length((b.GOTransform.transformMatrix * bLoc) - (a.GOTransform.transformMatrix * aLoc));
+	restingLength = glm::length((b.GOTransform.getTransformMatrix() * bLoc) - (a.GOTransform.getTransformMatrix() * aLoc));
 	this->k = k;
 }
 
@@ -51,19 +51,19 @@ void Spring::update(float dt) {
 }
 
 void Spring::draw() {
-	glm::vec3 aPosition = glm::vec3(a.GOTransform.transformMatrix * aLoc);
-	glm::vec3 bPosition = glm::vec3(b.GOTransform.transformMatrix * bLoc);
+	glm::vec3 aPosition = glm::vec3(a.GOTransform.getTransformMatrix() * aLoc);
+	glm::vec3 bPosition = glm::vec3(b.GOTransform.getTransformMatrix() * bLoc);
 	glm::vec3 diff = bPosition - aPosition;
 
-	this->transform->setPosition((aPosition + bPosition) * 0.5f);
-	this->transform->setScale(glm::vec3(0.01f, glm::length(diff), 0.01f));
+	this->getTransform().setPosition((aPosition + bPosition) * 0.5f);
+	this->getTransform().setScale(glm::vec3(0.01f, glm::length(diff), 0.01f));
 	//If angle is 0 or PI or 2PI, produces error
 	glm::vec3 axis = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), bPosition - aPosition);
 	if (glm::length(axis) <= 0)
 		axis = glm::vec3(0.0f, 0.0f, 1.0f);
 	else
 		axis = glm::normalize(axis);
-	this->transform->setRotation(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(bPosition - aPosition)), glm::normalize(axis));
+	this->getTransform().setRotation(glm::angle(glm::vec3(0.0f, 1.0f, 0.0f), glm::normalize(bPosition - aPosition)), glm::normalize(axis));
 
 	GameObject::draw();
 }

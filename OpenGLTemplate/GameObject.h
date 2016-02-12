@@ -14,8 +14,6 @@ class GameObject
 {
 public:
 	//Attributes
-	Transform* transform;	//OWNS TRANSFORM
-	Mesh* mesh;				//DOES NOT OWN MESH
 	CollisionDetector* collisionListener;		//OWNS COLLIDER
 	PhysicsComponent* physicsComponent;
 	glm::vec4 color;
@@ -28,8 +26,15 @@ public:
 	};
 
 	//Constructors
+	GameObject();
 	GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	~GameObject(void);
+
+	//Getters/Setters
+	const Transform& getTransform() const;
+	Transform& getTransform();
+
+	void setTransform(const Transform& newTransform);
 
 	//InitializerMethods
 	void setMesh(Mesh* mesh);
@@ -41,5 +46,9 @@ public:
 	virtual void update(float dt);
 
 	void setColor(int r, int g, int b, int a);
+
+private:
+	Transform m_transform;
+	Mesh* m_mesh;
 };
 

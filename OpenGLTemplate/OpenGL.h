@@ -9,5 +9,4 @@
 #include "glm\glm\gtx\quaternion.hpp"
 #include "glm\glm\gtc\quaternion.hpp"
 #include "glm\glm\gtx\vector_angle.hpp"
-#include "SOIL/SOIL.h"
 #endif

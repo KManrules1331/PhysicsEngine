@@ -103,7 +103,7 @@ void Trampoline::populateNodes(int width, int height)
 
 void Trampoline::addNode(glm::vec3 position, bool immovable)
 {
-	GameObject* node = new GameObject(glm::vec3(transform->transformMatrix * glm::vec4(position, 1.0f)), glm::vec3(0.0f), glm::vec3(0.1f));
+	GameObject* node = new GameObject(glm::vec3(getTransform().getTransformMatrix() * glm::vec4(position, 1.0f)), glm::vec3(0.0f), glm::vec3(0.1f));
 	node->setMesh(Mesh::sphereMesh);
 	node->setColor(192, 192, 192, 255);
 	node->addCollisionDetector(CollisionDetector::DetectorType::Sphere);

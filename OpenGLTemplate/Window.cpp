@@ -1,7 +1,7 @@
 #include "Window.h"
 
 
-Window::Window(char* name, int width, int height, glm::vec4 color)
+void Window::Init(char* name, int width, int height, glm::vec4 color)
 {
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(width, height);
@@ -12,6 +12,10 @@ Window::Window(char* name, int width, int height, glm::vec4 color)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+
+Window::Window()
+{
+}
 
 Window::~Window(void)
 {

@@ -3,15 +3,15 @@
 bool GJKCollisionDetection::areColliding(const std::vector<glm::vec3>& aVertices, const std::vector<glm::vec3>& bVertices)
 {
 	glm::vec3 initVertex = aVertices[0] - bVertices[0];
-	Simplex* simplex = new Simplex();
-	simplex->push_back(initVertex);
+	Simplex simplex;
+	simplex.push_back(initVertex);
 	glm::vec3 direction = -initVertex;
 	while (true)
 	{
 		glm::vec3 vertex = getVertex(aVertices, bVertices, direction);
 		if (glm::dot(vertex, direction) <= 0) return false;
-		simplex->push_back(vertex);
-		if (simplex->doSimplex(direction)) return true;
+		simplex.push_back(vertex);
+		if (simplex.doSimplex(direction)) return true;
 	}
 }
 

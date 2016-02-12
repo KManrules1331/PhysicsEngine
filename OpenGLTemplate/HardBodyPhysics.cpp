@@ -2,19 +2,43 @@
 
 std::vector<PhysicsComponent*> HardBodyPhysics::PhysicsComponents;
 
-void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, glm::vec3 normalOfCollision, glm::vec3 positionOfCollision)
+void HardBodyPhysics::Collide(
+	PhysicsComponent& a, 
+	PhysicsComponent& b, 
+	const glm::vec3& normalOfCollision, 
+	const glm::vec3& positionOfCollision)
 {
-	glm::vec3 radiusAP = positionOfCollision - a->GOTransform.getPosition();
-	glm::vec3 radiusBP = positionOfCollision - b->GOTransform.getPosition();
-	glm::vec3 velocityA = a->getVelocity() + glm::cross(glm::axis(a->getRotationalVelocity()) * glm::angle(a->getRotationalVelocity()), radiusAP);
-	glm::vec3 velocityB = b->getVelocity() + glm::cross(glm::axis(b->getRotationalVelocity()) * glm::angle(b->getRotationalVelocity()), radiusBP);
-	float j = getMomentumMagnitude(1.0f, velocityA - velocityB, normalOfCollision, a->inverseMass, b->inverseMass, radiusAP, radiusBP, a->inverseMOI, b->inverseMOI);
+	//Get distance between contacts and center of masses
+	glm::vec3 contactToA = positionOfCollision - a.GOTransform.getPosition();
+	glm::vec3 contactToB = positionOfCollision - b.GOTransform.getPosition();
 
-	a->addImpulse(normalOfCollision * j, positionOfCollision);
-	b->addImpulse(normalOfCollision * -j, positionOfCollision);
+	//Get the velocity of the points of contact at time of contact
+	const glm::quat& aRotVel = a.getRotationalVelocity();
+	const glm::quat& bRotVel = b.getRotationalVelocity();
+	glm::vec3 velocityA = a.getVelocity() + glm::cross(glm::axis(aRotVel) * glm::angle(aRotVel), contactToA);
+	glm::vec3 velocityB = b.getVelocity() + glm::cross(glm::axis(bRotVel) * glm::angle(bRotVel), contactToB);
+
+	//Plug into equation
+	float j = getMomentumMagnitude(
+		1.0f, 
+		velocityA - velocityB, 
+		normalOfCollision, 
+		a.inverseMass, 
+		b.inverseMass, 
+		contactToA, 
+		contactToB, 
+		a.inverseMOI, 
+		b.inverseMOI);
+
+	//Apply calculated force back into object's movement.
+	a.addImpulse(normalOfCollision * j, positionOfCollision);
+	b.addImpulse(normalOfCollision * -j, positionOfCollision);
 }
 //SAT implementation of this method 
-void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, Contact contact)
+void HardBodyPhysics::Collide(
+	PhysicsComponent* a, 
+	PhysicsComponent* b, 
+	Contact contact)
 {
 	//Move objects to eliminate intersections
 	glm::vec3 aVelocity = a->getVelocity();	glm::vec3 bVelocity = b->getVelocity();
@@ -51,11 +75,22 @@ void HardBodyPhysics::Collide(PhysicsComponent* a, PhysicsComponent* b, Contact 
 	b->move(b->getVelocity() * dt);
 }
 
-float HardBodyPhysics::getMomentumMagnitude(float e, glm::vec3 combinedVelocities, glm::vec3 normal, float inverseMassA, float inverseMassB, glm::vec3 radiusOfA, glm::vec3 radiusOfB, float InverseIOMA, float InverseIOMB)
+float HardBodyPhysics::getMomentumMagnitude(
+	float e, 
+	const glm::vec3& combinedVelocities, 
+	const glm::vec3& normal, 
+	float inverseMassA, 
+	float inverseMassB, 
+	const glm::vec3& contactToA, 
+	const glm::vec3& contactToB, 
+	float InverseIOMA, 
+	float InverseIOMB)
 {
-	float denom1 = glm::dot(normal, normal) * (inverseMassA + inverseMassB);
-	float denom2 = pow(glm::length(radiusOfA) * glm::length(normal) * sin(glm::angle(glm::normalize(radiusOfA), glm::normalize(normal))), 2) * InverseIOMA;
-	float denom3 = pow(glm::length(radiusOfB) * glm::length(normal) * sin(glm::angle(glm::normalize(radiusOfB), glm::normalize(normal))), 2) * InverseIOMB;
+	float denom1 = inverseMassA + inverseMassB;
+	float contactToALength = glm::length(contactToA);
+	float contactToBLength = glm::length(contactToB);
+	float denom2 = pow(contactToALength * sin(glm::angle(contactToA / contactToALength, normal)), 2) * InverseIOMA;
+	float denom3 = pow(contactToBLength * sin(glm::angle(contactToB / contactToBLength, normal)), 2) * InverseIOMB;
 
 	float denominator = denom1 + denom2 + denom3;
 

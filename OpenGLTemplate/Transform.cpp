@@ -6,8 +6,6 @@ Transform::Transform(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 	this->position = position;
 	this->rotation = rotation;
 	this->scale = scale;
-
-	updateTransformMatrix();
 }
 
 
@@ -18,101 +16,93 @@ Transform::~Transform()
 void Transform::move(glm::vec3 displacement)
 {
 	position += displacement;
-	updateTransformMatrix();
 }
 void Transform::rotate(glm::quat rotation)
 {
 	this->rotation *= rotation;
-	updateTransformMatrix();
 }
 void Transform::rotate(float angle, glm::vec3 axis)
 {
 	glm::quat rotation = glm::angleAxis(angle, axis);
 	this->rotation *= rotation;
-	updateTransformMatrix();
 }
 void Transform::changeScale(glm::vec3 scale)
 {
 	this->scale += scale;
-	updateTransformMatrix();
 }
 void Transform::setPosition(glm::vec3 newPosition)
 {
 	position = newPosition;
-	updateTransformMatrix();
 }
 void Transform::setRotation(glm::quat newRotation)
 {
 	rotation = newRotation;
-	updateTransformMatrix();
 }
 void Transform::setRotation(float angle, glm::vec3 axis)
 {
 	glm::quat newRotation = glm::angleAxis(angle, axis);
 	this->rotation = newRotation;
-	updateTransformMatrix();
 }
 void Transform::setScale(glm::vec3 newScale)
 {
 	scale = newScale;
-	updateTransformMatrix();
 }
-glm::vec3 Transform::getPosition()
+const glm::vec3& Transform::getPosition() const
 {
 	return this->position;
 }
-glm::quat Transform::getRotation()
+glm::vec3& Transform::getPosition()
+{
+	return this->position;
+}
+const glm::quat& Transform::getRotation() const
 {
 	return this->rotation;
 }
-glm::vec3 Transform::getScale()
+glm::quat& Transform::getRotation()
+{
+	return this->rotation;
+}
+const glm::vec3& Transform::getScale() const
 {
 	return this->scale;
 }
-glm::vec3 Transform::getForward()
+glm::vec3& Transform::getScale()
 {
-	glm::vec4 forwardVector = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-	forwardVector = rotationMatrix * forwardVector;
-	return glm::vec3(forwardVector);
+	return this->scale;
 }
-glm::vec3 Transform::getUp()
+glm::vec3 Transform::getForward() const
 {
-	glm::vec4 upVector = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-	upVector = rotationMatrix * upVector;
-	return glm::vec3(upVector);
+	return getRotationMatrix()[2];
 }
-glm::vec3 Transform::getRight()
+glm::vec3 Transform::getUp() const
 {
-	glm::vec4 rightVector = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	rightVector = rotationMatrix * rightVector;
-	return glm::vec3(rightVector);
+	return getRotationMatrix()[1];
+}
+glm::vec3 Transform::getRight() const
+{
+	return getRotationMatrix()[0];
 }
 
 glm::mat4 Transform::getInverseMatrix() const
 {
-	return glm::inverse(transformMatrix);
+	return glm::inverse(getTransformMatrix());
 }
 
 #pragma region MatrixUpdaters
 
-void Transform::updateTransformMatrix()
+glm::mat3 Transform::getRotationMatrix() const
 {
-	updateRotationMatrix();
-	glm::mat4 positionMatrix = glm::mat4(1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		position.x, position.y, position.z, 1.0f);
-	glm::mat4 scaleMatrix = glm::mat4(scale.x, 0.0f, 0.0f, 0.0f,
-		0.0f, scale.y, 0.0f, 0.0f,
-		0.0f, 0.0f, scale.z, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-
-	transformMatrix = positionMatrix * rotationMatrix * scaleMatrix;
+	return glm::toMat3(rotation);
 }
 
-void Transform::updateRotationMatrix()
+glm::mat4 Transform::getTransformMatrix() const
 {
-	rotationMatrix = glm::toMat4(rotation);
+	glm::mat4 scaleMatrix(glm::scale(scale));
+	glm::mat4 rotationMatrix(glm::toMat4(rotation));
+	glm::mat4 translationMatrix(glm::translate(position));
+
+	return translationMatrix * rotationMatrix * scaleMatrix;
 }
 
 #pragma endregion

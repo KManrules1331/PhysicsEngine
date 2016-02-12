@@ -2,7 +2,8 @@
 
 #pragma region Constructors
 
-Camera::Camera(glm::vec3 position, glm::vec3 rotation)
+Camera::Camera(glm::vec3 position, glm::vec3 rotation) :
+	m_transform(position, glm::quat(rotation))
 {
 
 #pragma region Initialize Projection Matrix
@@ -19,7 +20,6 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation)
 
 #pragma endregion
 
-	this->transform = new Transform(position, glm::quat(rotation));
 	//Called to initialize matrices
 	projectionData = glm::vec4(1.0f, 10.0f, 1.0f, 1.0f);
 }
@@ -30,7 +30,6 @@ Camera::Camera(glm::vec3 position, glm::vec3 rotation)
 
 Camera::~Camera(void)
 {
-	delete transform;
 }
 
 #pragma endregion
@@ -48,14 +47,14 @@ void Camera::bindUniforms(const GLuint program, const GLuint cameraPosition, con
 {
 	updateViewMatrix();
 	updateProjectionMatrix();
-	glProgramUniform3fv(program, cameraPosition, 1, &(transform->getPosition()[0]));
+	glProgramUniform3fv(program, cameraPosition, 1, &(m_transform.getPosition()[0]));
 	glProgramUniformMatrix4fv(program, projectionMatrix, 1, GL_FALSE, &(this->projectionMatrix[0][0]));
 	glProgramUniformMatrix4fv(program, viewMatrix, 1, GL_FALSE, &(this->viewMatrix[0][0]));
 }
 
 glm::vec3 Camera::getLookPosition()
 {
-	return transform->getPosition() + transform->getForward();
+	return m_transform.getPosition() + m_transform.getForward();
 }
 
 #pragma endregion
@@ -64,10 +63,10 @@ glm::vec3 Camera::getLookPosition()
 
 void Camera::updateViewMatrix()
 {
-	glm::vec3 forward = transform->getForward();
-	glm::vec3 right = transform->getRight();
-	glm::vec3 up = transform->getUp();
-	glm::vec3 position = transform->getPosition();
+	glm::vec3 forward = m_transform.getForward();
+	glm::vec3 right = m_transform.getRight();
+	glm::vec3 up = m_transform.getUp();
+	glm::vec3 position = m_transform.getPosition();
 	viewMatrix[0][0] = right.x;
 	viewMatrix[1][0] = right.y;
 	viewMatrix[2][0] = right.z;

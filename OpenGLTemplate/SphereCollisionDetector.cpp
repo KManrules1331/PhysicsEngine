@@ -117,7 +117,7 @@ bool SphereCollisionDetector::getSATCollisionInfo(CubeCollisionDetector& c, Cont
 	closestPoint.z = dist;
 
 	//Convert our point to world coordinates
-	closestPoint = transformVec3(closestPoint, c.GOTransform.transformMatrix);
+	closestPoint = transformVec3(closestPoint, c.GOTransform.getTransformMatrix());
 
 	//Check to see if it is actually colliding//This is out pixel perfect collision detection 
 	glm::vec3 collisionLine = GOTransform.getPosition() - closestPoint;

@@ -11,13 +11,22 @@
 class Scene
 {
 public:
+	Scene();
 	Scene(Camera* camera, Light* light);
 	~Scene(void);
 
 	//Attributes
 	ShaderProgram* shader;
 
+	//getters/setters
+	Camera* getCamera() const;
+	void setCamera(Camera* newCamera);
+
+	Light* getLight() const;
+	void setLight(Light* newLight);
+
 	//Methods
+	void Init();
 	void updateScene(float dt);
 	void drawScene();
 	void addObject(GameObject* obj);

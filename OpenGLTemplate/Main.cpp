@@ -12,9 +12,10 @@
 #include "Input.h"
 #include "SoftBodySphere.h"
 
-Window* window;
-Scene* scene1;
-Camera* cam;
+Window window;
+Scene scene1;
+Camera cam;
+GameObject a;
 SoftBodySphere* s;
 float framesPerSecond;
 float dt;
@@ -60,33 +61,50 @@ void mouselook(int x, int y)
 
 void init(void)
 {
+	a.setTransform(Transform(glm::vec3(0.0f, 4.0f, 0.0f), glm::quat(), glm::vec3(3.0f)));
+	a.setMesh(Mesh::sphereMesh);
+	a.setColor(255, 0, 0, 255);
+	a.addCollisionDetector(CollisionDetector::DetectorType::Sphere);
+	a.addPhysicsComponent(4.0f, 1.0f);
+	a.physicsComponent->setVelocity(glm::vec3(-0.05f, -0.8f, 0.0f));
+	scene1.addObject(&a);
 	s = new SoftBodySphere(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(3.0f));
-	scene1->addObject(s);
+	scene1.addObject(s);
 	glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, -3.0f);
-	cam->transform->setPosition(camPosition);
+	cam.m_transform.setPosition(camPosition);
 }
 
 void update(void)
 {
 	calculateFPS();
-	scene1->updateScene(dt);
+	scene1.updateScene(dt);
 	if (Input::KeyPressed('w'))
 	{
-		cam->transform->move(glm::vec3(0.0f, 0.25f, 0.0f));
+		cam.m_transform.move(cam.m_transform.getForward() * 0.25f);
 		//obj->transform->move(glm::vec3(0.0f, 0.0f, 0.01f));
 	}
 	if (Input::KeyPressed('a'))
 	{
+		cam.m_transform.move(cam.m_transform.getRight() * -0.25f);
 		//obj->transform->move(glm::vec3(-0.01f, 0.0f, 0.0f));
 	}
 	if (Input::KeyPressed('s'))
 	{
-		cam->transform->move(glm::vec3(0.0f, -0.25f, 0.0f));
+		cam.m_transform.move(cam.m_transform.getForward() * -0.25f);
 		//obj->transform->move(glm::vec3(0.0f, 0.0f, -0.01f));
 	}
 	if (Input::KeyPressed('d'))
 	{
+		cam.m_transform.move(cam.m_transform.getRight() * 0.25f);
 		//obj->transform->move(glm::vec3(0.01f, 0.0f, 0.0f));
+	}
+	if (Input::KeyPressed('q'))
+	{
+		cam.m_transform.move(cam.m_transform.getUp() * 0.25f);
+	}
+	if (Input::KeyPressed('e'))
+	{
+		cam.m_transform.move(cam.m_transform.getUp() * -0.25f);
 	}
 	if (Input::KeyPressed('t'))
 	{
@@ -97,14 +115,12 @@ void update(void)
 
 void draw(void)
 {
-	scene1->drawScene();
+	scene1.drawScene();
 	std::cout << std::fixed << "FPS: " << std::setprecision(4) << framesPerSecond << endl;
 }
 
 void quit(void)
 {
-	delete window;
-	delete scene1;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_DEFAULT);
 	exit(0);
 }
@@ -112,11 +128,12 @@ void quit(void)
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	window = new Window();
+	window.Init();
 	glewInit();
-	cam = new Camera(glm::vec3(0.0f, 0.0f, 0.0f));
-	Light* light = new Light(glm::vec3(0.0f, 3.0f, 0.0f));
-	scene1 = new Scene(cam, light);
+	Light light(glm::vec3(0.0f, 3.0f, 0.0f));
+	scene1.setCamera(&cam);
+	scene1.setLight(&light);
+	scene1.Init();
 	glutMouseFunc(mouseclick);
 	glutPassiveMotionFunc(mouselook);
 	glutSetCursor(GLUT_CURSOR_NONE);
@@ -127,7 +144,7 @@ int main(int argc, char **argv)
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
 	//Initializers
-	Mesh::init(scene1->shader);
+	Mesh::init(scene1.shader);
 	CollisionDetector::init();
 	init();
 

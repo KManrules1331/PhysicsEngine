@@ -4,6 +4,7 @@ class SoftBodySphere :
 	public Cloth
 {
 public:
+	SoftBodySphere();
 	SoftBodySphere(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	~SoftBodySphere();
 
@@ -16,5 +17,7 @@ private:
 	void pushNode(Transform* node);
 	void makeCube();
 	void populateStructuralSprings();
+	void populateShearSprings();
+	void populateBendStructuralSprings();
 };
 

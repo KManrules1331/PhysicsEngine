@@ -9,8 +9,15 @@ public:
 	std::vector<GameObject*> ClothNodes;
 
 	//Constructors/Destructors
+	Cloth();
 	Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width, int height);
 	~Cloth();
+
+	//Getters/Setters
+	int getWidth() const;
+	int getHeight() const;
+
+	void setWidthAndHeight(int newWidth, int newHeight);
 
 	//Methods
 	void draw() override;

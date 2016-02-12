@@ -1,25 +1,42 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+GameObject::GameObject() : m_transform()
 {
-	
-	this->transform = new Transform(position, glm::quat(rotation), scale);
+}
+
+GameObject::GameObject(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) :
+	m_transform(position, glm::quat(rotation), scale)
+{
 }
 
 
 GameObject::~GameObject(void)
 {
-	delete transform;
 	delete collisionListener;
 	if (physicsComponent)
 		HardBodyPhysics::removePhysicsComponent(physicsComponent);
 	delete physicsComponent;
 }
 
+const Transform & GameObject::getTransform() const
+{
+	return m_transform;
+}
+
+Transform & GameObject::getTransform()
+{
+	return m_transform;
+}
+
+void GameObject::setTransform(const Transform & newTransform)
+{
+	m_transform = newTransform;
+}
+
 void GameObject::setMesh(Mesh* mesh)
 {
-	this->mesh = mesh;
+	this->m_mesh = mesh;
 }
 void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 {
@@ -27,12 +44,12 @@ void GameObject::addCollisionDetector(CollisionDetector::DetectorType t)
 	{
 	case CollisionDetector::DetectorType::Cube:
 	{
-		collisionListener = new CubeCollisionDetector(*transform);
+		collisionListener = new CubeCollisionDetector(m_transform);
 		break;
 	}
 	case CollisionDetector::DetectorType::Sphere:
 	{
-		collisionListener = new SphereCollisionDetector(*transform, transform->getScale().x * 0.5f);
+		collisionListener = new SphereCollisionDetector(m_transform, m_transform.getScale().x * 0.5f);
 		break;
 	}
 	}
@@ -41,14 +58,14 @@ void GameObject::addPhysicsComponent(float Mass, float MOI)
 {
 	if (!collisionListener)
 		assert(false);
-	physicsComponent = new PhysicsComponent(*transform, *collisionListener, Mass, MOI);
+	physicsComponent = new PhysicsComponent(m_transform, *collisionListener, Mass, MOI);
 	HardBodyPhysics::addPhysicsComponent(physicsComponent);
 }
 
 void GameObject::draw()
 {
-	if (mesh)
-		mesh->draw(transform, &color[0]);
+	if (m_mesh != nullptr)
+		m_mesh->draw(&m_transform, &color[0]);
 }
 
 void GameObject::update(float dt)

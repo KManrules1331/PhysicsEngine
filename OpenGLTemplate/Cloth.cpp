@@ -1,6 +1,13 @@
 #include "Cloth.h"
 
 
+Cloth::Cloth() : GameObject()
+{
+	this->width = 5;
+	this->height = 5;
+	createCloth(width, height);
+}
+
 Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, int width, int height) : GameObject(position, rotation, scale)
 {
 	this->width = width;
@@ -15,6 +22,16 @@ Cloth::Cloth(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale) : GameObje
 
 Cloth::~Cloth()
 {
+}
+
+int Cloth::getWidth() const
+{
+	return width;
+}
+
+int Cloth::getHeight() const
+{
+	return height;
 }
 
 void Cloth::update(float dt)
@@ -39,9 +56,17 @@ void Cloth::update(float dt)
 	glm::vec3 newPos;
 	for (int i = 0; i < ClothNodes.size(); i++)
 	{
-		newPos += ClothNodes[i]->transform->getPosition();
+		newPos += ClothNodes[i]->getTransform().getPosition();
 	}
 	newPos /= (width * height);
+}
+
+void Cloth::setWidthAndHeight(int newWidth, int newHeight)
+{
+	this->width = newWidth;
+	this->height = newHeight;
+
+	createCloth(newWidth, newHeight);
 }
 
 void Cloth::draw()
@@ -69,7 +94,7 @@ void Cloth::addForce(const glm::vec3& force)
 	glm::vec3 newForce = force * (1.0f / (width * height));
 	for (int i = 0; i < ClothNodes.size(); i++)
 	{
-		ClothNodes[i]->physicsComponent->addForce(newForce, ClothNodes[i]->transform->getPosition());
+		ClothNodes[i]->physicsComponent->addForce(newForce, ClothNodes[i]->getTransform().getPosition());
 	}
 }
 
@@ -85,7 +110,7 @@ void Cloth::createCloth(int width, int height)
 //Necessary components.
 void Cloth::addNode(glm::vec3 position, bool immovable)
 {
-	position = glm::vec3(transform->transformMatrix * glm::vec4(position, 1.0f));
+	position = glm::vec3(getTransform().getTransformMatrix() * glm::vec4(position, 1.0f));
 	GameObject* node = new GameObject(position, glm::vec3(0.0f), glm::vec3(0.1f));
 	node->setMesh(Mesh::sphereMesh);
 	node->setColor(255, 204, 153, 255);
@@ -107,8 +132,8 @@ void Cloth::addNode(glm::vec3 position, bool immovable)
 void Cloth::populateNodes(int width, int height)
 {
 	//X distance between nodes
-	glm::vec3 scale = transform->getScale();
-	glm::vec3 position = transform->getPosition();
+	glm::vec3 scale = getTransform().getScale();
+	glm::vec3 position = getTransform().getPosition();
 	float dX = 1.0f / (width - 1);
 	float dY = 1.0f / (height - 1);
 	float pX = -0.5f;
@@ -129,7 +154,7 @@ void Cloth::populateNodes(int width, int height)
 //Method creates spring initialized to the two node's distances, and then added to the provided spring list.
 void Cloth::addSpring(GameObject& node1, GameObject& node2, std::vector<Spring*>& springList)
 {
-	Spring* spring = new Spring(*(node1.physicsComponent), *(node2.physicsComponent), glm::vec3(0.0f), glm::vec3(0.0f), 0.5f);
+	Spring* spring = new Spring(*(node1.physicsComponent), *(node2.physicsComponent), glm::vec3(0.0f), glm::vec3(0.0f), 5.0f);
 	spring->setMesh(Mesh::cubeMesh);
 	spring->setColor(255, 204, 152, 255);
 	springList.push_back(spring);
