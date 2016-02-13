@@ -16,9 +16,9 @@ private:
 		const glm::vec3& normalOfCollision, 
 		const glm::vec3& positionOfCollision);
 	static void Collide(
-		PhysicsComponent* a, 
-		PhysicsComponent* b, 
-		Contact contact);
+		PhysicsComponent& a, 
+		PhysicsComponent& b, 
+		Contact& contact);
 	static float getMomentumMagnitude(
 		float e, 
 		const glm::vec3& combinedVelocities, 

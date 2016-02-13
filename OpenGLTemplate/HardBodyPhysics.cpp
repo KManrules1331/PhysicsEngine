@@ -36,17 +36,18 @@ void HardBodyPhysics::Collide(
 }
 //SAT implementation of this method 
 void HardBodyPhysics::Collide(
-	PhysicsComponent* a, 
-	PhysicsComponent* b, 
-	Contact contact)
+	PhysicsComponent& a, 
+	PhysicsComponent& b, 
+	Contact& contact)
 {
 	//Move objects to eliminate intersections
-	glm::vec3 aVelocity = a->getVelocity();	glm::vec3 bVelocity = b->getVelocity();
+	glm::vec3& aVelocity = a.getVelocity();	
+	glm::vec3& bVelocity = b.getVelocity();
 	glm::vec3 relVelocity = aVelocity - bVelocity;
 	float testNumber = glm::dot(relVelocity, contact.normal);
 	float dt = contact.depth / testNumber * 0.5f;
-	a->move(-aVelocity * dt);	b->move(-bVelocity * dt);
-	a->GOCollider.getSATCollisionInfo(b->GOCollider, &contact);
+	a.move(-aVelocity * dt);	b.move(-bVelocity * dt);
+	a.GOCollider.getSATCollisionInfo(b.GOCollider, &contact);
 
 
 	/*float aVelocity = glm::dot(a->getVelocity(), contact.normal);
@@ -59,20 +60,29 @@ void HardBodyPhysics::Collide(
 	b->move(contact.normal * contact.depth * (bVelocity / total));*/
 
 	//Get the impulse scalar
-	glm::vec3 radiusAP = contact.position -a->GOTransform.getPosition();
-	glm::vec3 radiusBP = contact.position - b->GOTransform.getPosition();
-	glm::vec3 velocityA = a->getVelocity() + glm::cross(glm::axis(a->getRotationalVelocity()) * glm::angle(a->getRotationalVelocity()), radiusAP);
-	glm::vec3 velocityB = b->getVelocity() + glm::cross(glm::axis(b->getRotationalVelocity()) * glm::angle(b->getRotationalVelocity()), radiusBP);
-	float j = getMomentumMagnitude(1.0f, velocityA - velocityB, contact.normal, a->inverseMass, b->inverseMass, radiusAP, radiusBP, a->inverseMOI, b->inverseMOI);
+	glm::vec3 radiusAP = contact.position - a.GOTransform.getPosition();
+	glm::vec3 radiusBP = contact.position - b.GOTransform.getPosition();
+	glm::vec3 velocityA = a.getVelocity() + glm::cross(glm::axis(a.getRotationalVelocity()) * glm::angle(a.getRotationalVelocity()), radiusAP);
+	glm::vec3 velocityB = b.getVelocity() + glm::cross(glm::axis(b.getRotationalVelocity()) * glm::angle(b.getRotationalVelocity()), radiusBP);
+	float j = getMomentumMagnitude(
+		1.0f, 
+		velocityA - velocityB, 
+		contact.normal, 
+		a.inverseMass, 
+		b.inverseMass, 
+		radiusAP, 
+		radiusBP, 
+		a.inverseMOI, 
+		b.inverseMOI);
 	j = glm::abs(j);
 
 	//Apply impulse
 	//TODO//Determine if direction is correct
-	a->addImpulse(contact.normal * -j, contact.position);
-	b->addImpulse(contact.normal * j, contact.position);
+	a.addImpulse(contact.normal * -j, contact.position);
+	b.addImpulse(contact.normal * j, contact.position);
 
-	a->move(a->getVelocity() * dt);
-	b->move(b->getVelocity() * dt);
+	a.move(a.getVelocity() * dt);
+	b.move(b.getVelocity() * dt);
 }
 
 float HardBodyPhysics::getMomentumMagnitude(
@@ -130,7 +140,7 @@ void HardBodyPhysics::update()
 			bool collision;
 			collision = PhysicsComponents[i]->GOCollider.getSATCollisionInfo(PhysicsComponents[j]->GOCollider, &contact);
 			if (collision)
-				Collide(PhysicsComponents[i], PhysicsComponents[j], contact);
+				Collide(*PhysicsComponents[i], *PhysicsComponents[j], contact);
 		}
 	}
 }
