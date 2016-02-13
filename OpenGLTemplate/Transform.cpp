@@ -1,11 +1,13 @@
 #include "Transform.h"
 
+#include <utility>
+
 
 Transform::Transform(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 {
-	this->position = position;
-	this->rotation = rotation;
-	this->scale = scale;
+	this->position = std::move(position);
+	this->rotation = std::move(rotation);
+	this->scale = std::move(scale);
 }
 
 
@@ -13,39 +15,38 @@ Transform::~Transform()
 {
 }
 
-void Transform::move(glm::vec3 displacement)
+void Transform::move(const glm::vec3& displacement)
 {
 	position += displacement;
 }
-void Transform::rotate(glm::quat rotation)
+void Transform::rotate(const glm::quat& rotation)
 {
 	this->rotation *= rotation;
 }
-void Transform::rotate(float angle, glm::vec3 axis)
+void Transform::rotate(float angle, const glm::vec3& axis)
 {
 	glm::quat rotation = glm::angleAxis(angle, axis);
 	this->rotation *= rotation;
 }
-void Transform::changeScale(glm::vec3 scale)
+void Transform::changeScale(const glm::vec3& scale)
 {
 	this->scale += scale;
 }
 void Transform::setPosition(glm::vec3 newPosition)
 {
-	position = newPosition;
+	position = std::move(newPosition);
 }
 void Transform::setRotation(glm::quat newRotation)
 {
-	rotation = newRotation;
+	rotation = std::move(newRotation);
 }
-void Transform::setRotation(float angle, glm::vec3 axis)
+void Transform::setRotation(float angle, const glm::vec3& axis)
 {
-	glm::quat newRotation = glm::angleAxis(angle, axis);
-	this->rotation = newRotation;
+	this->rotation = glm::angleAxis(angle, axis);
 }
 void Transform::setScale(glm::vec3 newScale)
 {
-	scale = newScale;
+	scale = std::move(newScale);
 }
 const glm::vec3& Transform::getPosition() const
 {

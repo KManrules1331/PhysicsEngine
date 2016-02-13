@@ -10,13 +10,13 @@ public:
 	~Transform();
 
 	//Methods
-	void move(glm::vec3 displacement);
-	void rotate(glm::quat rotation);
-	void rotate(float angle, glm::vec3 axis);
-	void changeScale(glm::vec3 scale);
+	void move(const glm::vec3& displacement);
+	void rotate(const glm::quat& rotation);
+	void rotate(float angle, const glm::vec3& axis);
+	void changeScale(const glm::vec3& scale);
 	void setPosition(glm::vec3 newPosition);
 	void setRotation(glm::quat newRotation);
-	void setRotation(float angle, glm::vec3 axis);
+	void setRotation(float angle, const glm::vec3& axis);
 	void setScale(glm::vec3 newScale);
 
 	const glm::vec3& getPosition() const;
