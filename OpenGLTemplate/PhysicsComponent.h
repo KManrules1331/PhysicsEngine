@@ -17,8 +17,10 @@ public:
 	~PhysicsComponent();
 
 	//Getters
-	glm::vec3 getVelocity();
-	glm::quat getRotationalVelocity();
+	const glm::vec3& getVelocity() const;
+	glm::vec3& getVelocity();
+	const glm::quat& getRotationalVelocity() const;
+	glm::quat& getRotationalVelocity();
 
 	//Setters
 	void setVelocity(glm::vec3 newVelocity);
@@ -29,18 +31,22 @@ public:
 	void update(float dt);
 
 	//MovementMethods?
-	void addForce(glm::vec3 force, glm::vec3 positionOfForce);
-	void addImpulse(glm::vec3 impulse, glm::vec3 positionOfImpulse);
+	void addForce(
+		const glm::vec3& force, 
+		const glm::vec3& positionOfForce);
+	void addImpulse(
+		const glm::vec3& impulse, 
+		const glm::vec3& positionOfImpulse);
 
 	//I need this to resolve interpenetrations
-	void move(glm::vec3 offset);
+	void move(const glm::vec3& offset);
 
 private:
 	glm::vec3 acceleration;
-	glm::quat rotationalAcceleration;
 	glm::vec3 velocity;
+	glm::quat rotationalAcceleration;
 	glm::quat rotationalVelocity;
-	static float dampeningFactor;
+	static const float dampeningFactor;
 
 };
 
